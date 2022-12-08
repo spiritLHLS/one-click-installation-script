@@ -15,4 +15,7 @@ sudo apt install curl build-essential gcc make -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 source "$HOME/.profile"
-rustc -V
+rustup update
+cargo --version
+rustc --version
+rustdoc --version
