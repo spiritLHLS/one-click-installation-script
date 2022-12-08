@@ -13,6 +13,7 @@ echo ""
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install curl build-essential gcc make -y
+echo "加载官方安装脚本，选择选项1安装"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 source "$HOME/.profile"
