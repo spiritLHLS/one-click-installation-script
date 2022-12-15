@@ -11,3 +11,9 @@ ubuntu缺失公钥
 ```bash
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
 ```
+
+debian缺失公钥
+
+```bash
+apt-get install debian-keyring debian-archive-keyring
+```
