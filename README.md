@@ -12,6 +12,16 @@ ubuntu缺失公钥
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
 ```
 
+ubuntu更新源被锁
+
+```bash
+sudo rm -rf /var/cache/apt/archives/lock
+```
+
+或
+
+https://itsfoss.com/fix-ubuntu-install-error/
+
 debian缺失公钥
 
 ```bash
