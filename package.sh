@@ -3,6 +3,51 @@
 
 #!/bin/bash
 
+change_debian_apt_sources() {
+  # 获取系统版本
+  release=$(lsb_release -cs)
+
+  # 根据版本替换源列表
+  case "$release" in
+    "squeeze")
+      # Debian 6 "Squeeze"
+      # 替换源列表
+      sed -i 's/deb http:\/\/deb.debian.org\/debian squeeze main/deb http:\/\/mirrors.aliyun.com\/debian squeeze main/g' /etc/apt/sources.list
+      ;;
+    "wheezy")
+      # Debian 7 "Wheezy"
+      # 替换源列表
+      sed -i 's/deb http:\/\/deb.debian.org\/debian wheezy main/deb http:\/\/mirrors.aliyun.com\/debian wheezy main/g' /etc/apt/sources.list
+      ;;
+    "jessie")
+      # Debian 8 "Jessie"
+      # 替换源列表
+      sed -i 's/deb http:\/\/deb.debian.org\/debian jessie main/deb http:\/\/mirrors.aliyun.com\/debian jessie main/g' /etc/apt/sources.list
+      ;;
+    "stretch")
+      # Debian 9 "Stretch"
+      # 替换源列表
+      sed -i 's/deb http:\/\/deb.debian.org\/debian stretch main/deb http:\/\/mirrors.aliyun.com\/debian stretch main/g' /etc/apt/sources.list
+      ;;
+    "buster")
+      # Debian 10 "Buster"
+      # 替换源列表
+      sed -i 's/deb http:\/\/deb.debian.org\/debian buster main/deb http:\/\/mirrors.aliyun.com\/debian buster main/g' /etc/apt/sources.list
+      ;;
+    "bullseye")
+      # Debian 11 "Bullseye"
+      # 替换源列表
+      sed -i 's/deb http:\/\/deb.debian.org\/debian bullseye main/deb http:\/\/mirrors.aliyun.com\/debian bullseye main/g' /etc/apt/sources.list
+      ;;
+    *)
+      # 其他版本
+      # 不进行任何操作
+      echo "The system is not Debian 6/7/8/9/10/11 . No changes were made to the apt sources."
+      return
+      ;;
+  esac
+}
+
 function change_ubuntu_apt_sources {
   # Check the system's Ubuntu version
   ubuntu_version=$(lsb_release -r | awk '{print $2}')
@@ -60,7 +105,7 @@ function change_ubuntu_apt_sources {
 
 
 
-################ main #############################################
+##############################################################################################################################################
 
 
 sudo apt update
@@ -96,7 +141,17 @@ if [ $? -ne 0 ]; then
   # Check if the system is Debian or Ubuntu
   if [ -f /etc/debian_version ]; then
     # Replace the current apt sources list with the one at the specified URL
-    sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/debian.txt
+    #sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/debian.txt
+    # 获取系统版本
+    release=$(lsb_release -cs)
+
+    # 获取源列表中的版本
+    sources_release=$(grep "^deb" /etc/apt/sources.list | head -n1 | cut -d' ' -f3)
+
+    # 如果版本不同，则执行 change_debian_apt_sources 函数
+    if [ "$release" != "$sources_release" ]; then
+      change_debian_apt_sources
+    fi
   elif [ -f /etc/lsb-release ]; then
     # Replace the current apt sources list with the one at the specified URL
     # sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/ubuntu.txt
