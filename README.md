@@ -1,12 +1,12 @@
-# 一键安装环境
+# 一键脚本
 
-一键安装rust
+一键安装rust环境
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
 ```
 
-一键修复apt
+一键修复apt源
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/package.sh -o package.sh && chmod +x package.sh && bash package.sh
