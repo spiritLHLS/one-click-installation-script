@@ -44,6 +44,13 @@ else
       else
         echo "Network configuration is correct."
       fi
+      
+      # Try to ping again after modifying network priority
+      if ping -c 1 google.com; then
+        echo "Ping successful after modifying network priority"
+      else
+        echo "Network problem is not related to nameserver or network priority."
+      fi
     fi
   fi
 fi
