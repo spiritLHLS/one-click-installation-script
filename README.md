@@ -35,3 +35,10 @@ debian缺失公钥
 ```bash
 apt-get install debian-keyring debian-archive-keyring
 ```
+
+centos换源
+
+```bash
+sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.repo
+```
