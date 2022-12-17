@@ -57,9 +57,20 @@ main() {
       success=true
     fi
   fi
-
+  
+  
   # If the previous methods failed, try setting the size in journald.conf
   if ! $success && [ -f /etc/systemd/journald.conf ]; then
+    # Check if the file is writable
+    if [ ! -w /etc/systemd/journald.conf ]; then
+      # If the file is not writable, try changing its permissions
+      chmod +w /etc/systemd/journald.conf
+      if [ $? -ne 0 ]; then
+        echo "Failed to change permissions of journald.conf"
+        continue
+      fi
+    fi
+
     # Check if the line containing SystemMaxUse is commented out
     if grep -q '^#\s*SystemMaxUse=' /etc/systemd/journald.conf; then
       # If it is commented out, uncomment it
@@ -73,11 +84,14 @@ main() {
     else
       success=true
     fi
+
+    # Restore the original permissions of the file
+    chmod -w /etc/systemd/journald.conf
+    if [ $? -ne 0 ]; then
+      echo "Failed to restore permissions of journald.conf"
+    fi
   fi
 
-
-
-  
   # Restart the log recording service to force log rotation
   systemctl restart systemd-journald
   if [ $? -ne 0 ]; then
