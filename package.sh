@@ -301,8 +301,10 @@ if [ $? -ne 0 ]; then
   fi
 fi
 
+
 # Update the package list again to pick up the new sources
 sudo apt update
+
 if [ $? -ne 0 ]; then
   # Print a message indicating that the update failed
   echo "The update failed. Please try another way"
