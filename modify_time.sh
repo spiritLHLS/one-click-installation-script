@@ -107,4 +107,5 @@ check_again(){
 head
 check_os
 main
+sleep 1
 check_again
