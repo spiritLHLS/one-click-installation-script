@@ -11,9 +11,9 @@ head() {
   changeLog="一键修复本机系统时间"
   clear
   echo "#######################################################################"
-  echo "#                     ${YELLOW}一键修复本机系统时间脚本${PLAIN}                               #"
+  echo "#                     ${YELLOW}一键修复本机系统时间脚本${PLAIN}                        #"
   echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog                               #"
+  echo "# 更新日志：$changeLog                                      #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
   echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
