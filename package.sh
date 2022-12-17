@@ -260,6 +260,16 @@ if [ $? -ne 0 ]; then
 
     # 如果版本不同，则执行 change_debian_apt_sources 函数
     if [ "$release" != "$sources_release" ]; then
+      echo "debian source is wrong"
+    fi
+    # Display prompt asking whether to proceed with updating
+    read -p "Do you want to proceed with updating? [y/n] " -n 1 updating
+    echo ""
+
+    # Check user's input and exit if they do not want to proceed
+    if [ "$updating" != "y" ]; then
+      exit 0
+    else
       change_debian_apt_sources
     fi
   elif [ -f /etc/lsb-release ]; then
@@ -273,6 +283,16 @@ if [ $? -ne 0 ]; then
 
     # 如果版本不同，则执行 change_apt_sources 函数
     if [ "$release" != "$sources_release" ]; then
+      echo "ubuntu source is wrong"
+    fi
+    # Display prompt asking whether to proceed with updating
+    read -p "Do you want to proceed with updating? [y/n] " -n 1 updating
+    echo ""
+
+    # Check user's input and exit if they do not want to proceed
+    if [ "$updating" != "y" ]; then
+      exit 0
+    else
       change_ubuntu_apt_sources
     fi
   else
