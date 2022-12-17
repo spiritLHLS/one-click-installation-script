@@ -1,4 +1,7 @@
 #!/bin/bash
+#by spiritlhl
+#from https://github.com/spiritLHLS/one-click-installation-script
+#version: 2022.12.17
 
 # Try to ping Google.com
 if ping -c 1 google.com; then
