@@ -215,7 +215,7 @@ change_ubuntu_apt_sources() {
   else
     echo "The system is not Ubuntu 12/14/16/18/20/22 . No changes were made to the apt sources."
   fi
-
+}
 
 
 ##############################################################################################################################################
