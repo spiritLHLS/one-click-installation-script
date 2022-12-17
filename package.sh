@@ -172,6 +172,44 @@ change_ubuntu_apt_sources() {
   if [ "$location" = "China" ]; then
     # IP is in China, update apt sources
     echo "IP is in China, updating apt sources."
+    # Backup the current sources.list
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    if [ "$ubuntu_version" = "12.04" ]; then
+      # Write the AliYun Ubuntu 12.04 apt sources list to sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ precise main restricted universe multiverse" | sudo tee /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ precise-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ precise-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    elif [ "$ubuntu_version" = "14.04" ]; then
+      # Write the AliYun Ubuntu 14.04 apt sources list to sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse" | sudo tee /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    elif [ "$ubuntu_version" = "16.04" ]; then
+      # Write the AliYun Ubuntu 16.04 apt sources list to sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse" | sudo tee /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    elif [ "$ubuntu_version" = "18.04" ]; then
+      # Write the AliYun Ubuntu 18.04 apt sources list to sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse" | sudo tee /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    elif [ "$ubuntu_version" = "20.04" ]; then
+      # Write the AliYun Ubuntu 20.04 apt sources list to sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse" | sudo tee /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    elif [ "$ubuntu_version" = "22.04" ]; then
+      # Write the AliYun Ubuntu 22.04 apt sources list to sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ groovy main restricted universe multiverse" | sudo tee /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ groovy-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ groovy-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+      echo "deb http://mirrors.aliyun.com/ubuntu/ groovy-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    fi
   else:
     # Backup the current sources.list
     sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
