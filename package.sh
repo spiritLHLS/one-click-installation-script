@@ -305,11 +305,16 @@ if [ $? -ne 0 ]; then
   # Update the package list again to pick up the new sources
   sudo apt update
 
-  if [ $? -ne 0 ]; then
-    # Print a message indicating that the update failed
-    echo "The update failed. Please try another way"
+  # Check the exit status of the update command
+  if [ $? -eq 0 ]; then
+    # Print a message indicating that the update was successful
+    echo "The update was successful."
   else
-    # Print a message indicating that the update failed
-    echo "The update succeed!"
+    # Print a message indicating that the update failed and suggest other error resolution methods
+    echo "The update failed. You may want to try the following error resolution methods:
+      - Check your internet connection
+      - Check the sources list for errors
+      - Check for package dependencies
+      - Check for disk space issues"
   fi
 fi
