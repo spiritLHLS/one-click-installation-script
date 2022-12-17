@@ -6,12 +6,12 @@
 
 # 支持系统：Ubuntu 12+，Debian 6+
 ver="2022.12.17"
-changeLog="一键修复apt源，加载官方的源"
+changeLog="一键修复apt源，加载对应的源"
 clear
 echo "#######################################################################"
-echo "#                     ${YELLOW}一键修复apt源脚本${PLAIN}                                #"
+echo "#                     ${YELLOW}一键修复apt源脚本${PLAIN}                               #"
 echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                #"
+echo "# 更新日志：$changeLog                               #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
 echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
 echo "#######################################################################"
