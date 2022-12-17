@@ -11,6 +11,9 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 一键尝试修复apt源 
 
 - 支持系统：Ubuntu 12+，Debian 6+
+- 修复apt源锁死
+- 修复apt源公钥缺失
+- 修复替换系统可用的apt源列表，含国内用阿里源，国外用官方源
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/package.sh -o package.sh && chmod +x package.sh && bash package.sh
