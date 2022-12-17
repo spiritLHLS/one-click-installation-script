@@ -60,7 +60,7 @@ main() {
 
   # If the previous methods failed, try setting the size in journald.conf
   if ! $success && [ -f /etc/systemd/journald.conf ]; then
-    # Check if SystemMaxUse is commented out
+    # Check if the line containing SystemMaxUse is commented out
     if grep -q '^#\s*SystemMaxUse=' /etc/systemd/journald.conf; then
       # If it is commented out, uncomment it
       sed -i "s/^#\s*SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
@@ -74,6 +74,7 @@ main() {
       success=true
     fi
   fi
+
 
 
   
