@@ -6,9 +6,9 @@ head() {
   changeLog="一键修改journal日志记录大小，释放系统盘空间"
   clear
   echo "#######################################################################"
-  echo "#                     ${YELLOW}一键修改journal大小脚本${PLAIN}                               #"
+  echo "#                     ${YELLOW}一键修改journal大小脚本${PLAIN}                         #"
   echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog                               #"
+  echo "# 更新日志：$changeLog               #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
   echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
@@ -25,32 +25,25 @@ head() {
 }
 
 main() {
+
   # Prompt the user for the desired size of the journal directory in MB
   read -p "Enter the desired size of the journal directory in MB: " JOURNAL_SIZE_MB
 
   # Convert the size from MB to bytes
   JOURNAL_SIZE=$((JOURNAL_SIZE_MB * 1024 * 1024))
 
-  # Set the path to the journal directory
-  JOURNAL_DIR="/var/log/journal"
-
   # Set the name of the log recording service
   LOG_SERVICE="systemd-journald"
 
-  # Check if the journal directory exists
-  if [ -d "$JOURNAL_DIR" ]; then
-    # Set the size of the journal directory
-    systemd-journal-size --disk-space=$JOURNAL_SIZE
+  # Set the size of the journal directory
+  journalctl --disk-space=$JOURNAL_SIZE
 
-    # Restart the log recording service to force log rotation
-    systemctl restart $LOG_SERVICE
+  # Restart the log recording service to force log rotation
+  systemctl restart $LOG_SERVICE
 
-    # Print the size of the journal directory
-    du -sh $JOURNAL_DIR
-  else
-    echo "Error: Journal directory does not exist at $JOURNAL_DIR"
-    exit 1
-  fi
+  # Print the size of the journal directory
+  du -sh /var/log/journal
+
 }
 
 
