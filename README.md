@@ -18,6 +18,12 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/network.sh -o network.sh && chmod +x network.sh && bash network.sh
 ```
 
+一键尝试修复系统时间
+
+```
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/modify_time.sh -o modify_time.sh && chmod +x modify_time.sh && bash modify_time.sh
+```
+
 ### 手动命令
 
 ubuntu缺失公钥
