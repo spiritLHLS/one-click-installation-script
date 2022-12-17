@@ -1,7 +1,7 @@
 #!/bin/bash
-
-
-#!/bin/bash
+#by spiritlhl
+#from https://github.com/spiritLHLS/one-click-installation-script
+#version: 2022.12.17
 
 change_debian_apt_sources() {
   # 获取系统版本
