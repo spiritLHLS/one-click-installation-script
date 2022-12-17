@@ -158,7 +158,7 @@ EOF
 }
 
 
-change_ubuntu_apt_sources {
+change_ubuntu_apt_sources() {
   # Check the system's Ubuntu version
   ubuntu_version=$(lsb_release -r | awk '{print $2}')
   
