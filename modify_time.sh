@@ -30,7 +30,6 @@ else
     # 不在允许范围内，时间不准确
     echo "Time on $OS system is NOT accurate. Please check your system time and time zone settings."
 fi
-
 # 判断时间差是否在允许范围内
 if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
     # 在允许范围内，时间准确
@@ -40,12 +39,23 @@ else
     echo "Time on $OS system is NOT accurate. Adjusting system time to accurate time."
     if [ "$OS" == "Ubuntu/Debian/Almalinux" ]; then
         # Ubuntu/Debian/Almalinux 系统使用 ntpdate 命令
+        if [ ! -x "$(command -v ntpdate)" ]; then
+            # ntpdate 命令不存在，安装 ntpdate
+            sudo apt-get update
+            sudo apt-get install ntpdate -y
+        fi
         sudo ntpdate -u time.nist.gov
     elif [ "$OS" == "CentOS/Fedora" ]; then
         # CentOS/Fedora 系统使用 ntpdate 命令
+        if [ ! -x "$(command -v ntpdate)" ]; then
+            # ntpdate 命令不存在，安装 ntpdate
+            sudo yum update
+            sudo yum install ntpdate -y
+        fi
         sudo ntpdate time.nist.gov
     else
         # 未知系统
         echo "Unable to adjust system time on unknown system."
     fi
 fi
+
