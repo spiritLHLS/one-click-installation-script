@@ -20,7 +20,7 @@ head() {
   echo "1.修复nameserver为google源或cloudflare源"
   echo "2.尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)"
   # Display prompt asking whether to proceed with checking and changing
-  read -p "Do you want to proceed with checking and changing? [y/n] " -n 1 confirm
+  read -p "Do you want to proceed with checking and changing nameserver? [y/n] " -n 1 confirm
   echo ""
 
   # Check user's input and exit if they do not want to proceed
@@ -56,6 +56,15 @@ main() {
         echo "Ping successful with Cloudflare's nameserver"
       else
         echo "Ping failed with Cloudflare's nameserver. Checking network configuration."
+        
+        # Display prompt asking whether to proceed with checking and changing priority
+        read -p "Do you want to proceed with checking and changing network priority? [y/n] " -n 1 priority
+        echo ""
+
+        # Check user's input and exit if they do not want to proceed
+        if [ "$priority" != "y" ]; then
+          exit 0
+        fi
 
         # Check IP type and network priority
         ip_type=$(curl -s ip.sb | grep -oP '(?<=is )(.+)(?=\.)')
