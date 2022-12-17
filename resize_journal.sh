@@ -70,7 +70,11 @@ main() {
 
   
   # Restart the log recording service to force log rotation
-  systemctl restart rsyslog
+  systemctl restart systemd-journald
+  if [ $? -ne 0 ]; then
+      systemctl restart rsyslog
+  fi
+  
   
   # Loop for 10 seconds, printing journald disk usage every second
   count=0
