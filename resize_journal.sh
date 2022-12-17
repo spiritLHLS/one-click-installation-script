@@ -70,11 +70,15 @@ main() {
 
   
   # Restart the log recording service to force log rotation
-  systemctl restart $LOG_SERVICE
-
-  # Print the size of the journal directory
-  du -sh $JOURNAL_DIR
+  systemctl restart rsyslog
   
+  # Loop for 10 seconds, printing journald disk usage every second
+  count=0
+  while [ $count -lt 10 ]; do
+    journalctl --disk-usage
+    count=$((count+1))
+    sleep 1
+  done
   
 }
 
