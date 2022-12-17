@@ -3,50 +3,160 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.17
 
-change_debian_apt_sources() {
-  # 获取系统版本
-  release=$(lsb_release -cs)
 
-  # 根据版本替换源列表
-  case "$release" in
-    "squeeze")
-      # Debian 6 "Squeeze"
-      # 替换源列表
-      sed -i 's/deb http:\/\/deb.debian.org\/debian squeeze main/deb http:\/\/mirrors.aliyun.com\/debian squeeze main/g' /etc/apt/sources.list
-      ;;
-    "wheezy")
-      # Debian 7 "Wheezy"
-      # 替换源列表
-      sed -i 's/deb http:\/\/deb.debian.org\/debian wheezy main/deb http:\/\/mirrors.aliyun.com\/debian wheezy main/g' /etc/apt/sources.list
-      ;;
-    "jessie")
-      # Debian 8 "Jessie"
-      # 替换源列表
-      sed -i 's/deb http:\/\/deb.debian.org\/debian jessie main/deb http:\/\/mirrors.aliyun.com\/debian jessie main/g' /etc/apt/sources.list
-      ;;
-    "stretch")
-      # Debian 9 "Stretch"
-      # 替换源列表
-      sed -i 's/deb http:\/\/deb.debian.org\/debian stretch main/deb http:\/\/mirrors.aliyun.com\/debian stretch main/g' /etc/apt/sources.list
-      ;;
-    "buster")
-      # Debian 10 "Buster"
-      # 替换源列表
-      sed -i 's/deb http:\/\/deb.debian.org\/debian buster main/deb http:\/\/mirrors.aliyun.com\/debian buster main/g' /etc/apt/sources.list
-      ;;
-    "bullseye")
-      # Debian 11 "Bullseye"
-      # 替换源列表
-      sed -i 's/deb http:\/\/deb.debian.org\/debian bullseye main/deb http:\/\/mirrors.aliyun.com\/debian bullseye main/g' /etc/apt/sources.list
-      ;;
-    *)
-      # 其他版本
-      # 不进行任何操作
-      echo "The system is not Debian 6/7/8/9/10/11 . No changes were made to the apt sources."
-      return
-      ;;
-  esac
+# 支持系统：Ubuntu 12+，Debian 6+
+ver="2022.12.17"
+changeLog="一键修复apt源，加载官方的源"
+clear
+echo "#######################################################################"
+echo "#                     ${YELLOW}一键修复apt源脚本${PLAIN}                                #"
+echo "# 版本：$ver                                                    #"
+echo "# 更新日志：$changeLog                                #"
+echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
+echo "#######################################################################"
+echo "支持系统：Ubuntu 12+，Debian 6+"
+# Display prompt asking whether to proceed with checking
+read -p "Do you want to proceed with checking? [y/n] " -n 1 confirm
+echo ""
+
+# Check user's input and exit if they do not want to proceed
+if [ "$confirm" != "y" ]; then
+  exit 0
+fi
+
+
+change_debian_apt_sources() {
+  # Check if the IP is in China
+  ip=$(curl -s https://ipapi.co/ip)
+  location=$(curl -s https://ipapi.co/$ip/country_name)
+  
+  # Backup current sources list
+  cp /etc/apt/sources.list /etc/apt/sources.list.bak
+  # Determine Debian version
+  DEBIAN_VERSION=$(lsb_release -sr)
+  # Get the current system version
+  DEBIAN_VERSION=$(lsb_release -sr)
+
+  if [ "$location" = "China" ]; then
+    # IP is in China, update apt sources
+    echo "IP is in China, updating apt sources."
+    if [ "$DEBIAN_VERSION" = "6.0" ]; then
+      # Debian 6
+      cat > /etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/debian/ squeeze main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ squeeze main non-free contrib
+EOF
+    elif [ "$DEBIAN_VERSION" = "7.0" ]; then
+      # Debian 7
+      cat > /etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/debian/ wheezy main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ wheezy main non-free contrib
+EOF
+    elif [ "$DEBIAN_VERSION" = "8.0" ]; then
+      # Debian 8
+      cat > /etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/debian/ jessie main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ jessie main non-free contrib
+EOF
+    elif [ "$DEBIAN_VERSION" = "9.0" ]; then
+      # Debian 9
+      cat > /etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ stretch main non-free contrib
+EOF
+    elif [ "$DEBIAN_VERSION" = "10.0" ]; then
+      # Debian 10
+      cat > /etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/debian/ buster main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib
+EOF
+    elif [ "$DEBIAN_VERSION" = "11.0" ]; then
+      # Debian 11
+      cat > /etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
+EOF
+    fi
+  else
+    # IP is not in China, update apt sources
+    echo "IP is not in China, updating apt sources."
+    # Use official sources list for Debian 6
+    if [[ $DEBIAN_VERSION == 6 ]]; then
+      cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian squeeze main contrib non-free
+deb-src http://deb.debian.org/debian squeeze main contrib non-free
+
+deb http://deb.debian.org/debian squeeze-updates main contrib non-free
+deb-src http://deb.debian.org/debian squeeze-updates main contrib non-free
+
+deb http://security.debian.org/ squeeze/updates main contrib non-free
+deb-src http://security.debian.org/ squeeze/updates main contrib non-free
+EOF
+    # Use official sources list for Debian 7
+    elif [[ $DEBIAN_VERSION == 7 ]]; then
+      cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian wheezy main contrib non-free
+deb-src http://deb.debian.org/debian wheezy main contrib non-free
+
+deb http://deb.debian.org/debian wheezy-updates main contrib non-free
+deb-src http://deb.debian.org/debian wheezy-updates main contrib non-free
+
+deb http://security.debian.org/ wheezy/updates main contrib non-free
+deb-src http://security.debian.org/ wheezy/updates main contrib non-free
+EOF
+   # Use official sources list for Debian 8
+    elif [[ $DEBIAN_VERSION == 8 ]]; then
+      cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian jessie main contrib non-free
+deb-src http://deb.debian.org/debian jessie main contrib non-free
+
+deb http://deb.debian.org/debian jessie-updates main contrib non-free
+deb-src http://deb.debian.org/debian jessie-updates main contrib non-free
+
+deb http://security.debian.org/ jessie/updates main contrib non-free
+deb-src http://security.debian.org/ jessie/updates main contrib non-free
+EOF
+    # Use official sources list for Debian 9
+    elif [[ $DEBIAN_VERSION == 9 ]]; then
+      cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian stretch main contrib non-free
+deb-src http://deb.debian.org/debian stretch main contrib non-free
+
+deb http://deb.debian.org/debian stretch-updates main contrib non-free
+deb-src http://deb.debian.org/debian stretch-updates main contrib non-free
+
+deb http://security.debian.org/ stretch/updates main contrib non-free
+deb-src http://security.debian.org/ stretch/updates main contrib non-free
+EOF
+    # Use official sources list for Debian 10
+    elif [[ $DEBIAN_VERSION == 10 ]]; then
+      cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian buster main contrib non-free
+deb-src http://deb.debian.org/debian buster main contrib non-free
+
+deb http://deb.debian.org/debian buster-updates main contrib non-free
+deb-src http://deb.debian.org/debian buster-updates main contrib non-free
+
+deb http://security.debian.org/ buster/updates main contrib non-free
+deb-src http://security.debian.org/ buster/updates main contrib non-free
+EOF
+    # Use official sources list for Debian 11
+    elif [[ $DEBIAN_VERSION == 11 ]]; then
+      cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian bullseye main contrib non-free
+deb-src http://deb.debian.org/debian bullseye main contrib non-free
+
+deb http://deb.debian.org/debian bullseye-updates main contrib non-free
+deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
+
+deb http://security.debian.org/ bullseye/updates main contrib non-free
+deb-src http://security.debian.org/ bullseye/updates main contrib non-free
+EOF
+    fi
+  fi
 }
+
 
 change_ubuntu_apt_sources {
   # Check the system's Ubuntu version
