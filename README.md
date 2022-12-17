@@ -27,8 +27,17 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 - 检测修复本机系统时间，如果相差超过300秒的合理范围则校准时间
 
-```
+```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/modify_time.sh -o modify_time.sh && chmod +x modify_time.sh && bash modify_time.sh
+```
+
+一键修改系统自带的journal日志记录大小释放系统盘空间
+
+- 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
+- 自定义修改，一般500M或者1G即可，有的系统日志默认给了5G甚至更多，不是做站啥的没必要
+
+```
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/resize_journal.sh -o resize_journal.sh && chmod +x resize_journal.sh && bash resize_journal.sh
 ```
 
 ### 一键环境安装脚本
