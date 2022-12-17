@@ -30,14 +30,6 @@ if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
     # 在允许范围内，时间准确
     echo "Time on $OS system is accurate."
 else
-    # 不在允许范围内，时间不准确
-    echo "Time on $OS system is NOT accurate. Please check your system time and time zone settings."
-fi
-# 判断时间差是否在允许范围内
-if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
-    # 在允许范围内，时间准确
-    echo "Time on $OS system is accurate."
-else
     # 不在允许范围内，时间不准确，调整时间
     echo "Time on $OS system is NOT accurate. Adjusting system time to accurate time."
     if [ "$OS" == "Ubuntu/Debian/Almalinux" ]; then
