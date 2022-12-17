@@ -369,5 +369,7 @@ fix_sources() {
 
 head
 fix_broken
+sleep 1
 fix_locked
+sleep 1
 fix_sources
