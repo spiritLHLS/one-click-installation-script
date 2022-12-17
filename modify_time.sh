@@ -47,7 +47,7 @@ else
             sudo apt-get update
             sudo apt-get install ntpdate -y
         fi
-        sudo ntpdate -u time.nist.gov
+        sudo ntpdate -u time.nist.gov || sudo ntpdate pool.ntp.org || sudo ntpdate cn.pool.ntp.org
     elif [ "$OS" == "CentOS/Fedora" ]; then
         # CentOS/Fedora 系统使用 ntpdate 命令
         if [ ! -x "$(command -v ntpdate)" ]; then
@@ -55,7 +55,7 @@ else
             sudo yum update
             sudo yum install ntpdate -y
         fi
-        sudo ntpdate time.nist.gov
+        sudo ntpdate time.nist.gov || sudo ntpdate pool.ntp.org || sudo ntpdate cn.pool.ntp.org
     else
         # 未知系统
         echo "Unable to adjust system time on unknown system."
