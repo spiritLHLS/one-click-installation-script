@@ -173,48 +173,38 @@ change_ubuntu_apt_sources() {
     # IP is in China, update apt sources
     echo "IP is in China, updating apt sources."
   else:
+    # Backup the current sources.list
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
     if [ "$ubuntu_version" = "12.04" ]; then
-      # Backup the current sources.list
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
       # Write the Ubuntu 12.04 apt sources list that can be used with apt to sources.list
       echo "deb http://old-releases.ubuntu.com/ubuntu precise main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://old-releases.ubuntu.com/ubuntu precise-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://old-releases.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "14.04" ]; then
-      # Backup the current sources.list
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
       # Write the standard Ubuntu 14.04 apt sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "16.04" ]; then
-      # Backup the current sources.list
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
       # Write the standard Ubuntu 16.04 apt sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "18.04" ]; then
-      # Backup the current sources.list
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
       # Write the standard Ubuntu 18.04 apt sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "20.04" ]; then
-      # Backup the current sources.list
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
       # Write the standard Ubuntu 20.04 apt sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "22.04" ]; then
-      # Backup the current sources.list
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
       # Write the standard Ubuntu 22.04 apt sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu hirsute main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu hirsute-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
