@@ -41,21 +41,41 @@ main() {
   # Try setting the size of the journal directory with systemd-journal-size
   if command -v systemd-journal-size &> /dev/null; then
     systemd-journal-size --disk-space=$JOURNAL_SIZE
-
-  # If systemd-journal-size is not available, try setting the size with journalctl
-  elif command -v journalctl &> /dev/null; then
-    journalctl --disk-space=$JOURNAL_SIZE
-
-  # If neither systemd-journal-size nor journalctl is available, try setting the size in journald.conf
-  else
-    sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+    if [ $? -ne 0 ]; then
+      echo "Failed to set journal size using systemd-journal-size"
+    else
+      success=true
+    fi
   fi
 
+  # If the previous method failed, try setting the size with journalctl
+  if ! $success && command -v journalctl &> /dev/null; then
+    journalctl --disk-space=$JOURNAL_SIZE
+    if [ $? -ne 0 ]; then
+      echo "Failed to set journal size using journalctl"
+    else
+      success=true
+    fi
+  fi
+
+  # If the previous methods failed, try setting the size in journald.conf
+  if ! $success && [ -f /etc/systemd/journald.conf ]; then
+    sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+    if [ $? -ne 0 ]; then
+      echo "Failed to set journal size using journald.conf"
+    else
+      success=true
+    fi
+  fi
+
+  
   # Restart the log recording service to force log rotation
   systemctl restart $LOG_SERVICE
 
   # Print the size of the journal directory
   du -sh $JOURNAL_DIR
+  
+  
 }
 
 
