@@ -14,6 +14,7 @@ head() {
   echo "#######################################################################"
   echo "支持系统：Ubuntu 12+，Debian 6+"
   echo "自定义修改大小，单位为MB，一般500M或者1G即可，有的系统日志默认给了5G甚至更多，不是做站啥的没必要"
+  echo "请注意，修改journal目录大小可能会影响系统日志的记录。因此，在修改 journal 目录大小之前，建议先备份系统日志到本地"
   # Display prompt asking whether to proceed with changing
   read -p "Do you want to proceed with changing? [y/n] " -n 1 confirm
   echo ""
