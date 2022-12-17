@@ -302,16 +302,14 @@ if [ $? -ne 0 ]; then
     # Print a message indicating that the system is not supported
     echo "This system is not supported. The apt sources will not be modified."
   fi
-fi
+  # Update the package list again to pick up the new sources
+  sudo apt update
 
-
-# Update the package list again to pick up the new sources
-sudo apt update
-
-if [ $? -ne 0 ]; then
-  # Print a message indicating that the update failed
-  echo "The update failed. Please try another way"
-else
-  # Print a message indicating that the update failed
-  echo "The update succeed!"
+  if [ $? -ne 0 ]; then
+    # Print a message indicating that the update failed
+    echo "The update failed. Please try another way"
+  else
+    # Print a message indicating that the update failed
+    echo "The update succeed!"
+  fi
 fi
