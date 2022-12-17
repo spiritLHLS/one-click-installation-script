@@ -16,6 +16,9 @@ echo "# ${GREEN}作者${PLAIN}: spiritlhl                                       
 echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
 echo "#######################################################################"
 echo "支持系统：Ubuntu 12+，Debian 6+"
+echo "1.修复apt源锁死"
+echo "2.修复apt源公钥缺失"
+echo "3.修复替换系统可用的apt源列表，含国内用阿里源，国外用官方源"
 # Display prompt asking whether to proceed with checking
 read -p "Do you want to proceed with checking? [y/n] " -n 1 confirm
 echo ""
