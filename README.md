@@ -6,7 +6,7 @@
 - 修复apt源broken损坏
 - 修复apt源锁死
 - 修复apt源公钥缺失
-- 修复替换系统可用的apt源列表，含国内用阿里源，国外用官方源
+- 修复替换系统可用的apt源列表，国内用阿里源，国外用官方源
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/package.sh -o package.sh && chmod +x package.sh && bash package.sh
