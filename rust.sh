@@ -8,13 +8,13 @@
 ver="2022.12.08"
 changeLog="一键安装rust，加载官方脚本"
 clear
-echo "#############################################################"
+echo "#######################################################################"
 echo "#                     ${YELLOW}一键安装rust脚本${PLAIN}                        #"
-echo "# 版本：$ver                                          #"
-echo "# 更新日志：$changeLog                    #"
-echo "# ${GREEN}作者${PLAIN}: spiritlhl                                           #"
-echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script"
-echo "#############################################################"
+echo "# 版本：$ver                                                    #"
+echo "# 更新日志：$changeLog                                #"
+echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
+echo "#######################################################################"
 echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
 # Display prompt asking whether to proceed with installation
 read -p "Do you want to proceed with the Rust installation? [y/n] " -n 1 confirm
