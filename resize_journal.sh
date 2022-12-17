@@ -93,10 +93,7 @@ main() {
   fi
 
   # Restart the log recording service to force log rotation
-  systemctl restart systemd-journald
-  if [ $? -ne 0 ]; then
-      systemctl restart rsyslog
-  fi
+  sudo systemctl kill --kill-who=main --signal=SIGUSR2 systemd-journald.service
   
   
   # Loop for 10 seconds, printing journald disk usage every second
