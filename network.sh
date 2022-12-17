@@ -3,7 +3,7 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.17
 
-# Try to ping Google.com
+# Check if ping to google.com is successful
 if ping -c 1 google.com; then
   echo "Ping successful"
 else
