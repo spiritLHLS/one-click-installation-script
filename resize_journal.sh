@@ -60,13 +60,21 @@ main() {
 
   # If the previous methods failed, try setting the size in journald.conf
   if ! $success && [ -f /etc/systemd/journald.conf ]; then
-    sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+    # Check if SystemMaxUse is commented out
+    if grep -q '^#\s*SystemMaxUse=' /etc/systemd/journald.conf; then
+      # If it is commented out, uncomment it
+      sed -i "s/^#\s*SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+    else
+      # If it is not commented out, just update the value
+      sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+    fi
     if [ $? -ne 0 ]; then
       echo "Failed to set journal size using journald.conf"
     else
       success=true
     fi
   fi
+
 
   
   # Restart the log recording service to force log rotation
