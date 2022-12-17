@@ -26,25 +26,36 @@ head() {
 }
 
 main() {
-
   # Prompt the user for the desired size of the journal directory in MB
   read -p "Enter the desired size of the journal directory in MB: " JOURNAL_SIZE_MB
 
   # Convert the size from MB to bytes
   JOURNAL_SIZE=$((JOURNAL_SIZE_MB * 1024 * 1024))
 
+  # Set the path to the journal directory
+  JOURNAL_DIR="/var/log/journal"
+
   # Set the name of the log recording service
   LOG_SERVICE="systemd-journald"
 
-  # Set the size of the journal directory
-  journalctl --disk-space=$JOURNAL_SIZE
+  # Try setting the size of the journal directory with systemd-journal-size
+  if command -v systemd-journal-size &> /dev/null; then
+    systemd-journal-size --disk-space=$JOURNAL_SIZE
+
+  # If systemd-journal-size is not available, try setting the size with journalctl
+  elif command -v journalctl &> /dev/null; then
+    journalctl --disk-space=$JOURNAL_SIZE
+
+  # If neither systemd-journal-size nor journalctl is available, try setting the size in journald.conf
+  else
+    sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+  fi
 
   # Restart the log recording service to force log rotation
   systemctl restart $LOG_SERVICE
 
   # Print the size of the journal directory
-  du -sh /var/log/journal
-
+  du -sh $JOURNAL_DIR
 }
 
 
