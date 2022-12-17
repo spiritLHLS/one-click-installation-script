@@ -9,7 +9,7 @@ ver="2022.12.08"
 changeLog="一键安装rust，加载官方脚本"
 clear
 echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装rust脚本${PLAIN}                        #"
+echo "#                     ${YELLOW}一键安装rust脚本${PLAIN}                                #"
 echo "# 版本：$ver                                                    #"
 echo "# 更新日志：$changeLog                                #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
