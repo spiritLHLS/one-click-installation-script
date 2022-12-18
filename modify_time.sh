@@ -3,8 +3,6 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.18
 
-# 检测本机时间是否准确，如果不准确则修复的脚本
-
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
