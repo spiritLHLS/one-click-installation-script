@@ -39,19 +39,26 @@ HOSTS_LINE="$(grep $HOSTNAME /etc/hosts)"
 if [ -z "$HOSTS_LINE" ]; then
   # Hostname not found in /etc/hosts. Add it.
   yellow "Updating /etc/hosts with hostname: $HOSTNAME"
-  sudo bash -c "echo '127.0.0.1 $HOSTNAME' >> /etc/hosts"
+  echo "127.0.0.1 $HOSTNAME" | sudo tee -a /etc/hosts
 else
   # Hostname found in /etc/hosts. Check if the IP address is correct.
   HOSTS_IP="$(awk '{print $1}' <<<$HOSTS_LINE)"
   if [ "$HOSTS_IP" != "127.0.0.1" ]; then
     # IP address is incorrect. Update it.
     yellow "Updating IP address for $HOSTNAME in /etc/hosts"
-    sudo sed -i "s/$HOSTS_IP/127.0.0.1/g" /etc/hosts
+    temp_file=$(mktemp)
+    backup_file="/etc/hosts-$(date +%Y%m%d%H%M%S).bak"
+    cp /etc/hosts "$backup_file"
+    yellow "Backed up /etc/hosts to $backup_file"
+    awk -v new_ip="127.0.0.1" -v hostname="$HOSTNAME" '{ if ($2 == hostname) { print new_ip " " $2 } else { print $0 } }' /etc/hosts > "$temp_file"
+    cp "$temp_file" /etc/hosts
+    rm "$temp_file"
   else
     # Hostname and IP address are correct. No changes needed.
     green "Hostname and IP address in /etc/hosts are correct."
   fi
 fi
+
 
 # Check if the sudo command works
 sudo yellow "Testing sudo command..."
