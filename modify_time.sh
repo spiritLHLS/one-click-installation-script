@@ -67,7 +67,9 @@ main(){
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
         # 在允许范围内，时间准确
         green "Time on $OS system is accurate."
-        echo "Current timezone: $TIMEZONE"
+        # 将偏移量转换为时区缩写
+        TZ_ABBREV=$(cat /usr/share/zoneinfo/zone.tab | grep "${TIMEZONE:0:3}${TIMEZONE:3:2}" | cut -f4)
+        echo "Current timezone: $TZ_ABBREV"
         echo "Current time: $(date)"
         exit 0
     else
@@ -120,7 +122,9 @@ check_again(){
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
         # 在允许范围内，时间准确
         green "Time on $OS system is accurate."
-        echo "Current timezone: $TIMEZONE"
+        # 将偏移量转换为时区缩写
+        TZ_ABBREV=$(cat /usr/share/zoneinfo/zone.tab | grep "${TIMEZONE:0:3}${TIMEZONE:3:2}" | cut -f4)
+        echo "Current timezone: $TZ_ABBREV"
         echo "Current time: $(date)"
     else
         # 不在允许范围内，时间不准确
