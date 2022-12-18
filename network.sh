@@ -33,8 +33,19 @@ head() {
   fi
 }
 
-
 main() {
+  external_ip=$(host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has" | awk '{print $4}')
+  # 判断 IP 类型并执行对应的函数
+  if [[ $external_ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+      main_v4
+  elif [[ $external_ip =~ ^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}$ ]]; then
+      main_v6
+  else
+      echo "无法识别外网 IP 地址类型"
+  fi
+}
+
+main_v4() {
   # Check if /etc/resolv.conf and /etc/gai.conf exist before backing them up
   if [ -f /etc/resolv.conf ]; then
     cp /etc/resolv.conf /etc/resolv.conf.bak
@@ -101,6 +112,53 @@ main() {
     exit 1
   fi
 }
+
+main_v6() {
+    # 定义 nameserver 列表
+    nameservers=(
+        "2001:67c:2960:5353:5353:5353:5353:5353"
+        "2001:67c:2960:6464:6464:6464:6464:6464"
+        "2602:fc23:18::7"
+        "2001:67c:27e4::60"
+        "2001:67c:27e4:15::64"
+        "2001:67c:27e4::64"
+        "2001:67c:27e4:15::6411"
+        "2a01:4f9:c010:3f02::1"
+        "2a00:1098:2c::1"
+        "2a00:1098:2b::1"
+        "2a01:4f8:c2c:123f::1"
+        "2001:67c:2960::64"
+        "2001:67c:2960::6464"
+        "2001:67c:2960::64"
+        "2001:67c:2960::6464"
+        "2001:67c:2b0::6"
+        "2001:67c:2b0::4"
+        "2a03:7900:2:0:31:3:104:161"
+    )
+
+    # 保存当前 nameserver 的值，以便之后恢复
+    current_nameserver=$(cat /etc/resolv.conf | grep "nameserver" | awk '{print $2}')
+
+    # 循环尝试替换 nameserver 并测试网络
+    for nameserver in "${nameservers[@]}"; do
+        # 替换 nameserver
+        echo "nameserver $nameserver" > /etc/resolv.conf
+
+        # 让修改生效
+        resolvconf -u
+
+        # ping 测试
+        if ping -c 3 google.com &> /dev/null || ping -c 3 github.com &> /dev/null; then
+            echo "网络恢复成功"
+            return
+        fi
+    done
+
+    # 如果所有 nameserver 都尝试过了仍然无法修复，则恢复为原来的 nameserver
+    echo "nameserver $current_nameserver" > /etc/resolv.conf
+    resolvconf -u
+}
+
 
 
 head
