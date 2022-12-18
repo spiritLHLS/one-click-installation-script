@@ -93,7 +93,9 @@ install_jupyter() {
   green "已安装jupyter lab的web端到外网端口13692上，请打开你的 外网IP:13692"
   green "初次安装会要求输入token设置密码，token详见上方打印信息或当前目录的nohup.out日志"
   green "同时已保存日志输出到当前目录的nohup.out中且已打印5秒日志如上"
-  green "如果需要进一步查询，请关闭本窗口开一个新窗口再执行本脚本，否则无法加载一些预设的环境变量" && exit 0
+  green "如果需要进一步查询，请关闭本窗口开一个新窗口再执行本脚本，否则无法加载一些预设的环境变量" 
+  green "如果想要手动查询，输入 source activate jupyter-env && jupyter server list && conda deactivate 即可查询"
+  exit 0
 }
 
 query_jupyter_info() {
