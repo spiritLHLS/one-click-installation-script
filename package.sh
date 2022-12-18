@@ -283,16 +283,15 @@ check_eol_and_switch_apt_source() {
 
 fix_broken() {
   # Check if the output of the update contains "--fix-broken install"
-  if apt update | grep -F '--fix-broken install'; then
+  if apt update | grep -E '--fix-broken.*install'; then
     # If it does, run apt --fix-broken install -y
     apt --fix-broken install -y
     apt update
-  fi
-  
-  if [ $? -eq 0 ]; then
-    # Print a message indicating that the update was successful
-    green "The apt update was successful."
-    exit 0
+    if [ $? -eq 0 ]; then
+      # Print a message indicating that the update was successful
+      green "The apt update was successful."
+      exit 0
+    fi
   fi
 }
 
