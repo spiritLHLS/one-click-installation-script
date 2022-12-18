@@ -50,6 +50,8 @@ check_os() {
 }
 
 main(){
+    # 获取当前时区信息
+    TIMEZONE=$(date +%z)
     # 获取当前时间和网络时间
     CURRENT_TIME=$(date -u +%s)
     NETWORK_TIME=$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)
@@ -58,10 +60,14 @@ main(){
     # 计算时间差
     DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME))
 
+    # 根据时区信息增加或减少时间差的允许范围
+    ALLOWED_DIFF=$((300 + ${TIMEZONE:0:3} * 3600 + ${TIMEZONE:3:2} * 60))
+
     # 判断时间差是否在允许范围内
-    if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
+    if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
         # 在允许范围内，时间准确
         green "Time on $OS system is accurate."
+        exit 0
     else
         # 不在允许范围内，时间不准确，调整时间
         yellow "Time on $OS system is NOT accurate. Adjusting system time to accurate time."
@@ -91,22 +97,25 @@ main(){
 
 check_again(){
     # 获取当前时间和网络时间
-    CURRENT_TIME=$(date +%s)
+    CURRENT_TIME=$(date -u +%s)
     NETWORK_TIME=$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)
-    NETWORK_TIME_SECONDS=$(date -d "$NETWORK_TIME" +%s)
+    NETWORK_TIME_SECONDS=$(TZ=":UTC" date -d "$NETWORK_TIME" +%s)
 
-    # 获取当前时区
-    CURRENT_TZ=$(date +%Z)
-    # 获取网络时间对应的时区
+    # 获取当前时区信息
+    TIMEZONE=$(date +%z)
+    # 获取网络时间对应的时区信息
     NETWORK_TZ=$(echo "$NETWORK_TIME" | awk '{print $5}')
     # 计算时区差，单位是秒
-    TZ_DIFF=$((($(date -d "$NETWORK_TZ" +%s)-$(date -d "$CURRENT_TZ" +%s))/3600*3600))
+    TZ_DIFF=$((($(TZ=":$NETWORK_TZ" date -d "now" +%s)-$(TZ=":$TIMEZONE" date -d "now" +%s))/3600*3600))
 
     # 计算时间差
     DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME-$TZ_DIFF))
 
+    # 根据时区信息增加或减少时间差的允许范围
+    ALLOWED_DIFF=$((300 + ${TIMEZONE:0:3} * 3600 + ${TIMEZONE:3:2} * 60))
+
     # 判断时间差是否在允许范围内
-    if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
+    if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
         # 在允许范围内，时间准确
         green "Time on $OS system is accurate."
     else
@@ -114,6 +123,7 @@ check_again(){
         red "Time on $OS system is NOT accurate. Please check your system time and time zone settings again!"
     fi
 }
+
 
 
 
