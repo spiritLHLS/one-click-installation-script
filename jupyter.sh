@@ -3,6 +3,8 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.18
 
+source ~/.bashrc
+
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
@@ -29,15 +31,20 @@ install_jupyter() {
   
   # Check if conda is already installed
   if ! command -v conda &> /dev/null; then
-      # Install conda
+    # Install conda
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    bash Miniconda3-latest-Linux-x86_64.sh -u
-    # bash Miniconda3-latest-Linux-x86_64.sh
-
-    # Add conda to PATH
+    bash Miniconda3-latest-Linux-x86_64.sh -b -u
+    # added by Miniconda3 installer
     echo 'export PATH="$PATH:$HOME/miniconda3/bin:$HOME/miniconda3/condabin"' >> ~/.bashrc
     echo 'export PATH="$PATH:$HOME/.local/share/jupyter"' >> ~/.bashrc
     source ~/.bashrc
+    sleep 1
+    echo 'export PATH="/home/user/miniconda3/bin:$PATH"' >> ~/.bashrc
+    source ~/.bashrc
+    sleep 1
+    # Add the necessary paths to your search path
+    export PATH="/home/user/miniconda3/bin:$PATH"
+    sleep 5
   fi
 
   # Create a new conda environment and install jupyter
@@ -65,8 +72,7 @@ install_jupyter() {
   fi
 
   # Start Jupyter Notebook with port 13692 and host 0.0.0.0
-  jupyter lab --port 13692 --no-browser --ip=0.0.0.0
-
+  jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root
 
 }
 
