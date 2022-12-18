@@ -38,7 +38,6 @@ install_jupyter() {
       sudo zypper install -y python3 python3-pip python3-devel openssl-devel libffi-devel
   fi
 
-
   # Install virtualenv
   pip3 install --upgrade virtualenv
 
@@ -50,12 +49,15 @@ install_jupyter() {
 
   # Install Jupyter Notebook and Jupyter Lab
   pip3 install jupyter jupyterlab
+  
+  # Add Jupyter Notebook to PATH
+  export PATH="$PATH:/path/to/jupyter/bin"
 
   # Generate a config file for Jupyter Notebook
   jupyter notebook --generate-config
 
   # Set username and password for Jupyter Notebook
-  echo "c.NotebookApp.password = 'sha1:44f8945b6c73:9f9a9d7b80e92359f7a21669f0b3bbe3eee3e1c2'" >> ~/.jupyter/jupyter_notebook_config.py
+  echo "c.NotebookApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_notebook_config.py
   echo "c.NotebookApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_notebook_config.py
 
   # Open port 13692 in firewall
