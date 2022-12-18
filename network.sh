@@ -35,66 +35,71 @@ head() {
 
 
 main() {
+  # Backup /etc/resolv.conf and /etc/gai.conf
+  cp /etc/resolv.conf /etc/resolv.conf.bak
+  yellow "Backed up /etc/resolv.conf to /etc/resolv.conf.bak"
+  cp /etc/gai.conf /etc/gai.conf.bak
+  yellow "Backed up /etc/gai.conf to /etc/gai.conf.bak"
+
   # Check if ping to google.com is successful
   if ping -c 1 google.com; then
     green "Ping successful, no need modify"
   else
     yellow "Ping failed. Checking nameserver."
+  
+  # Check current nameserver
+  nameserver=$(grep nameserver /etc/resolv.conf | awk '{print $2}')
+  yellow "Current nameserver: $nameserver"
 
-    # Check current nameserver
-    nameserver=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
-    yellow "Current nameserver: $nameserver"
+  # Try using Google's nameserver
+  green "Trying Google's nameserver: 8.8.8.8"
+  echo "nameserver 8.8.8.8" > /etc/resolv.conf
+  if ping -c 1 google.com; then
+    green "Ping successful with Google's nameserver"
+  else
+    yellow "Ping failed with Google's nameserver. Trying Cloudflare's nameserver."
 
-    # Try using Google's nameserver
-    green "Trying Google's nameserver: 8.8.8.8"
-    sudo sed -i "s/$nameserver/8.8.8.8/g" /etc/resolv.conf
+    # Try using Cloudflare's nameserver
+    green "Trying Cloudflare's nameserver: 1.1.1.1"
+    echo "nameserver 1.1.1.1" > /etc/resolv.conf
     if ping -c 1 google.com; then
-      green "Ping successful with Google's nameserver"
+      green "Ping successful with Cloudflare's nameserver"
     else
-      yellow "Ping failed with Google's nameserver. Trying Cloudflare's nameserver."
+      yellow "Ping failed with Cloudflare's nameserver. Checking network configuration."
 
-      # Try using Cloudflare's nameserver
-      green "Trying Cloudflare's nameserver: 1.1.1.1"
-      sudo sed -i "s/8.8.8.8/1.1.1.1/g" /etc/resolv.conf
-      if ping -c 1 google.com; then
-        green "Ping successful with Cloudflare's nameserver"
+      # Display prompt asking whether to proceed with checking and changing priority
+      read -p "Do you want to proceed with checking and changing network priority? [y/n] " priority
+      echo ""
+
+      # Check user's input and exit if they do not want to proceed
+      if [ "$priority" != "y" ]; then
+        exit 0
+      fi
+
+      # Check IP type and network priority
+      ip_type=$(curl -s ip.sb | grep -oP '(?<=is )(.+)(?=\.)')
+      green "IP type: $ip_type"
+      if [ "$ip_type" = "IPv4" ]; then
+        priority=$(grep precedence /etc/gai.conf | grep -oP '(?<=precedence ::ffff:0:0\/96 )\d+')
       else
-        yellow "Ping failed with Cloudflare's nameserver. Checking network configuration."
-        
-        # Display prompt asking whether to proceed with checking and changing priority
-        reading "Do you want to proceed with checking and changing network priority? [y/n] " priority
-        echo ""
+        priority=$(grep precedence /etc/gai.conf | grep -oP '(?<=precedence ::/0 )\d+')
+      fi
+      green "Network priority: $priority"
 
-        # Check user's input and exit if they do not want to proceed
-        if [ "$priority" != "y" ]; then
-          exit 0
-        fi
+      # Modify network priority if necessary
+      if [ "$ip_type" = "IPv4" ] && [ "$priority" -gt "100" ]; then
+        echo "precedence ::ffff:0:0/96 50" > /etc/gai.conf
+      elif [ "$ip_type" = "IPv6" ] && [ "$priority" -lt "100" ]; then
+        echo "precedence ::/0 100" > /etc/gai.conf
+      else
+        red "Network configuration is correct."
+      fi
 
-        # Check IP type and network priority
-        ip_type=$(curl -s ip.sb | grep -oP '(?<=is )(.+)(?=\.)')
-        green "IP type: $ip_type"
-        if [ "$ip_type" = "IPv4" ]; then
-          priority=$(cat /etc/gai.conf | grep -oP '(?<=precedence ::ffff:0:0\/96 )\d+')
-        else
-          priority=$(cat /etc/gai.conf | grep -oP '(?<=precedence ::/0 )\d+')
-        fi
-        green "Network priority: $priority"
-
-        # Modify network priority if necessary
-        if [ "$ip_type" = "IPv4" ] && [ "$priority" -gt "100" ]; then
-          sudo sed -i 's/precedence ::ffff:0:0\/96 100/precedence ::ffff:0:0\/96 50/' /etc/gai.conf
-        elif [ "$ip_type" = "IPv6" ] && [ "$priority" -lt "100" ]; then
-          sudo sed -i 's/precedence ::\/0 50/precedence ::\/0 100/' /etc/gai.conf
-        else
-          red "Network configuration is correct."
-        fi
-
-        # Try to ping again after modifying network priority
-        if ping -c 1 google.com; then
-          green "Ping successful after modifying network priority"
-        else
-          red "Network problem is not related to nameserver or network priority."
-        fi
+      # Try to ping again after modifying network priority
+      if ping -c 1 google.com; then
+        green "Ping successful after modifying network priority"
+      else
+        red "Network problem is not related to nameserver or network priority."
       fi
     fi
   fi
