@@ -288,6 +288,12 @@ fix_broken() {
     apt --fix-broken install -y
     apt update
   fi
+  
+  if [ $? -eq 0 ]; then
+    # Print a message indicating that the update was successful
+    green "The apt update was successful."
+    exit 0
+  fi
 }
 
 fix_locked() {
@@ -300,7 +306,15 @@ fix_locked() {
       sudo rm /var/lib/dpkg/lock
       sudo rm /var/cache/apt/archives/lock
     fi
+    
     sudo apt update
+    
+    if [ $? -eq 0 ]; then
+      # Print a message indicating that the update was successful
+      green "The apt update was successful."
+      exit 0
+    fi
+  
     if [ $? -ne 0 ]; then
       yellow "The update still failed. Attempting to fix missing GPG keys..."
       if [ -f /etc/debian_version ]; then
@@ -315,6 +329,12 @@ fix_locked() {
 fix_sources() {
   # Update the package list to pick up the new sources
   sudo apt update
+  
+  if [ $? -eq 0 ]; then
+      # Print a message indicating that the update was successful
+      green "The apt update was successful."
+      exit 0
+  fi
 
   # Check the exit status of the update command
   if [ $? -ne 0 ]; then
@@ -370,6 +390,10 @@ fix_sources() {
         - Check for disk space issues"
     fi
   fi
+}
+
+check_again() {
+
 }
 
 
