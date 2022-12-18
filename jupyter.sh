@@ -44,24 +44,26 @@ install_jupyter() {
     sleep 1
     # Add the necessary paths to your search path
     export PATH="/home/user/miniconda3/bin:$PATH"
-    sleep 5
+    green "请重新启动窗口再执行本脚本，否则无法加载一些预设的环境变量" && exit 0
   fi
-
+  
+  green "加载预设的conda环境变量成功，准备安装jupyter，无脑输入y和回车即可"
+  
   # Create a new conda environment and install jupyter
   conda create -n jupyter-env python=3
   source activate jupyter-env
   conda install jupyter jupyterlab
-  
+
   # Add the following line to /etc/profile
   echo 'export PATH="$PATH:~/.local/share/jupyter"' >> /etc/profile
   # Execute the configuration
   source /etc/profile
-  
-  # Set username and password for Jupyter Notebook
+
+  # Set username and password for Jupyter Server
   jupyter notebook --generate-config
   cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
-  echo "c.NotebookApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
-  echo "c.NotebookApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
+  echo "c.ServerApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
+  echo "c.ServerApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
 
   # Open port 13692 in firewall
   if command -v ufw &> /dev/null; then
@@ -71,9 +73,8 @@ install_jupyter() {
       sudo firewall-cmd --reload
   fi
 
-  # Start Jupyter Notebook with port 13692 and host 0.0.0.0
-  jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root
-
+  # Start Jupyter Server with port 13692 and host 0.0.0.0
+  nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & echo $!
 }
 
 change_username_and_password() {
