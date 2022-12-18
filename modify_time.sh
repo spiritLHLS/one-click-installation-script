@@ -5,6 +5,13 @@
 
 # 检测本机时间是否准确，如果不准确则修复的脚本
 
+GREEN="\033[32m"
+PLAIN="\033[0m"
+red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading(){ read -rp "$(green "$1")" "$2"; }
+
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
   ver="2022.12.17"
@@ -20,7 +27,7 @@ head() {
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
   echo "检测修复本机系统时间，如果相差超过300秒的合理范围则校准时间"
   # Display prompt asking whether to proceed with checking and changing
-  read -p "Do you want to proceed with checking and changing? [y/n] " -n 1 confirm
+  reading "Do you want to proceed with checking and changing? [y/n] " confirm
   echo ""
 
   # Check user's input and exit if they do not want to proceed
@@ -56,10 +63,10 @@ main(){
     # 判断时间差是否在允许范围内
     if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
         # 在允许范围内，时间准确
-        echo "Time on $OS system is accurate."
+        green "Time on $OS system is accurate."
     else
         # 不在允许范围内，时间不准确，调整时间
-        echo "Time on $OS system is NOT accurate. Adjusting system time to accurate time."
+        yellow "Time on $OS system is NOT accurate. Adjusting system time to accurate time."
         if [ "$OS" == "Ubuntu/Debian/Almalinux" ]; then
             # Ubuntu/Debian/Almalinux 系统使用 ntpdate 命令
             if [ ! -x "$(command -v ntpdate)" ]; then
@@ -78,7 +85,7 @@ main(){
             sudo ntpdate time.nist.gov || sudo ntpdate pool.ntp.org || sudo ntpdate cn.pool.ntp.org
         else
             # 未知系统
-            echo "Unable to adjust system time on unknown system."
+            red "Unable to adjust system time on unknown system."
         fi
     fi
 }
@@ -95,10 +102,10 @@ check_again(){
     # 判断时间差是否在允许范围内
     if [ "$DIFF" -lt 300 ] && [ "$DIFF" -gt -300 ]; then
         # 在允许范围内，时间准确
-        echo "Time on $OS system is accurate."
+        green "Time on $OS system is accurate."
     else
         # 不在允许范围内，时间不准确
-        echo "Time on $OS system is NOT accurate. Please check your system time and time zone settings."
+        red "Time on $OS system is NOT accurate. Please check your system time and time zone settings again!"
     fi
 }
 
