@@ -32,6 +32,12 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/modify_time.sh -o modify_time.sh && chmod +x modify_time.sh && bash modify_time.sh
 ```
 
+#### 一键尝试修复```sudo: unable to resolve host xxx: Name or service not known```警告(爆错)
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/check_sudo.sh -o check_sudo.sh && chmod +x check_sudo.sh && bash check_sudo.sh
+```
+
 #### 一键修改系统自带的journal日志记录大小释放系统盘空间
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
@@ -43,12 +49,6 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/resize_journal.sh -o resize_journal.sh && chmod +x resize_journal.sh && bash resize_journal.sh
-```
-
-#### 一键修复```sudo: unable to resolve host xxx: Name or service not known```警告(爆错)
-
-```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/check_sudo.sh -o check_sudo.sh && chmod +x check_sudo.sh && bash check_sudo.sh
 ```
 
 ### 一键环境安装脚本
