@@ -48,8 +48,8 @@ change_debian_apt_sources() {
   DEBIAN_VERSION=$(lsb_release -sr)
 
   if [ "$location" = "China" ]; then
-    # IP is in China, update apt sources
-    echo "IP is in China, updating apt sources."
+    # IP is in China, update apt-get sources
+    echo "IP is in China, updating apt-get sources."
     if [ "$DEBIAN_VERSION" = "6.0" ]; then
       # Debian 6
       cat > /etc/apt/sources.list <<EOF
@@ -88,8 +88,8 @@ deb-src http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
 EOF
     fi
   else
-    # IP is not in China, update apt sources
-    echo "IP is not in China, updating apt sources."
+    # IP is not in China, update apt-get sources
+    echo "IP is not in China, updating apt-get sources."
     # Use official sources list for Debian 6
     if [[ $DEBIAN_VERSION == 6 ]]; then
       cat > /etc/apt/sources.list <<EOF
@@ -175,41 +175,41 @@ change_ubuntu_apt_sources() {
   # Check the system's Ubuntu version
   ubuntu_version=$(lsb_release -r | awk '{print $2}')
   if [ "$location" = "China" ]; then
-    # IP is in China, update apt sources
-    echo "IP is in China, updating apt sources."
+    # IP is in China, update apt-get sources
+    echo "IP is in China, updating apt-get sources."
     # Backup the current sources.list
     sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
     if [ "$ubuntu_version" = "12.04" ]; then
-      # Write the AliYun Ubuntu 12.04 apt sources list to sources.list
+      # Write the AliYun Ubuntu 12.04 apt-get sources list to sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ precise main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ precise-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ precise-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "14.04" ]; then
-      # Write the AliYun Ubuntu 14.04 apt sources list to sources.list
+      # Write the AliYun Ubuntu 14.04 apt-get sources list to sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "16.04" ]; then
-      # Write the AliYun Ubuntu 16.04 apt sources list to sources.list
+      # Write the AliYun Ubuntu 16.04 apt-get sources list to sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "18.04" ]; then
-      # Write the AliYun Ubuntu 18.04 apt sources list to sources.list
+      # Write the AliYun Ubuntu 18.04 apt-get sources list to sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "20.04" ]; then
-      # Write the AliYun Ubuntu 20.04 apt sources list to sources.list
+      # Write the AliYun Ubuntu 20.04 apt-get sources list to sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "22.04" ]; then
-      # Write the AliYun Ubuntu 22.04 apt sources list to sources.list
+      # Write the AliYun Ubuntu 22.04 apt-get sources list to sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ groovy main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ groovy-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://mirrors.aliyun.com/ubuntu/ groovy-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
@@ -219,42 +219,42 @@ change_ubuntu_apt_sources() {
     # Backup the current sources.list
     sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
     if [ "$ubuntu_version" = "12.04" ]; then
-      # Write the Ubuntu 12.04 apt sources list that can be used with apt to sources.list
+      # Write the Ubuntu 12.04 apt-get sources list that can be used with apt-get to sources.list
       echo "deb http://old-releases.ubuntu.com/ubuntu precise main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://old-releases.ubuntu.com/ubuntu precise-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://old-releases.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "14.04" ]; then
-      # Write the standard Ubuntu 14.04 apt sources list to sources.list
+      # Write the standard Ubuntu 14.04 apt-get sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "16.04" ]; then
-      # Write the standard Ubuntu 16.04 apt sources list to sources.list
+      # Write the standard Ubuntu 16.04 apt-get sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "18.04" ]; then
-      # Write the standard Ubuntu 18.04 apt sources list to sources.list
+      # Write the standard Ubuntu 18.04 apt-get sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu bionic-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "20.04" ]; then
-      # Write the standard Ubuntu 20.04 apt sources list to sources.list
+      # Write the standard Ubuntu 20.04 apt-get sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     elif [ "$ubuntu_version" = "22.04" ]; then
-      # Write the standard Ubuntu 22.04 apt sources list to sources.list
+      # Write the standard Ubuntu 22.04 apt-get sources list to sources.list
       echo "deb http://archive.ubuntu.com/ubuntu hirsute main restricted universe multiverse" | sudo tee /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu hirsute-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu hirsute-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
       echo "deb http://archive.ubuntu.com/ubuntu hirsute-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
     else
-      echo "The system is not Ubuntu 12/14/16/18/20/22 . No changes were made to the apt sources."
+      echo "The system is not Ubuntu 12/14/16/18/20/22 . No changes were made to the apt-get sources."
     fi
   fi
 }
@@ -272,7 +272,7 @@ check_eol_and_switch_apt_source() {
     if [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]; then
       # 修改apt源
       sed -i -e "s/archive.ubuntu.com/old-releases.ubuntu.com/g" /etc/apt/sources.list
-      apt update
+      apt-get update
     fi
   else
     # 版本未过期
@@ -283,13 +283,13 @@ check_eol_and_switch_apt_source() {
 
 fix_broken() {
   # Check if the output of the update contains "--fix-broken install"
-  if apt update | grep -F -- '--fix-broken' | grep -F -- 'install'; then
-    # If it does, run apt --fix-broken install -y
-    apt --fix-broken install -y
-    apt update
+  if apt-get update | grep -F -- '--fix-broken' | grep -F -- 'install'; then
+    # If it does, run apt-get --fix-broken install -y
+    apt-get --fix-broken install -y
+    apt-get update
     if [ $? -eq 0 ]; then
       # Print a message indicating that the update was successful
-      green "The apt update was successful."
+      green "The apt-get update was successful."
       exit 0
     fi
   fi
@@ -297,7 +297,7 @@ fix_broken() {
 
 fix_locked() {
   if [ $? -ne 0 ]; then
-    echo "The update failed. Attempting to unlock the apt sources..."
+    echo "The update failed. Attempting to unlock the apt-get sources..."
     if [ -f /etc/debian_version ]; then
       sudo rm /var/lib/apt/lists/lock
       sudo rm /var/cache/apt/archives/lock
@@ -306,11 +306,11 @@ fix_locked() {
       sudo rm /var/cache/apt/archives/lock
     fi
     
-    sudo apt update
+    sudo apt-get update
     
     if [ $? -eq 0 ]; then
       # Print a message indicating that the update was successful
-      green "The apt update was successful."
+      green "The apt-get update was successful."
       exit 0
     fi
   
@@ -327,22 +327,22 @@ fix_locked() {
 
 fix_sources() {
   # Update the package list to pick up the new sources
-  sudo apt update
+  sudo apt-get update
   
   if [ $? -eq 0 ]; then
       # Print a message indicating that the update was successful
-      green "The apt update was successful."
+      green "The apt-get update was successful."
       exit 0
   fi
 
   # Check the exit status of the update command
   if [ $? -ne 0 ]; then
     # Print a message indicating that the update failed
-    yellow "The update failed. Attempting to replace the apt sources..."
+    yellow "The update failed. Attempting to replace the apt-get sources..."
 
     # Check if the system is Debian or Ubuntu
     if [ -f /etc/debian_version ]; then
-      # Replace the current apt sources list with the one at the specified URL
+      # Replace the current apt-get sources list with the one at the specified URL
       #sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/debian.txt
       # Display prompt asking whether to proceed with updating
       reading "Do you want to proceed with updating? [y/n] " updating
@@ -355,7 +355,7 @@ fix_sources() {
         change_debian_apt_sources
       fi
     elif [ -f /etc/lsb-release ]; then
-      # Replace the current apt sources list with the one at the specified URL
+      # Replace the current apt-get sources list with the one at the specified URL
       # sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/ubuntu.txt
       
       # Display prompt asking whether to proceed with updating
@@ -371,15 +371,15 @@ fix_sources() {
       fi
     else
       # Print a message indicating that the system is not supported
-      red "This system is not supported. The apt sources will not be modified."
+      red "This system is not supported. The apt-get sources will not be modified."
     fi
     # Update the package list again to pick up the new sources
-    sudo apt update
+    sudo apt-get update
 
     # Check the exit status of the update command
     if [ $? -eq 0 ]; then
       # Print a message indicating that the update was successful
-      green "The apt update was successful."
+      green "The apt-get update was successful."
     else
       # Print a message indicating that the update failed and suggest other error resolution methods
       red "The update failed. You may want to try the following error resolution methods:
