@@ -20,7 +20,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/network.sh -o network.sh && chmod +x network.sh && bash network.sh
+curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/network.sh -o network.sh && chmod +x network.sh && bash network.sh
 ```
 
 #### 一键尝试修复系统时间 
