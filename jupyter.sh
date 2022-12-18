@@ -60,10 +60,11 @@ install_jupyter() {
   source /etc/profile
 
   # Set username and password for Jupyter Server
-  jupyter notebook --generate-config
-  cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
-  echo "c.ServerApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
-  echo "c.ServerApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
+  # jupyter notebook --generate-config
+  # cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
+  jupyter server --generate-config
+  # echo "c.ServerApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
+  # echo "c.ServerApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
 
   # Open port 13692 in firewall
   if command -v ufw &> /dev/null; then
@@ -75,6 +76,8 @@ install_jupyter() {
 
   # Start Jupyter Server with port 13692 and host 0.0.0.0
   nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & echo $!
+  sleep 5
+  cat nohup.out
 }
 
 change_username_and_password() {
