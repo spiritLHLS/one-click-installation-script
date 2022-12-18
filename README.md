@@ -60,7 +60,9 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 #### 一键安装jupyter环境 
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-- 有安装则提示是否需要修改用户名和密码，否则则自动安装，自动安装后默认用户名和密码都是spiritlhl，如果安装完毕需要修改，再次执行本脚本修改
+- **本脚本使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯洁勿要使用本脚本！**
+- 执行脚本，之前有通过本脚本安装过则打印设置的登陆信息，没安装过则进行安装再打印信息
+- 如果是初次安装无脑输入yes或y回车即可
 - **本脚本为实验性脚本会有各种bug，勿要轻易尝试**
 
 ```bash
