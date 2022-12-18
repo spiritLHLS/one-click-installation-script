@@ -67,6 +67,8 @@ main(){
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
         # 在允许范围内，时间准确
         green "Time on $OS system is accurate."
+        echo "Current timezone: $TIMEZONE"
+        echo "Current time: $(date)"
         exit 0
     else
         # 不在允许范围内，时间不准确，调整时间
@@ -118,6 +120,8 @@ check_again(){
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
         # 在允许范围内，时间准确
         green "Time on $OS system is accurate."
+        echo "Current timezone: $TIMEZONE"
+        echo "Current time: $(date)"
     else
         # 不在允许范围内，时间不准确
         red "Time on $OS system is NOT accurate. Please check your system time and time zone settings again!"
