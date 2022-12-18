@@ -61,7 +61,7 @@ main() {
   fi
   
   
-  # If the previous methods failed, try setting the size in journald.conf
+  # Convert the size from MB to bytes
   if ! $success && [ -f /etc/systemd/journald.conf ]; then
     # Check if the file is writable
     if [ ! -w /etc/systemd/journald.conf ]; then
@@ -76,10 +76,10 @@ main() {
     # Check if the line containing SystemMaxUse is commented out
     if grep -q '^#\s*SystemMaxUse=' /etc/systemd/journald.conf; then
       # If it is commented out, uncomment it
-      sed -i "s/^#\s*SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+      sed -i "s/^#\s*SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE_MBM/g" /etc/systemd/journald.conf
     else
       # If it is not commented out, just update the value
-      sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE/g" /etc/systemd/journald.conf
+      sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE_MBM/g" /etc/systemd/journald.conf
     fi
     if [ $? -ne 0 ]; then
       echo "Failed to set journal size using journald.conf"
@@ -102,13 +102,14 @@ main() {
       success=true
       echo "3.2 success"
     fi
-    
+
     # Restore the original permissions of the file
     chmod -w /etc/systemd/journald.conf
     if [ $? -ne 0 ]; then
       echo "Failed to restore permissions of journald.conf"
     fi
   fi
+
 
 
   # Restart the log recording service to force log rotation
