@@ -16,18 +16,21 @@ head() {
   echo "自定义修改大小，单位为MB，一般500M或者1G即可，有的系统日志默认给了5G甚至更多，不是做站啥的没必要"
   echo "请注意，修改journal目录大小可能会影响系统日志的记录。因此，在修改 journal 目录大小之前，建议先备份系统日志到本地"
   # Display prompt asking whether to proceed with changing
-  read -p "Do you want to proceed with changing? [y/n] " -n 1 confirm
+  reading "Do you want to proceed with changing? [y/n] " -n 1 confirm
   echo ""
 
   # Check user's input and exit if they do not want to proceed
   if [ "$confirm" != "y" ]; then
     exit 0
   fi
+  
+  reading "Enter the desired day of the journal retention days(eg: 7): " retention_days
+  reading "Enter the desired size of the journal directory in MB (eg: 500): " size
 }
 
+reading(){ read -rp "$(green "$1")" "$2"; }
+
 main() {
-  # Prompt the user for the desired size of the journal directory in MB
-  read -p "Enter the desired size of the journal directory in MB (eg: 500): " size
 
   # Set default value for size
   size="$size"M
@@ -36,31 +39,22 @@ main() {
 
   # Restart journald service
   systemctl restart systemd-journald
-  
-  
-  # Loop for 10 seconds, printing journald disk usage every second
-  count=0
-  while [ $count -lt 10 ]; do
-    journalctl --disk-usage
-    count=$((count+1))
-    sleep 1
-  done
-  
 }
+
 
 level() {
   # Set default values for variables
-  retention_days=7
   log_level=warning
+  journald_log_dir="/var/log/journal"
 
   # Check if log directory exists
-  if [ ! -d /var/log ]; then
+  if [ ! -d "$journald_log_dir" ]; then
     echo "Log directory not found" >&2
     exit 1
   fi
 
   # Set log retention period
-  find /var/log -mtime +$retention_days -exec rm {} \;
+  find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
 
   # Check if config file exists
   if [ ! -f /etc/rsyslog.conf ]; then
@@ -69,8 +63,21 @@ level() {
   fi
 
   # Set log level
-  sed -i "s/loglevel = .*/loglevel = $log_level/" /etc/rsyslog.conf
+  if grep -q "loglevel" /etc/rsyslog.conf; then  # Add this line
+    sed -i "s/^\(#\)\{0,1\}loglevel = .*/loglevel = $log_level/" /etc/rsyslog.conf
+  else  # Add this block
+    echo "loglevel = $log_level" >> /etc/rsyslog.conf
+  fi
+}
 
+check_again() {
+  # Loop for 5 seconds, printing journald disk usage every second
+  count=0
+  while [ $count -lt 5 ]; do
+    journalctl --disk-usage
+    count=$((count+1))
+    sleep 1
+  done
 
 }
 
@@ -78,3 +85,4 @@ level() {
 head
 main
 level
+check_again
