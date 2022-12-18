@@ -25,6 +25,7 @@ head() {
   echo "1.修复apt源锁死"
   echo "2.修复apt源公钥缺失"
   echo "3.修复替换系统可用的apt源列表，国内用阿里源，国外用官方源"
+  echo "4.如果使用的Ubuntu系统是EOL非长期维护的版本，将修复替换为Ubuntu官方的old-releases仓库以支持源的使用"
   # Display prompt asking whether to proceed with checking
   reading "Do you want to proceed with checking? [y/n] " confirm
   echo ""
@@ -258,6 +259,28 @@ change_ubuntu_apt_sources() {
   fi
 }
 
+
+check_eol_and_switch_apt_source() {
+  # 获取系统版本
+  version=$(lsb_release -cs)
+
+  # 检查系统版本是否已经过期
+  eol=$(curl -s https://ubuntu.com/dists/${version}/Release | grep "EOL" | wc -l)
+  if [ $eol -gt 0 ]; then
+    # 版本已经过期
+    reading "This version of Ubuntu is EOL. Do you want to switch to the old-releases repository? [y/n] " confirm
+    if [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]; then
+      # 修改apt源
+      sed -i -e "s/archive.ubuntu.com/old-releases.ubuntu.com/g" /etc/apt/sources.list
+      apt update
+    fi
+  else
+    # 版本未过期
+    echo "This version of Ubuntu is not EOL. No need to switch repositories."
+  fi
+}
+
+
 fix_broken() {
   # Check if the output of the update contains "--fix-broken install"
   if apt update | grep -F '--fix-broken install'; then
@@ -302,16 +325,6 @@ fix_sources() {
     if [ -f /etc/debian_version ]; then
       # Replace the current apt sources list with the one at the specified URL
       #sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/debian.txt
-      # 获取系统版本
-      release=$(lsb_release -cs)
-
-      # 获取源列表中的版本
-      sources_release=$(grep "^deb" /etc/apt/sources.list | head -n1 | cut -d' ' -f3)
-
-      # 如果版本不同，则执行 change_debian_apt_sources 函数
-      if [ "$release" != "$sources_release" ]; then
-        yellow "debian source is wrong"
-      fi
       # Display prompt asking whether to proceed with updating
       reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
@@ -325,16 +338,7 @@ fix_sources() {
     elif [ -f /etc/lsb-release ]; then
       # Replace the current apt sources list with the one at the specified URL
       # sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/ubuntu.txt
-      # 获取系统版本
-      release=$(lsb_release -cs)
-
-      # 获取源列表中的版本
-      sources_release=$(grep "^deb" /etc/apt/sources.list | head -n1 | cut -d' ' -f3)
-
-      # 如果版本不同，则执行 change_apt_sources 函数
-      if [ "$release" != "$sources_release" ]; then
-        yellow "ubuntu source is wrong"
-      fi
+      
       # Display prompt asking whether to proceed with updating
       reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
@@ -343,6 +347,7 @@ fix_sources() {
       if [ "$updating" != "y" ]; then
         exit 0
       else
+        check_eol_and_switch_apt_source
         change_ubuntu_apt_sources
       fi
     else
