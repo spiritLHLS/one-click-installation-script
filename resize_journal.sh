@@ -55,7 +55,7 @@ level() {
 
   # Check if log directory exists
   if [ ! -d "$journald_log_dir" ]; then
-    echo "Log directory not found" >&2
+    echo "Log directory not found, so not delete" >&2
     exit 1
   fi
 
@@ -64,7 +64,7 @@ level() {
 
   # Check if config file exists
   if [ ! -f /etc/rsyslog.conf ]; then
-    echo "Config file not found" >&2
+    echo "Config file (/etc/rsyslog.conf) not found, so not modify" >&2
     exit 1
   fi
 
