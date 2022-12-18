@@ -3,9 +3,16 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.17
 
+GREEN="\033[32m"
+PLAIN="\033[0m"
+red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading(){ read -rp "$(green "$1")" "$2"; }
+
 
 # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-ver="2022.12.17"
+ver="2022.12.18"
 changeLog="一键安装rust，加载官方脚本"
 clear
 echo "#######################################################################"
@@ -17,7 +24,7 @@ echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-insta
 echo "#######################################################################"
 echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
 # Display prompt asking whether to proceed with installation
-read -p "Do you want to proceed with the Rust installation? [y/n] " -n 1 confirm
+reading "Do you want to proceed with the Rust installation? [y/n] " confirm
 echo ""
 
 # Check user's input and exit if they do not want to proceed
