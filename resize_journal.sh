@@ -88,10 +88,10 @@ main() {
     # Check if the line containing ForwardToSyslog is commented out
     if grep -q '^#\s*ForwardToSyslog=' /etc/systemd/journald.conf; then
       # If it is commented out, uncomment it and set the value to no
-      sed -i "s/^#\s*ForwardToSyslog=.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
+      sed -i "s/^#\s*ForwardToSyslog=no.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
     else
       # If it is not commented out, just update the value
-      sed -i "s/^ForwardToSyslog=.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
+      sed -i "s/^ForwardToSyslog=no.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
     fi
     if [ $? -ne 0 ]; then
       echo "Failed to set ForwardToSyslog to no in journald.conf"
