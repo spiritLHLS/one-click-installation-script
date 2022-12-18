@@ -34,7 +34,11 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 一键修改系统自带的journal日志记录大小释放系统盘空间
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-- 自定义修改，一般500M或者1G即可，有的系统日志默认给了5G甚至更多，不是做站啥的没必要
+- 1.自定义修改大小，单位为MB，一般500或者1000即可，有的系统日志默认给了5000甚至更多，不是做站啥的没必要
+-- 请注意，修改journal目录大小可能会影响系统日志的记录。因此，在修改 journal 目录大小之前，建议先备份系统日志到本地
+- 2.运行脚本同时设置系统日志保留日期时长，超过日期时长的日志将被清除
+- 3.同时修改日志只记录warning等级
+- 4.以后日志的产生将受到日志文件大小，日志保留时间，日志保留等级的限制
 
 ```
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/resize_journal.sh -o resize_journal.sh && chmod +x resize_journal.sh && bash resize_journal.sh
