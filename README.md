@@ -41,8 +41,14 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 3.默认修改日志只记录warning等级(无法自定义)
 - 4.以后日志的产生将受到日志文件大小，日志保留时间，日志保留等级的限制
 
-```
+```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/resize_journal.sh -o resize_journal.sh && chmod +x resize_journal.sh && bash resize_journal.sh
+```
+
+一键修复```sudo: unable to resolve host xxx: Name or service not known```警告(爆错)
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/check_sudo.sh -o check_sudo.sh && chmod +x check_sudo.sh && bash check_sudo.sh
 ```
 
 ### 一键环境安装脚本
