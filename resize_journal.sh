@@ -39,17 +39,23 @@ head() {
 }
 
 main() {
-
   # Set default value for size
   size="$size"M
 
-  sed -i "s/^\(#\)\{0,1\}SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
+  temp_file=$(mktemp)
+  backup_file="/etc/systemd/journald.conf-$(date +%Y%m%d%H%M%S).bak"
+  sudo cp /etc/systemd/journald.conf "$backup_file"
+  yellow "Backed up /etc/systemd/journald.conf to $backup_file"
+  awk -v size="$size" '{ if ($1 == "SystemMaxUse=") { print "SystemMaxUse=" size } else { print $0 } }' /etc/systemd/journald.conf > "$temp_file"
+  sudo cp "$temp_file" /etc/systemd/journald.conf
+  rm "$temp_file"
 
   # Restart journald service
   systemctl restart systemd-journald
-  
+
   green "change /etc/systemd/journald.conf successfully"
 }
+
 
 
 level() {
@@ -72,13 +78,21 @@ level() {
     red "Config file (/etc/rsyslog.conf) not found, so not modify" >&2
   else
     # Set log level
-    if grep -q "loglevel" /etc/rsyslog.conf; then  # Add this line
-      sed -i "s/^\(#\)\{0,1\}loglevel = .*/loglevel = $log_level/" /etc/rsyslog.conf
-    else  # Add this block
-      echo "loglevel = $log_level" >> /etc/rsyslog.conf
+    temp_file=$(mktemp)
+    backup_file="/etc/rsyslog.conf-$(date +%Y%m%d%H%M%S).bak"
+    sudo cp /etc/rsyslog.conf "$backup_file"
+    yellow "Backed up /etc/rsyslog.conf to $backup_file"
+    if grep -q "loglevel" /etc/rsyslog.conf; then
+      awk -v log_level="$log_level" '{ if ($1 == "loglevel") { print "loglevel = " log_level } else { print $0 } }' /etc/rsyslog.conf > "$temp_file"
+    else
+      cat /etc/rsyslog.conf > "$temp_file"
+      echo "loglevel = $log_level" >> "$temp_file"
     fi
+    sudo cp "$temp_file" /etc/rsyslog.conf
+    rm "$temp_file"
     green "change /etc/rsyslog.conf successfully"
   fi
+
 }
 
 check_again() {
