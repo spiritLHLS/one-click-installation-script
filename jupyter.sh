@@ -134,23 +134,29 @@ main() {
   # Check if jupyter is installed
   if jupyter --version &> /dev/null; then
     echo "Jupyter is already installed on this system."
-    reading "Do you want to change the username and password for Jupyter? (y/n) " confirm
+    reading "Do you want to change the username and password for Jupyter? (y/n) " change
     echo ""
 
     # Check user's input and exit if they do not want to proceed
-    if [ "$confirm" != "y" ]; then
+    if [ "$change" != "y" ]; then
       exit 0
     fi
+    
+    change_username_and_password
+    
   else
-    reading "Jupyter is not installed on this system. Do you want to install it? (y/n) " confirm
+    reading "Jupyter is not installed on this system. Do you want to install it? (y/n) " confirminstall
     echo ""
 
     # Check user's input and exit if they do not want to proceed
-    if [ "$confirm" != "y" ]; then
+    if [ "$confirminstall" != "y" ]; then
       exit 0
     fi
+    
+    install_jupyter
+    
   fi
-
+  
   # Print the current info for Jupyter
   echo "The current info for Jupyter:"
   query_jupyter_info
