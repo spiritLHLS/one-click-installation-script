@@ -27,93 +27,45 @@ head() {
 
 main() {
   # Prompt the user for the desired size of the journal directory in MB
-  read -p "Enter the desired size of the journal directory in MB: " JOURNAL_SIZE_MB
+  read -p "Enter the desired size of the journal directory in MB (eg: 500): " size
 
-  # Convert the size from MB to bytes
-  JOURNAL_SIZE=$((JOURNAL_SIZE_MB * 1024 * 1024))
+  # Set default value for size
+  size="$size"M
 
-  # Set the path to the journal directory
-  JOURNAL_DIR="/var/log/journal"
+  # Parse command line argument
+  while getopts ":s:" opt; do
+    case $opt in
+      s)
+        size=$OPTARG
+        ;;
+      \?)
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        exit 1
+        ;;
+    esac
+  done
 
-  # Set the name of the log recording service
-  LOG_SERVICE="systemd-journald"
-
-#   # Try setting the size of the journal directory with systemd-journal-size
-#   if command -v systemd-journal-size &> /dev/null; then
-#     systemd-journal-size --disk-space=$JOURNAL_SIZE
-#     if [ $? -ne 0 ]; then
-#       echo "Failed to set journal size using systemd-journal-size"
-#     else
-#       success=true
-#       echo "1 success"
-#     fi
-#   fi
-
-#   # If the previous method failed, try setting the size with journalctl
-#   if ! $success && command -v journalctl &> /dev/null; then
-#     journalctl --disk-space=$JOURNAL_SIZE
-#     if [ $? -ne 0 ]; then
-#       echo "Failed to set journal size using journalctl"
-#     else
-#       success=true
-#       echo "2 success"
-#     fi
-#   fi
-  
-  
-  # Convert the size from MB to bytes
-  if ! $success && [ -f /etc/systemd/journald.conf ]; then
-    # Check if the file is writable
-    if [ ! -w /etc/systemd/journald.conf ]; then
-      # If the file is not writable, try changing its permissions
-      chmod +w /etc/systemd/journald.conf
-      if [ $? -ne 0 ]; then
-        echo "Failed to change permissions of journald.conf"
-        continue
-      fi
-    fi
-
-    # Check if the line containing SystemMaxUse is commented out
-    if grep -q '^#\s*SystemMaxUse=' /etc/systemd/journald.conf; then
-      # If it is commented out, uncomment it
-      sed -i "s/^#\s*SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE_MBM/g" /etc/systemd/journald.conf
-    else
-      # If it is not commented out, just update the value
-      sed -i "s/^SystemMaxUse=.*/SystemMaxUse=$JOURNAL_SIZE_MBM/g" /etc/systemd/journald.conf
-    fi
-    if [ $? -ne 0 ]; then
-      echo "Failed to set journal size using journald.conf"
-    else
-      success=true
-      echo "3.1 success"
-    fi
-
-    # Check if the line containing ForwardToSyslog is commented out
-    if grep -q '^#\s*ForwardToSyslog=' /etc/systemd/journald.conf; then
-      # If it is commented out, uncomment it and set the value to no
-      sed -i "s/^#\s*ForwardToSyslog=no.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
-    else
-      # If it is not commented out, just update the value
-      sed -i "s/^ForwardToSyslog=no.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
-    fi
-    if [ $? -ne 0 ]; then
-      echo "Failed to set ForwardToSyslog to no in journald.conf"
-    else
-      success=true
-      echo "3.2 success"
-    fi
-
-    # Restore the original permissions of the file
-    chmod -w /etc/systemd/journald.conf
-    if [ $? -ne 0 ]; then
-      echo "Failed to restore permissions of journald.conf"
-    fi
+  # Check system type
+  if [ -f /etc/lsb-release ]; then
+    # Ubuntu
+    sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
+  elif [ -f /etc/redhat-release ]; then
+    # CentOS
+    sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
+  elif [ -f /etc/debian_version ]; then
+    # Debian
+    sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
+  else
+    echo "Unsupported system type" >&2
+    exit 1
   fi
 
-
-
-  # Restart the log recording service to force log rotation
-  sudo systemctl kill --kill-who=main --signal=SIGUSR2 systemd-journald.service
+  # Restart journald service
+  systemctl restart systemd-journald
   
   
   # Loop for 10 seconds, printing journald disk usage every second
@@ -126,6 +78,42 @@ main() {
   
 }
 
+level() {
+  # Set default values for variables
+  retention_days=7
+  log_level=warning
+   
+  echo "请输入设置你的journald日志保留时长(同时设置保留的日志等级仅为warning)"
+  
+  # Parse command line options
+  while getopts ":r:l:" opt; do
+    case $opt in
+      r)
+        retention_days=$OPTARG
+        ;;
+      l)
+        log_level=$OPTARG
+        ;;
+      \?)
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        exit 1
+        ;;
+    esac
+  done
+
+  # Set log retention period
+  find /path/to/logs -mtime +$retention_days -exec rm {} \;
+
+  # Set log level
+  sed -i "s/loglevel = .*/loglevel = $log_level/" /path/to/config/file
+
+}
+
 
 head
 main
+level
