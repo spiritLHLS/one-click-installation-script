@@ -55,21 +55,22 @@ level() {
   # Check if log directory exists
   if [ ! -d "$journald_log_dir" ]; then
     red "Log directory not found, so not delete" >&2
+  else
+    # Set log retention period
+    find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
   fi
-
-  # Set log retention period
-  find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
-
+  
+  
   # Check if config file exists
   if [ ! -f /etc/rsyslog.conf ]; then
     red "Config file (/etc/rsyslog.conf) not found, so not modify" >&2
-  fi
-
-  # Set log level
-  if grep -q "loglevel" /etc/rsyslog.conf; then  # Add this line
-    sed -i "s/^\(#\)\{0,1\}loglevel = .*/loglevel = $log_level/" /etc/rsyslog.conf
-  else  # Add this block
-    echo "loglevel = $log_level" >> /etc/rsyslog.conf
+  else
+    # Set log level
+    if grep -q "loglevel" /etc/rsyslog.conf; then  # Add this line
+      sed -i "s/^\(#\)\{0,1\}loglevel = .*/loglevel = $log_level/" /etc/rsyslog.conf
+    else  # Add this block
+      echo "loglevel = $log_level" >> /etc/rsyslog.conf
+    fi
   fi
 }
 
@@ -83,7 +84,6 @@ check_again() {
   done
 
 }
-
 
 head
 main
