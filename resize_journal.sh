@@ -32,7 +32,7 @@ main() {
   # Set default value for size
   size="$size"M
 
-  sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
+  sed -i "s/^\(#\)\{0,1\}SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
 
   # Restart journald service
   systemctl restart systemd-journald
