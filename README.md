@@ -7,6 +7,7 @@
 - 修复apt源锁死
 - 修复apt源公钥缺失
 - 修复替换系统可用的apt源列表，国内用阿里源，国外用官方源
+- 修复本机的Ubuntu系统是EOL非长期维护的版本，将替换为Ubuntu官方的old-releases仓库以支持apt的使用
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/package.sh -o package.sh && chmod +x package.sh && bash package.sh
