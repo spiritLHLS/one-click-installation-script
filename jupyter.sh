@@ -14,9 +14,9 @@ ver="2022.12.18"
 changeLog="一键安装jupyter环境"
 clear
 echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装jupyter环境${PLAIN}                                #"
+echo "#                     ${YELLOW}一键安装jupyter环境${PLAIN}                             #"
 echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                #"
+echo "# 更新日志：$changeLog                                       #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
 echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
 echo "#######################################################################"
@@ -96,10 +96,43 @@ change_username_and_password() {
   sed -i "s/#c.NotebookApp.username = .*/c.NotebookApp.username = u'$username'/" "$config_file"
 }
 
+query_jupyter_info() {
+  # Check if jupyter is installed
+  if jupyter --version &> /dev/null; then
+    echo "Error: Jupyter is not installed on this system."
+    return 1
+  fi
+
+  # Check if jupyter_notebook_config.py exists
+  if [ ! -f ~/.jupyter/jupyter_notebook_config.py ]; then
+    echo "Error: jupyter_notebook_config.py not found."
+    return 1
+  fi
+
+  # Read jupyter_notebook_config.py
+  config=$(cat ~/.jupyter/jupyter_notebook_config.py)
+
+  # Extract username and password
+  password_required=$(echo "$config" | grep "c.NotebookApp.password_required" | awk -F "=" '{print $2}' | tr -d ' ')
+  if [ "$password_required" = "True" ]; then
+    username=$(echo "$config" | grep "c.NotebookApp.password" | awk -F "=" '{print $2}' | tr -d ' ' | base64 --decode | awk -F ":" '{print $1}')
+    password=$(echo "$config" | grep "c.NotebookApp.password" | awk -F "=" '{print $2}' | tr -d ' ' | base64 --decode | awk -F ":" '{print $2}')
+    echo "Username: $username"
+    echo "Password: $password"
+  else
+    echo "Jupyter Notebook server is not password protected."
+  fi
+
+  # Extract port
+  port=$(echo "$config" | grep "c.NotebookApp.port" | awk -F "=" '{print $2}' | tr -d ' ')
+  echo "Port: $port"
+}
+
+
 
 main() {
   # Check if jupyter is installed
-  if command -v jupyter &> /dev/null; then
+  if jupyter --version &> /dev/null; then
     echo "Jupyter is already installed on this system."
     reading "Do you want to change the username and password for Jupyter? (y/n) " confirm
     echo ""
@@ -118,11 +151,9 @@ main() {
     fi
   fi
 
-  # Print the current username and password for Jupyter
-  echo "The current username and password for Jupyter are:"
-  jupyter --version
-
-  echo "Script finished."
+  # Print the current info for Jupyter
+  echo "The current info for Jupyter:"
+  query_jupyter_info
 }
 
 main
