@@ -76,30 +76,30 @@ main() {
           exit 0
         fi
 
-        # Set initial network priority to IPv4
-        echo "precedence ::ffff:0:0/96 50" > /etc/gai.conf
-
-        # Restart network interface
-        sudo ifconfig eth0 down
-        sudo ifconfig eth0 up
-
-        # Try pinging with IPv4 network priority
-        if ping -c 1 google.com; then
-          green "Ping successful with IPv4 network priority"
+        # Check IP type and network priority
+        ip_type=$(curl -s ip.sb | grep -oP '(?<=is )(.+)(?=\.)')
+        green "IP type: $ip_type"
+        if [ "$ip_type" = "IPv4" ]; then
+          priority=$(grep precedence /etc/gai.conf | grep -oP '(?<=precedence ::ffff:0:0\/96 )\d+')
         else
-          # Set network priority to IPv6
+          priority=$(grep precedence /etc/gai.conf | grep -oP '(?<=precedence ::/0 )\d+')
+        fi
+        green "Network priority: $priority"
+
+        # Modify network priority if necessary
+        if [ "$ip_type" = "IPv4" ] && [ "$priority" -gt "100" ]; then
+          echo "precedence ::ffff:0:0/96 50" > /etc/gai.conf
+        elif [ "$ip_type" = "IPv6" ] && [ "$priority" -lt "100" ]; then
           echo "precedence ::/0 100" > /etc/gai.conf
+        else
+          red "Network configuration is correct."
+        fi
 
-          # Restart network interface
-          sudo ifconfig eth0 down
-          sudo ifconfig eth0 up
-
-          # Try pinging with IPv6 network priority
-          if ping -c 1 google.com; then
-            green "Ping successful with IPv6 network priority"
-          else
-            red "Still unable to ping Google after trying both network priorities. There may be other issues with the network."
-          fi
+        # Try to ping again after modifying network priority
+        if ping -c 1 google.com; then
+          green "Ping successful after modifying network priority"
+        else
+          red "Network problem is not related to nameserver or network priority."
         fi
       fi
     fi
