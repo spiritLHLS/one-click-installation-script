@@ -32,23 +32,6 @@ main() {
   # Set default value for size
   size="$size"M
 
-  # Parse command line argument
-  while getopts ":s:" opt; do
-    case $opt in
-      s)
-        size=$OPTARG
-        ;;
-      \?)
-        echo "Invalid option: -$OPTARG" >&2
-        exit 1
-        ;;
-      :)
-        echo "Option -$OPTARG requires an argument." >&2
-        exit 1
-        ;;
-    esac
-  done
-
   # Check system type
   if [ -f /etc/lsb-release ]; then
     # Ubuntu
@@ -82,34 +65,25 @@ level() {
   # Set default values for variables
   retention_days=7
   log_level=warning
-   
-  echo "请输入设置你的journald日志保留时长(同时设置保留的日志等级仅为warning)"
-  
-  # Parse command line options
-  while getopts ":r:l:" opt; do
-    case $opt in
-      r)
-        retention_days=$OPTARG
-        ;;
-      l)
-        log_level=$OPTARG
-        ;;
-      \?)
-        echo "Invalid option: -$OPTARG" >&2
-        exit 1
-        ;;
-      :)
-        echo "Option -$OPTARG requires an argument." >&2
-        exit 1
-        ;;
-    esac
-  done
+
+  # Check if log directory exists
+  if [ ! -d /var/log ]; then
+    echo "Log directory not found" >&2
+    exit 1
+  fi
 
   # Set log retention period
-  find /path/to/logs -mtime +$retention_days -exec rm {} \;
+  find /var/log -mtime +$retention_days -exec rm {} \;
+
+  # Check if config file exists
+  if [ ! -f /etc/rsyslog.conf ]; then
+    echo "Config file not found" >&2
+    exit 1
+  fi
 
   # Set log level
-  sed -i "s/loglevel = .*/loglevel = $log_level/" /path/to/config/file
+  sed -i "s/loglevel = .*/loglevel = $log_level/" /etc/rsyslog.conf
+
 
 }
 
