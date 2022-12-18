@@ -12,7 +12,7 @@ head() {
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
   echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
-  echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
+  echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
   echo "1.自定义修改大小，单位为MB，一般500或者1000即可，有的系统日志默认给了5000甚至更多，不是做站啥的没必要"
   echo "请注意，修改journal目录大小可能会影响系统日志的记录。因此，在修改 journal 目录大小之前，建议先备份系统日志到本地"
   echo "2.运行脚本同时设置系统日志保留日期时长，超过日期时长的日志将被清除"
@@ -26,8 +26,7 @@ head() {
   if [ "$confirm" != "y" ]; then
     exit 0
   fi
-  
-  reading "Enter the desired day of the journal retention days(eg: 7): " retention_days
+  reading "Enter the desired day of the journal retention days (eg: 7): " retention_days
   reading "Enter the desired size of the journal directory in MB (eg: 500): " size
 }
 
@@ -55,8 +54,7 @@ level() {
 
   # Check if log directory exists
   if [ ! -d "$journald_log_dir" ]; then
-    echo "Log directory not found, so not delete" >&2
-    exit 1
+    red "Log directory not found, so not delete" >&2
   fi
 
   # Set log retention period
@@ -64,8 +62,7 @@ level() {
 
   # Check if config file exists
   if [ ! -f /etc/rsyslog.conf ]; then
-    echo "Config file (/etc/rsyslog.conf) not found, so not modify" >&2
-    exit 1
+    red "Config file (/etc/rsyslog.conf) not found, so not modify" >&2
   fi
 
   # Set log level
