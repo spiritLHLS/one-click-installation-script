@@ -149,7 +149,7 @@ main_v6() {
 
         # ping 测试
         if ping -c 3 google.com &> /dev/null || ping -c 3 github.com &> /dev/null; then
-            echo "网络恢复成功"
+            green "网络恢复成功"
             return
         fi
     done
@@ -165,6 +165,5 @@ head
 main
 # ping 测试
 if ping -c 3 google.com &> /dev/null || ping -c 3 github.com &> /dev/null; then
-    echo "V4网络恢复成功"
-    return
+    green "V4网络恢复成功"
 fi
