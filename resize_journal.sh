@@ -38,27 +38,27 @@ main() {
   # Set the name of the log recording service
   LOG_SERVICE="systemd-journald"
 
-  # Try setting the size of the journal directory with systemd-journal-size
-  if command -v systemd-journal-size &> /dev/null; then
-    systemd-journal-size --disk-space=$JOURNAL_SIZE
-    if [ $? -ne 0 ]; then
-      echo "Failed to set journal size using systemd-journal-size"
-    else
-      success=true
-      echo "1 success"
-    fi
-  fi
+#   # Try setting the size of the journal directory with systemd-journal-size
+#   if command -v systemd-journal-size &> /dev/null; then
+#     systemd-journal-size --disk-space=$JOURNAL_SIZE
+#     if [ $? -ne 0 ]; then
+#       echo "Failed to set journal size using systemd-journal-size"
+#     else
+#       success=true
+#       echo "1 success"
+#     fi
+#   fi
 
-  # If the previous method failed, try setting the size with journalctl
-  if ! $success && command -v journalctl &> /dev/null; then
-    journalctl --disk-space=$JOURNAL_SIZE
-    if [ $? -ne 0 ]; then
-      echo "Failed to set journal size using journalctl"
-    else
-      success=true
-      echo "2 success"
-    fi
-  fi
+#   # If the previous method failed, try setting the size with journalctl
+#   if ! $success && command -v journalctl &> /dev/null; then
+#     journalctl --disk-space=$JOURNAL_SIZE
+#     if [ $? -ne 0 ]; then
+#       echo "Failed to set journal size using journalctl"
+#     else
+#       success=true
+#       echo "2 success"
+#     fi
+#   fi
   
   
   # Convert the size from MB to bytes
