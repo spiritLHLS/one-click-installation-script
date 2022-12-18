@@ -32,20 +32,7 @@ main() {
   # Set default value for size
   size="$size"M
 
-  # Check system type
-  if [ -f /etc/lsb-release ]; then
-    # Ubuntu
-    sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
-  elif [ -f /etc/redhat-release ]; then
-    # CentOS
-    sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
-  elif [ -f /etc/debian_version ]; then
-    # Debian
-    sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
-  else
-    echo "Unsupported system type" >&2
-    exit 1
-  fi
+  sed -i "s/SystemMaxUse=.*/SystemMaxUse=$size/" /etc/systemd/journald.conf
 
   # Restart journald service
   systemctl restart systemd-journald
