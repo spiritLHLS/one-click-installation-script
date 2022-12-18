@@ -44,6 +44,8 @@ change_debian_apt_sources() {
   
   # Backup current sources list
   cp /etc/apt/sources.list /etc/apt/sources.list.bak
+  yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list.bak"
+  
   # Determine Debian version
   DEBIAN_VERSION=$(lsb_release -sr)
 
@@ -108,6 +110,8 @@ change_ubuntu_apt_sources() {
   
   # Backup current sources list
   sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+  yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list.bak"
+  
   # Write sources list in the desired format
   cat > /etc/apt/sources.list <<EOF
 deb ${URL} ${UBUNTU_RELEASE} main restricted universe multiverse
@@ -133,8 +137,16 @@ check_eol_and_switch_apt_source() {
     # 版本已经过期
     reading "This version of Ubuntu is EOL. Do you want to switch to the old-releases repository? [y/n] " confirm
     if [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]; then
+      # 备份当前sources.list
+      cp /etc/apt/sources.list /etc/apt/sources.list.bak
+      yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list.bak"
       # 修改apt源
-      sed -i -e "s/archive.ubuntu.com/old-releases.ubuntu.com/g" /etc/apt/sources.list
+      cat > /etc/apt/sources.list <<EOF
+deb http://old-releases.ubuntu.com/ubuntu/ $version main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ $version-security main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ $version-updates main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ $version-backports main restricted universe multiverse
+EOF
       apt-get update
     fi
   else
@@ -142,6 +154,7 @@ check_eol_and_switch_apt_source() {
     echo "This version of Ubuntu is not EOL. No need to switch repositories."
   fi
 }
+
 
 
 fix_broken() {
@@ -205,8 +218,6 @@ fix_sources() {
 
     # Check if the system is Debian or Ubuntu
     if [ -f /etc/debian_version ]; then
-      # Replace the current apt-get sources list with the one at the specified URL
-      #sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/debian.txt
       # Display prompt asking whether to proceed with updating
       reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
@@ -218,9 +229,6 @@ fix_sources() {
         change_debian_apt_sources
       fi
     elif [ -f /etc/lsb-release ]; then
-      # Replace the current apt-get sources list with the one at the specified URL
-      # sudo curl -o /etc/apt/sources.list https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/ubuntu.txt
-      
       # Display prompt asking whether to proceed with updating
       reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
