@@ -1,12 +1,19 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.17
+#version: 2022.12.18
 
+
+GREEN="\033[32m"
+PLAIN="\033[0m"
+red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2022.12.17"
+  ver="2022.12.18"
   changeLog="一键修复apt源，加载对应的源"
   clear
   echo "#######################################################################"
@@ -22,7 +29,7 @@ head() {
   echo "2.修复apt源公钥缺失"
   echo "3.修复替换系统可用的apt源列表，国内用阿里源，国外用官方源"
   # Display prompt asking whether to proceed with checking
-  read -p "Do you want to proceed with checking? [y/n] " -n 1 confirm
+  reading "Do you want to proceed with checking? [y/n] " confirm
   echo ""
 
   # Check user's input and exit if they do not want to proceed
@@ -275,11 +282,11 @@ fix_locked() {
     fi
     sudo apt update
     if [ $? -ne 0 ]; then
-      echo "The update still failed. Attempting to fix missing GPG keys..."
+      yellow "The update still failed. Attempting to fix missing GPG keys..."
       if [ -f /etc/debian_version ]; then
         sudo apt-key update
       elif [ -f /etc/lsb-release ]; then
-        echo "try sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys missing key"
+        red "try sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys missing key"
       fi
     fi
   fi
@@ -292,7 +299,7 @@ fix_sources() {
   # Check the exit status of the update command
   if [ $? -ne 0 ]; then
     # Print a message indicating that the update failed
-    echo "The update failed. Attempting to replace the apt sources..."
+    yellow "The update failed. Attempting to replace the apt sources..."
 
     # Check if the system is Debian or Ubuntu
     if [ -f /etc/debian_version ]; then
@@ -306,10 +313,10 @@ fix_sources() {
 
       # 如果版本不同，则执行 change_debian_apt_sources 函数
       if [ "$release" != "$sources_release" ]; then
-        echo "debian source is wrong"
+        yellow "debian source is wrong"
       fi
       # Display prompt asking whether to proceed with updating
-      read -p "Do you want to proceed with updating? [y/n] " -n 1 updating
+      reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
 
       # Check user's input and exit if they do not want to proceed
@@ -329,10 +336,10 @@ fix_sources() {
 
       # 如果版本不同，则执行 change_apt_sources 函数
       if [ "$release" != "$sources_release" ]; then
-        echo "ubuntu source is wrong"
+        yellow "ubuntu source is wrong"
       fi
       # Display prompt asking whether to proceed with updating
-      read -p "Do you want to proceed with updating? [y/n] " -n 1 updating
+      reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
 
       # Check user's input and exit if they do not want to proceed
@@ -343,7 +350,7 @@ fix_sources() {
       fi
     else
       # Print a message indicating that the system is not supported
-      echo "This system is not supported. The apt sources will not be modified."
+      red "This system is not supported. The apt sources will not be modified."
     fi
     # Update the package list again to pick up the new sources
     sudo apt update
@@ -351,10 +358,10 @@ fix_sources() {
     # Check the exit status of the update command
     if [ $? -eq 0 ]; then
       # Print a message indicating that the update was successful
-      echo "The update was successful."
+      green "The apt update was successful."
     else
       # Print a message indicating that the update failed and suggest other error resolution methods
-      echo "The update failed. You may want to try the following error resolution methods:
+      red "The update failed. You may want to try the following error resolution methods:
         - Check your internet connection
         - Check the sources list for errors
         - Check for package dependencies
