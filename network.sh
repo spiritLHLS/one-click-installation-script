@@ -21,7 +21,7 @@ head() {
   echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
-  echo "1.检测ping谷歌有问题修改nameserver为google源或cloudflare源"
+  echo "1.检测ping谷歌如果有问题修改nameserver为google源或cloudflare源"
   echo "2.检测ping谷歌还有问题尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)"
   # Display prompt asking whether to proceed with checking and changing
   reading "Do you want to proceed with checking and changing nameserver? [y/n] " confirm
@@ -37,7 +37,7 @@ head() {
 main() {
   # Check if ping to google.com is successful
   if ping -c 1 google.com; then
-    green "Ping successful"
+    green "Ping successful, no need modify"
   else
     yellow "Ping failed. Checking nameserver."
 
