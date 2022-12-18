@@ -8,8 +8,6 @@ green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading(){ read -rp "$(green "$1")" "$2"; }
 
-
-# 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 ver="2022.12.18"
 changeLog="一键安装jupyter环境"
 clear
@@ -22,6 +20,7 @@ echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-insta
 echo "#######################################################################"
 echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
 echo "有安装则提示是否需要修改用户名和密码，否则则自动安装，自动安装后默认用户名和密码都是spiritlhl，如果安装完毕需要修改，再次执行本脚本修改"
+echo "最后都会打印jupyter的信息，如果本机最后有jupyter的话，无论是通过何种途径安装的"
 
 install_jupyter() {
   # Update package manager and install required packages
