@@ -23,44 +23,29 @@ echo "有安装则提示是否需要修改用户名和密码，否则则自动�
 echo "最后都会打印jupyter的信息，如果本机最后有jupyter的话，无论是通过何种途径安装的"
 
 install_jupyter() {
-  # Update package manager and install required packages
-  if command -v apt-get &> /dev/null; then
-      sudo apt-get update
-      sudo apt-get install -y python3 python3-pip python3-dev build-essential libssl-dev libffi-dev
-  elif command -v dnf &> /dev/null; then
-      sudo dnf update
-      sudo dnf install -y python3 python3-pip python3-devel openssl-devel libffi-devel
-  elif command -v yum &> /dev/null; then
-      sudo yum update
-      sudo yum install -y python3 python3-pip python3-devel openssl-devel libffi-devel
-  elif command -v zypper &> /dev/null; then
-      sudo zypper update
-      sudo zypper install -y python3 python3-pip python3-devel openssl-devel libffi-devel
+  rm -rf Miniconda3-latest-Linux-x86_64.sh*
+  
+  # Check if conda is already installed
+  if ! command -v conda &> /dev/null; then
+      # Install conda
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    bash Miniconda3-latest-Linux-x86_64.sh -u
+    # bash Miniconda3-latest-Linux-x86_64.sh
+
+    # Add conda to PATH
+    echo 'export PATH="$PATH:$HOME/miniconda3/bin:$HOME/miniconda3/condabin"' >> ~/.bashrc
+    echo 'export PATH="$PATH:$HOME/.local/share/jupyter"' >> ~/.bashrc
+    source ~/.bashrc
   fi
 
-  # Install virtualenv
-  pip3 install --upgrade virtualenv
-
-  # Create virtual environment for Jupyter Notebook
-  virtualenv jupyter-env
-
-  # Activate the virtual environment
-  source jupyter-env/bin/activate
-
-  # Install Jupyter Notebook and Jupyter Lab
-  pip3 install jupyter jupyterlab
-
-  # Add Jupyter Notebook to PATH
-  echo 'export PATH="$PATH:$(python3 -m site --user-base)/bin"' >> ~/.bashrc
-  source ~/.bashrc
-
-  # Generate a config file for Jupyter Notebook
-  jupyter notebook --generate-config
-
-  # Copy the config file to jupyter_server_config.py
-  cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
+  # Create a new conda environment and install jupyter
+  conda create -n jupyter-env python=3
+  source activate jupyter-env
+  conda install jupyter jupyterlab
 
   # Set username and password for Jupyter Notebook
+  jupyter notebook --generate-config
+  cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
   echo "c.NotebookApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
   echo "c.NotebookApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
 
@@ -72,10 +57,13 @@ install_jupyter() {
       sudo firewall-cmd --reload
   fi
 
-  # Start Jupyter Notebook with port 13692
-  jupyter lab --port 13692 --no-browser
+  # Start Jupyter Notebook with port 13692 and host 0.0.0.0
+  jupyter lab --port 13692 --no-browser --ip=0.0.0.0
+
 
 }
+
+
 
 change_username_and_password() {
   # Prompt the user for a new username and password
@@ -132,6 +120,35 @@ query_jupyter_info() {
   # Extract port
   port=$(echo "$config" | grep "c.NotebookApp.port" | awk -F "=" '{print $2}' | tr -d ' ')
   echo "Port: $port"
+  
+  
+}
+
+uninstall_jupyter() {
+  # Deactivate the virtual environment
+  deactivate
+
+  # Remove the virtual environment
+  rm -rf jupyter-env
+
+  # Uninstall Jupyter Notebook and Jupyter Lab
+  pip3 uninstall jupyter jupyterlab
+
+  # Remove Jupyter Notebook from PATH
+  sed -i '/export PATH="$PATH:$(python3 -m site --user-base)\/bin"/d' ~/.bashrc
+  source ~/.bashrc
+
+  # Remove Jupyter Notebook config files
+  rm -rf ~/.jupyter
+
+  # Remove port 13692 from firewall
+  if command -v ufw &> /dev/null; then
+      sudo ufw delete allow 13692/tcp
+  elif command -v firewall-cmd &> /dev/null; then
+      sudo firewall-cmd --remove-port=13692/tcp --permanent
+      sudo firewall-cmd --reload
+  fi
+
 }
 
 
