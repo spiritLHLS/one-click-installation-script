@@ -35,9 +35,13 @@ head() {
 
 
 main() {
-  # Backup /etc/resolv.conf and /etc/gai.conf
-  cp /etc/resolv.conf /etc/resolv.conf.bak
-  cp /etc/gai.conf /etc/gai.conf.bak
+  # Check if /etc/resolv.conf and /etc/gai.conf exist before backing them up
+  if [ -f /etc/resolv.conf ]; then
+    cp /etc/resolv.conf /etc/resolv.conf.bak
+  fi
+  if [ -f /etc/gai.conf ]; then
+    cp /etc/gai.conf /etc/gai.conf.bak
+  fi
 
   # Check if ping to google.com is successful
   if ping -c 1 google.com; then
