@@ -49,16 +49,20 @@ install_jupyter() {
 
   # Install Jupyter Notebook and Jupyter Lab
   pip3 install jupyter jupyterlab
-  
+
   # Add Jupyter Notebook to PATH
-  export PATH="$PATH:/path/to/jupyter/bin"
+  echo 'export PATH="$PATH:$(python3 -m site --user-base)/bin"' >> ~/.bashrc
+  source ~/.bashrc
 
   # Generate a config file for Jupyter Notebook
   jupyter notebook --generate-config
 
+  # Copy the config file to jupyter_server_config.py
+  cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
+
   # Set username and password for Jupyter Notebook
-  echo "c.NotebookApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_notebook_config.py
-  echo "c.NotebookApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_notebook_config.py
+  echo "c.NotebookApp.password = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
+  echo "c.NotebookApp.username = 'spiritlhl'" >> ~/.jupyter/jupyter_server_config.py
 
   # Open port 13692 in firewall
   if command -v ufw &> /dev/null; then
@@ -70,6 +74,7 @@ install_jupyter() {
 
   # Start Jupyter Notebook with port 13692
   jupyter lab --port 13692 --no-browser
+
 }
 
 change_username_and_password() {
