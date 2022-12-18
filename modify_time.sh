@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.17
+#version: 2022.12.18
 
 # 检测本机时间是否准确，如果不准确则修复的脚本
 
