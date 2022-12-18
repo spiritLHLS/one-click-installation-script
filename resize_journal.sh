@@ -47,6 +47,8 @@ main() {
 
   # Restart journald service
   systemctl restart systemd-journald
+  
+  green "change /etc/systemd/journald.conf successfully"
 }
 
 
@@ -57,10 +59,11 @@ level() {
 
   # Check if log directory exists
   if [ ! -d "$journald_log_dir" ]; then
-    red "Log directory not found, so not delete" >&2
+    yellow "Log directory not found, so no delete" >&2
   else
     # Set log retention period
     find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
+    green "change $journald_log_dir successfully"
   fi
   
   
@@ -74,6 +77,7 @@ level() {
     else  # Add this block
       echo "loglevel = $log_level" >> /etc/rsyslog.conf
     fi
+    green "change /etc/rsyslog.conf successfully"
   fi
 }
 
