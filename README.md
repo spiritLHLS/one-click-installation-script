@@ -21,6 +21,8 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 尝试修复nameserver为google源或cloudflare源
 - 尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)
 
+**一定要在screen中执行该脚本，否则可能导致修改过程中ssh断链接而修改失败卡住最终SSH无法连接！**
+
 ```bash
 curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/network.sh -o network.sh && chmod +x network.sh && bash network.sh
 ```
