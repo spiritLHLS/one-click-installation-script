@@ -85,12 +85,27 @@ main() {
       success=true
     fi
 
+    # Check if the line containing ForwardToSyslog is commented out
+    if grep -q '^#\s*ForwardToSyslog=' /etc/systemd/journald.conf; then
+      # If it is commented out, uncomment it and set the value to no
+      sed -i "s/^#\s*ForwardToSyslog=.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
+    else
+      # If it is not commented out, just update the value
+      sed -i "s/^ForwardToSyslog=.*/ForwardToSyslog=no/g" /etc/systemd/journald.conf
+    fi
+    if [ $? -ne 0 ]; then
+      echo "Failed to set ForwardToSyslog to no in journald.conf"
+    else
+      success=true
+    fi
+
     # Restore the original permissions of the file
     chmod -w /etc/systemd/journald.conf
     if [ $? -ne 0 ]; then
       echo "Failed to restore permissions of journald.conf"
     fi
   fi
+
 
   # Restart the log recording service to force log rotation
   sudo systemctl kill --kill-who=main --signal=SIGUSR2 systemd-journald.service
