@@ -1,12 +1,18 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.17
+#version: 2022.12.18
 
+GREEN="\033[32m"
+PLAIN="\033[0m"
+red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-  ver="2022.12.17"
+  ver="2022.12.18"
   changeLog="一键修复linux网络脚本"
   clear
   echo "#######################################################################"
@@ -20,7 +26,7 @@ head() {
   echo "1.检测ping谷歌有问题修改nameserver为google源或cloudflare源"
   echo "2.检测ping谷歌还有问题尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)"
   # Display prompt asking whether to proceed with checking and changing
-  read -p "Do you want to proceed with checking and changing nameserver? [y/n] " -n 1 confirm
+  reading "Do you want to proceed with checking and changing nameserver? [y/n] " confirm
   echo ""
 
   # Check user's input and exit if they do not want to proceed
@@ -33,32 +39,32 @@ head() {
 main() {
   # Check if ping to google.com is successful
   if ping -c 1 google.com; then
-    echo "Ping successful"
+    green "Ping successful"
   else
-    echo "Ping failed. Checking nameserver."
+    yellow "Ping failed. Checking nameserver."
 
     # Check current nameserver
     nameserver=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
-    echo "Current nameserver: $nameserver"
+    yellow "Current nameserver: $nameserver"
 
     # Try using Google's nameserver
-    echo "Trying Google's nameserver: 8.8.8.8"
+    green "Trying Google's nameserver: 8.8.8.8"
     sudo sed -i "s/$nameserver/8.8.8.8/g" /etc/resolv.conf
     if ping -c 1 google.com; then
-      echo "Ping successful with Google's nameserver"
+      green "Ping successful with Google's nameserver"
     else
-      echo "Ping failed with Google's nameserver. Trying Cloudflare's nameserver."
+      yellow "Ping failed with Google's nameserver. Trying Cloudflare's nameserver."
 
       # Try using Cloudflare's nameserver
-      echo "Trying Cloudflare's nameserver: 1.1.1.1"
+      green "Trying Cloudflare's nameserver: 1.1.1.1"
       sudo sed -i "s/8.8.8.8/1.1.1.1/g" /etc/resolv.conf
       if ping -c 1 google.com; then
-        echo "Ping successful with Cloudflare's nameserver"
+        green "Ping successful with Cloudflare's nameserver"
       else
-        echo "Ping failed with Cloudflare's nameserver. Checking network configuration."
+        yellow "Ping failed with Cloudflare's nameserver. Checking network configuration."
         
         # Display prompt asking whether to proceed with checking and changing priority
-        read -p "Do you want to proceed with checking and changing network priority? [y/n] " -n 1 priority
+        reading "Do you want to proceed with checking and changing network priority? [y/n] " priority
         echo ""
 
         # Check user's input and exit if they do not want to proceed
@@ -68,13 +74,13 @@ main() {
 
         # Check IP type and network priority
         ip_type=$(curl -s ip.sb | grep -oP '(?<=is )(.+)(?=\.)')
-        echo "IP type: $ip_type"
+        green "IP type: $ip_type"
         if [ "$ip_type" = "IPv4" ]; then
           priority=$(cat /etc/gai.conf | grep -oP '(?<=precedence ::ffff:0:0\/96 )\d+')
         else
           priority=$(cat /etc/gai.conf | grep -oP '(?<=precedence ::/0 )\d+')
         fi
-        echo "Network priority: $priority"
+        green "Network priority: $priority"
 
         # Modify network priority if necessary
         if [ "$ip_type" = "IPv4" ] && [ "$priority" -gt "100" ]; then
@@ -82,14 +88,14 @@ main() {
         elif [ "$ip_type" = "IPv6" ] && [ "$priority" -lt "100" ]; then
           sudo sed -i 's/precedence ::\/0 50/precedence ::\/0 100/' /etc/gai.conf
         else
-          echo "Network configuration is correct."
+          red "Network configuration is correct."
         fi
 
         # Try to ping again after modifying network priority
         if ping -c 1 google.com; then
-          echo "Ping successful after modifying network priority"
+          green "Ping successful after modifying network priority"
         else
-          echo "Network problem is not related to nameserver or network priority."
+          red "Network problem is not related to nameserver or network priority."
         fi
       fi
     fi
