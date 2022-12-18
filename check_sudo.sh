@@ -11,10 +11,10 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
   ver="2022.12.18"
-  changeLog="修复sudo: unable to resolve host爆错"
+  changeLog="修复sudo: unable to resolve host警告"
   clear
   echo "#######################################################################"
-  echo "#           ${YELLOW}修复sudo: unable to resolve host xxx: Name or service not known爆错${PLAIN}                        #"
+  echo "#           ${YELLOW}修复sudo: unable to resolve host xxx: Name or service not known警告${PLAIN}                        #"
   echo "# 版本：$ver                                                    #"
   echo "# 更新日志：$changeLog                                      #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
