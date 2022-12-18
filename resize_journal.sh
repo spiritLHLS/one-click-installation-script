@@ -45,6 +45,7 @@ main() {
       echo "Failed to set journal size using systemd-journal-size"
     else
       success=true
+      echo "1 success"
     fi
   fi
 
@@ -55,6 +56,7 @@ main() {
       echo "Failed to set journal size using journalctl"
     else
       success=true
+      echo "2 success"
     fi
   fi
   
@@ -83,6 +85,7 @@ main() {
       echo "Failed to set journal size using journald.conf"
     else
       success=true
+      echo "3.1 success"
     fi
 
     # Check if the line containing ForwardToSyslog is commented out
@@ -97,8 +100,9 @@ main() {
       echo "Failed to set ForwardToSyslog to no in journald.conf"
     else
       success=true
+      echo "3.2 success"
     fi
-
+    
     # Restore the original permissions of the file
     chmod -w /etc/systemd/journald.conf
     if [ $? -ne 0 ]; then
