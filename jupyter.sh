@@ -21,6 +21,8 @@ echo "#######################################################################"
 echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
 echo "有安装则提示是否需要修改用户名和密码，否则则自动安装，自动安装后默认用户名和密码都是spiritlhl，如果安装完毕需要修改，再次执行本脚本修改"
 echo "最后都会打印jupyter的信息，如果本机最后有jupyter的话，无论是通过何种途径安装的"
+echo "如果是初次安装无脑输入yes或y回车即可"
+
 
 install_jupyter() {
   rm -rf Miniconda3-latest-Linux-x86_64.sh*
@@ -42,7 +44,12 @@ install_jupyter() {
   conda create -n jupyter-env python=3
   source activate jupyter-env
   conda install jupyter jupyterlab
-
+  
+  # Add the following line to /etc/profile
+  echo 'export PATH="$PATH:~/.local/share/jupyter"' >> /etc/profile
+  # Execute the configuration
+  source /etc/profile
+  
   # Set username and password for Jupyter Notebook
   jupyter notebook --generate-config
   cp ~/.jupyter/jupyter_notebook_config.py ~/.jupyter/jupyter_server_config.py
@@ -62,8 +69,6 @@ install_jupyter() {
 
 
 }
-
-
 
 change_username_and_password() {
   # Prompt the user for a new username and password
