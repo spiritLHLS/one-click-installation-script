@@ -260,7 +260,7 @@ change_ubuntu_apt_sources() {
 
 fix_broken() {
   # Check if the output of the update contains "--fix-broken install"
-  if apt update | grep -q "--fix-broken install"; then
+  if apt update | grep -F '--fix-broken install'; then
     # If it does, run apt --fix-broken install -y
     apt --fix-broken install -y
     apt update
