@@ -77,7 +77,8 @@ install_jupyter() {
   fi
 
   # Start Jupyter Server with port 13692 and host 0.0.0.0
-  nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $! & green "后台执行的pid的进程ID和输出日志文件名字如上"
+  green "后台执行的pid的进程ID和输出日志文件名字如下"
+  nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
   sleep 5
   cat nohup.out
   
