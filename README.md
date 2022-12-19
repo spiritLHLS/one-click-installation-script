@@ -17,6 +17,8 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 #### 一键尝试修复网络
 
+**该脚本轻易勿要使用，请确保运行时服务器无重要文件或程序，出现运行bug后续可能需要重装系统**
+
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 - 尝试修复nameserver为google源或cloudflare源
 - 尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)
