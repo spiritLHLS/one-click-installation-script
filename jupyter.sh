@@ -20,7 +20,9 @@ echo "# 更新日志：$changeLog                                       #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
 echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
 echo "#######################################################################"
-echo "验证已支持的系统：Ubuntu 18/20/22，Debian 9"
+echo "验证已支持的系统：
+echo "Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台"
+echo "Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示"
 echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
 red "本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯洁勿要轻易使用本脚本！"
 yellow "执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息"
@@ -77,13 +79,29 @@ install_jupyter() {
       sudo firewall-cmd --reload
   fi
   
-  source activate jupyter-env
-  sleep 1
-  # Start Jupyter Server with port 13692 and host 0.0.0.0
-  green "后台执行的pid的进程ID和输出日志文件名字如下"
-  nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
-  sleep 5
-  cat nohup.out
+  # Get the current system name
+  system_name=$(uname)
+  # Check if the system is Ubuntu
+  if [ "$system_name" == "Ubuntu" ]; then
+    source activate jupyter-env
+    sleep 1
+    # Start Jupyter Server with port 13692 and host 0.0.0.0
+    green "后台执行的pid的进程ID和输出日志文件名字如下"
+    nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
+    sleep 5
+    cat nohup.out
+  else
+    echo "你正在除了Ubuntu系统之外的系统执行，如果运行最后几行有如下提示"
+    yellow "nohup: failed to run command 'jupyter': No such file or directory"
+    echo "你需要手动执行下面的命令"
+    yellow "source activate jupyter-env"
+    yellow "nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root"
+    yellow "cat nohup.out"
+    echo "这样才能手动挂起jupyter后台执行"
+  fi
+
+  
+  
   
   # Add the specified paths to the PATH variable
   paths="./miniconda3/envs/jupyter-env/etc/jupyter:./miniconda3/envs/jupyter-env/bin/jupyter:./miniconda3/envs/jupyter-env/share/jupyter"
