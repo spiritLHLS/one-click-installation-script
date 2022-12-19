@@ -77,7 +77,7 @@ install_jupyter() {
   fi
 
   # Start Jupyter Server with port 13692 and host 0.0.0.0
-  nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & echo $!
+  nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $! & green "后台执行的pid的进程ID和输出日志文件名字如上"
   sleep 5
   cat nohup.out
   
@@ -121,6 +121,7 @@ query_jupyter_info() {
   source activate jupyter-env && jupyter server list && conda deactivate
   
   green "已查询登陆信息如上"
+  green "如果想要手动查询，输入 source activate jupyter-env && jupyter server list && conda deactivate 即可查询"
 }
 
 main() {
