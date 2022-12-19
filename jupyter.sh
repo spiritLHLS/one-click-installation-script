@@ -21,9 +21,9 @@ echo "# ${GREEN}作者${PLAIN}: spiritlhl                                       
 echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
 echo "#######################################################################"
 echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
-red "本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯洁勿要使用本脚本！"
-echo "执行脚本，之前有安装过则打印设置的登陆信息，没安装过则进行安装再打印信息"
-echo "如果是初次安装无脑输入yes或y回车即可"
+red "本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯洁勿要轻易使用本脚本！"
+yellow "执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息"
+yellow "如果是初次安装无脑输入y回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行"
 
 
 install_jupyter() {
