@@ -51,7 +51,9 @@ install_jupyter() {
   
   # Create a new conda environment and install jupyter
   conda create -n jupyter-env python=3
-  source activate jupyter-env
+  sleep 5
+  source activate jupyter-env > /dev/null 2>&1
+  sleep 1
   conda install jupyter jupyterlab
 
   # Add the following line to /etc/profile
@@ -99,7 +101,7 @@ install_jupyter() {
 }
 
 query_jupyter_info() {
-  source activate jupyter-env
+  source activate jupyter-env > /dev/null 2>&1
   # Check if jupyter is installed
   if ! jupyter --version &> /dev/null; then
     echo "Error: Jupyter is not installed on this system."
@@ -122,7 +124,7 @@ query_jupyter_info() {
 }
 
 main() {
-  source activate jupyter-env
+  source activate jupyter-env > /dev/null 2>&1
   # Check if jupyter is installed
   if jupyter --version &> /dev/null; then
     green "Jupyter is already installed on this system."
