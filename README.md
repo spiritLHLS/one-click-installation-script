@@ -1,4 +1,4 @@
-# one-click-installation-script
+# one-click-script
 
 如果脚本有任何问题或者任何修复系统的需求，看在issues中提出，有空会解决或者回答
 
