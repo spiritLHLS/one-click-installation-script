@@ -75,6 +75,7 @@ curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spir
 - 可能支持的系统(未验证)：centos 7+，Fedora，Almalinux 8.5+
 - 执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息
 - 如果是初次安装无脑输入y回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行
+- 安装完毕后使用安装第三方库需要使用conda进行下载而不是pip下载，这是需要注意的
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
