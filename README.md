@@ -130,6 +130,6 @@ https://github.com/spiritLHLS/ecs
 
 https://github.com/spiritLHLS/lxc
 
-#### 朋友 fscarmen 的常用工具仓库
+#### 朋友 fscarmen 的常用一键工具仓库
 
 https://github.com/fscarmen/tools
