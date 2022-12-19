@@ -67,7 +67,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 验证已支持的系统：
   - Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台
   - Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示
-- 可能支持的系统：centos 7+，Fedora，Almalinux 8.5+
+- 可能支持的系统(未验证)：centos 7+，Fedora，Almalinux 8.5+
 - 执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息
 - 如果是初次安装无脑输入y回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行
 
