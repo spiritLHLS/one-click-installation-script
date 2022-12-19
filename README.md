@@ -119,3 +119,7 @@ centos换源
 sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.repo
 ```
+
+### 友链
+
+https://github.com/fscarmen/tools
