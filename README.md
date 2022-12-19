@@ -46,6 +46,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 #### 一键尝试修复网络
 
 **该脚本轻易勿要使用，请确保运行时服务器无重要文件或程序，出现运行bug后续可能需要重装系统**
+
 **一定要在screen中执行该脚本，否则可能导致修改过程中ssh断链接而修改失败卡住最终SSH无法连接！不在screen中执行后果自负！**
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 - 尝试修复nameserver为google源或cloudflare源
