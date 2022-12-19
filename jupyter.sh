@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.18
+#version: 2022.12.19
 
 source ~/.bashrc
 
@@ -10,7 +10,7 @@ green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading(){ read -rp "$(green "$1")" "$2"; }
 
-ver="2022.12.18"
+ver="2022.12.19"
 changeLog="一键安装jupyter环境"
 clear
 echo "#######################################################################"
