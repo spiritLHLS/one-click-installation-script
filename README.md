@@ -87,7 +87,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
 ```
 
-### 部分手动命令
+## 部分手动命令
 
 ubuntu缺失公钥
 
@@ -101,7 +101,7 @@ ubuntu更新源被锁
 sudo rm -rf /var/cache/apt/archives/lock
 ```
 
-或
+或查看下文
 
 https://itsfoss.com/fix-ubuntu-install-error/
 
