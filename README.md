@@ -90,6 +90,15 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
 ```
 
+#### 一键安装vnstat环境
+
+- 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
+- 加载官方文件编译安装，前置条件适配系统以及后置条件判断安装的版本
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/vnstat.sh -o vnstat.sh && chmod +x vnstat.sh && bash vnstat.sh 
+```
+
 ## 部分手动命令
 
 ubuntu缺失公钥
