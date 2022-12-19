@@ -96,13 +96,10 @@ install_jupyter() {
     echo "你需要手动执行下面的命令"
     yellow "source activate jupyter-env"
     yellow "nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root"
-    green "等待5秒后关闭本窗口，开新窗口执行下面的命令"
+    green "等待5秒后关闭本窗口，开新窗口执行下面的命令查看登陆信息"
     yellow "cat nohup.out"
-    echo "这样才能手动挂起jupyter后台执行"
-  fi
-
-  
-  
+    echo "非Ubuntu系统这样才能手动挂起jupyter后台执行"
+  fi  
   
   # Add the specified paths to the PATH variable
   paths="./miniconda3/envs/jupyter-env/etc/jupyter:./miniconda3/envs/jupyter-env/bin/jupyter:./miniconda3/envs/jupyter-env/share/jupyter"
