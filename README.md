@@ -48,7 +48,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 - 1.自定义修改大小，单位为MB，一般500或者1000即可，有的系统日志默认给了5000甚至更多，不是做站啥的没必要
-- 请注意，修改journal目录大小会影响系统日志的记录，因此，在修改journal目录大小之前如果需要之前的日志，建议先备份系统日志到本地
+  - 请注意，修改journal目录大小会影响系统日志的记录，因此，在修改journal目录大小之前如果需要之前的日志，建议先备份系统日志到本地
 - 2.自定义修改设置系统日志保留日期时长，超过日期时长的日志将被清除
 - 3.默认修改日志只记录warning等级(无法自定义)
 - 4.以后日志的产生将受到日志文件大小，日志保留时间，日志保留等级的限制
@@ -61,11 +61,13 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 #### 一键安装jupyter环境 
 
-- 验证已支持的系统：Ubuntu 18/20/22，Debian 9，
+- 验证已支持的系统：
+  - Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台
+  - Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示
 - 可能支持的系统：centos 7+，Fedora，Almalinux 8.5+
 - **本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯洁勿要轻易使用本脚本！**
-- 执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息
-- 如果是初次安装无脑输入y回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行
+  - 执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息
+  - 如果是初次安装无脑输入y回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行
 - **本脚本为实验性脚本可能会有各种bug，勿要轻易尝试！**
 
 **安装前需要保证 sudo wget curl 已安装**
