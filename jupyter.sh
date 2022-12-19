@@ -96,6 +96,7 @@ install_jupyter() {
     echo "你需要手动执行下面的命令"
     yellow "source activate jupyter-env"
     yellow "nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root"
+    green "等待5秒后关闭本窗口，开新窗口执行下面的命令"
     yellow "cat nohup.out"
     echo "这样才能手动挂起jupyter后台执行"
   fi
