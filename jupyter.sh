@@ -53,7 +53,7 @@ install_jupyter() {
   # Create a new conda environment and install jupyter
   conda create -n jupyter-env python=3
   sleep 5
-  source activate jupyter-env > /dev/null 2>&1
+  source activate jupyter-env
   sleep 1
   conda install jupyter jupyterlab
 
@@ -76,7 +76,9 @@ install_jupyter() {
       sudo firewall-cmd --add-port=13692/tcp --permanent
       sudo firewall-cmd --reload
   fi
-
+  
+  source activate jupyter-env
+  sleep 1
   # Start Jupyter Server with port 13692 and host 0.0.0.0
   green "后台执行的pid的进程ID和输出日志文件名字如下"
   nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
