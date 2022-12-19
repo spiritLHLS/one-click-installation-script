@@ -1,4 +1,8 @@
-### 一键修复脚本
+# one-click-installation-script
+
+如果脚本有任何问题或者任何修复系统的需求，看在issues中提出，有空会解决或者回答
+
+## 一键修复脚本
 
 运行所有一键修复脚本前注意看说明，以及保证服务器无重要数据，运行后造成的一切后果作者不负任何责任，自行评判风险！
 
@@ -56,11 +60,11 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/network.sh -o network.sh && chmod +x network.sh && bash network.sh
 ```
 
-### 一键环境安装脚本
+## 一键环境安装脚本
 
 #### 一键安装jupyter环境 
 
-- **本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯洁勿要轻易使用本脚本！**
+- **本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！**
 - **本脚本为实验性脚本可能会有各种bug，勿要轻易尝试！**
 - **安装前需要保证 sudo wget curl 已安装**
 - 验证已支持的系统：
