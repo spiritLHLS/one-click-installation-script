@@ -120,6 +120,16 @@ sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.back
 sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.repo
 ```
 
-### 友链
+## 友链
+
+#### 一键测试服务器的融合怪脚本
+
+https://github.com/spiritLHLS/ecs
+
+#### 一键批量开NAT服务器(LXC)
+
+https://github.com/spiritLHLS/lxc
+
+#### 朋友 fscarmen 的常用工具仓库
 
 https://github.com/fscarmen/tools
