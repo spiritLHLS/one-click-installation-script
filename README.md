@@ -62,6 +62,8 @@ curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spir
 
 ## 一键环境安装脚本
 
+只推荐在新服务器上安装，环境不纯净不保证不出bug
+
 #### 一键安装jupyter环境 
 
 - **本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！**
