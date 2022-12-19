@@ -18,7 +18,7 @@ echo "# 更新日志：$changeLog                                       #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
 echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
 echo "#######################################################################"
-echo "验证已支持的系统：
+echo "验证已支持的系统："
 echo "Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台"
 echo "Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示"
 echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
