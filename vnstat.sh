@@ -10,17 +10,17 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   ver="2022.12.19"
-  changeLog="一键按照vnstat脚本"
+  changeLog="一键安装vnstat脚本"
   clear
   echo "#######################################################################"
-  echo "#                     ${YELLOW}一键按照vnstat脚本${PLAIN}                        #"
+  echo "#                     ${YELLOW}一键安装vnstat脚本${PLAIN}                        #"
   echo "# 版本：$ver                                                    #"
   echo "# 更新日志：$changeLog                                      #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
   echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
-  echo "检测修复本机系统时间，对应时区时间，如果相差超过300秒的合理范围则校准时间"
+  echo "加载官方文件编译安装，前置条件适配系统以及后置条件判断安装的版本"
   # Display prompt asking whether to proceed with installation
   reading "Do you want to proceed with installation? [y/n] " confirm
   echo ""
