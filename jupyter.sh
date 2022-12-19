@@ -108,16 +108,6 @@ query_jupyter_info() {
     echo "Error: Jupyter is not installed on this system."
     return 1
   fi
-
-  # Find jupyter config directory
-  config_dir=$(jupyter --config-dir)
-  config_path="$config_dir/jupyter_server_config.py"
-
-  # Check if jupyter_server_config.py exists
-  if [ ! -f "$config_path" ]; then
-    echo "Error: jupyter_server_config.py not found."
-    return 1
-  fi
   
   source activate jupyter-env && jupyter server list && conda deactivate
   
