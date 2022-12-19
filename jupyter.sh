@@ -115,22 +115,10 @@ query_jupyter_info() {
     echo "Error: jupyter_server_config.py not found."
     return 1
   fi
-
-  # Read jupyter_server_config.py
-  config=$(cat "$config_path")
-
-  # Extract token
-  # token=$(echo "$config" | grep "c.ServerApp.token" | awk -F "=" '{print $2}' | tr -d ' ')
-  token=$(echo "$config" | grep "c.IdentityProvider.token" | awk -F "=" '{print $2}' | tr -d ' ')
-  if [ -z "$token" ]; then
-    echo "Error: Token not found in jupyter_server_config.py."
-    return 1
-  fi
-  echo "Token: $token"
-
-  # Extract port
-  port=$(echo "$config" | grep "c.ServerApp.port" | awk -F "=" '{print $2}' | tr -d ' ')
-  echo "Port: $port"
+  
+  source activate jupyter-env && jupyter server list && conda deactivate
+  
+  green "已查询登陆信息如上"
 }
 
 main() {
@@ -150,7 +138,7 @@ main() {
   fi
   
   # Print the current info for Jupyter
-  echo "The current info for Jupyter:"
+  green "The current info for Jupyter:"
   query_jupyter_info
 }
 
