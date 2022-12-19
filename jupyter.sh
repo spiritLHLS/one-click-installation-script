@@ -78,9 +78,10 @@ install_jupyter() {
   fi
   
   # Get the current system name
-  system_name=$(uname)
-  # Check if the system is Ubuntu
-  if [ "$system_name" == "Ubuntu" ]; then
+  ubuntu_version=$(lsb_release -rs)
+  # Check if the Ubuntu version is 18.04, 20.04, or 22.04
+  if [ "$ubuntu_version" == "18.04" ] || [ "$ubuntu_version" == "20.04" ] || [ "$ubuntu_version" == "22.04" ]; then
+    # The system is Ubuntu 18.04, 20.04, or 22.04
     source activate jupyter-env
     sleep 1
     # Start Jupyter Server with port 13692 and host 0.0.0.0
