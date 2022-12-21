@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.19
+#version: 2022.12.21
 
-ver="2022.12.19"
+ver="2022.12.21"
 changeLog="一键安装jupyter环境"
 source ~/.bashrc
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
@@ -23,7 +23,7 @@ echo "Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台"
 echo "Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示"
 echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
 red "本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！"
-yellow "执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息"
+yellow "执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息，如果已安装但未启动则自动启动后再打印信息"
 yellow "如果是初次安装无脑y无脑回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行"
 
 
@@ -84,6 +84,7 @@ install_jupyter() {
     # The system is Ubuntu 18.04, 20.04, or 22.04
     source activate jupyter-env
     sleep 1
+    rm -rf nohup.out
     # Start Jupyter Server with port 13692 and host 0.0.0.0
     green "后台执行的pid的进程ID和输出日志文件名字如下"
     nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
@@ -138,6 +139,13 @@ main() {
   # Check if jupyter is installed
   if jupyter --version &> /dev/null; then
     green "Jupyter is already installed on this system."
+    if ! (nc -z localhost 13692) > /dev/null 2>&1
+    then
+        source activate jupyter-env
+        rm -rf nohup.out
+        green "后台未启动jupyter，正在启动"
+        nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
+    fi
   else
     reading "Jupyter is not installed on this system. Do you want to install it? (y/n) " confirminstall
     echo ""
