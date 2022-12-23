@@ -145,6 +145,8 @@ main() {
         rm -rf nohup.out
         green "后台未启动jupyter，正在启动"
         nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root & green $!
+        sleep 1
+        jupyter lab
     fi
   else
     reading "Jupyter is not installed on this system. Do you want to install it? (y/n) " confirminstall
