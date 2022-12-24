@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.18
+#version: 2022.12.24
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -9,7 +9,7 @@ yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
-  ver="2022.12.18"
+  ver="2022.12.24"
   changeLog="一键修复本机系统时间"
   clear
   echo "#######################################################################"
