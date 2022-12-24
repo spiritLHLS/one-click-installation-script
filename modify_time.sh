@@ -58,7 +58,8 @@ main(){
     DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME))
 
     # 根据时区信息增加或减少时间差的允许范围
-    ALLOWED_DIFF=$((300 + ${TIMEZONE:0:3} * 3600 + ${TIMEZONE:3:2} * 60))
+    ALLOWED_DIFF=$((300 + "${TIMEZONE:0:3}" * 3600 + "${TIMEZONE:3:2}" * 60))
+
 
     # 判断时间差是否在允许范围内
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
@@ -110,7 +111,8 @@ check_again(){
     DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME-$TZ_DIFF))
 
     # 根据时区信息增加或减少时间差的允许范围
-    ALLOWED_DIFF=$((300 + ${TIMEZONE:0:3} * 3600 + ${TIMEZONE:3:2} * 60))
+    ALLOWED_DIFF=$((300 + "${TIMEZONE:0:3}" * 3600 + "${TIMEZONE:3:2}" * 60))
+
 
     # 判断时间差是否在允许范围内
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
@@ -122,10 +124,6 @@ check_again(){
         red "Time on $OS system is NOT accurate. Please check your system time and time zone settings again!"
     fi
 }
-
-
-
-
 
 head
 check_os
