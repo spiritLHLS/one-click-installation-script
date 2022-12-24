@@ -58,8 +58,11 @@ main(){
     DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME))
 
     # 根据时区信息增加或减少时间差的允许范围
-    ALLOWED_DIFF=$((300 + "${TIMEZONE:0:3}" * 3600 + "${TIMEZONE:3:2}" * 60))
-
+    HOUR_OFFSET=${TIMEZONE:0:3}
+    MINUTE_OFFSET=${TIMEZONE:3:2}
+    HOUR_OFFSET_SECONDS=$((HOUR_OFFSET * 3600))
+    MINUTE_OFFSET_SECONDS=$((MINUTE_OFFSET * 60))
+    ALLOWED_DIFF=$((300 + HOUR_OFFSET_SECONDS + MINUTE_OFFSET_SECONDS))
 
     # 判断时间差是否在允许范围内
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
@@ -109,10 +112,13 @@ check_again(){
 
     # 计算时间差
     DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME-$TZ_DIFF))
-
+    
     # 根据时区信息增加或减少时间差的允许范围
-    ALLOWED_DIFF=$((300 + "${TIMEZONE:0:3}" * 3600 + "${TIMEZONE:3:2}" * 60))
-
+    HOUR_OFFSET=${TIMEZONE:0:3}
+    MINUTE_OFFSET=${TIMEZONE:3:2}
+    HOUR_OFFSET_SECONDS=$((HOUR_OFFSET * 3600))
+    MINUTE_OFFSET_SECONDS=$((MINUTE_OFFSET * 60))
+    ALLOWED_DIFF=$((300 + HOUR_OFFSET_SECONDS + MINUTE_OFFSET_SECONDS))
 
     # 判断时间差是否在允许范围内
     if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
