@@ -90,6 +90,15 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
 ```
 
+#### 一键安装C++环境 
+
+- 支持系统：使用apt或者yum作为包管理器的系统
+- 如果未安装则安装，如果有安装则提示升级
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/cplusplus.sh -o cplusplus.sh && chmod +x cplusplus.sh && bash cplusplus.sh 
+```
+
 #### 一键安装vnstat环境
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
