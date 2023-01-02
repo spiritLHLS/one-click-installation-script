@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.20
+#version: 2023.01.02
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -10,7 +10,7 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2022.12.20"
+  ver="2023.01.02"
   changeLog="一键修复apt源，加载对应的源"
   clear
   echo "#######################################################################"
@@ -163,14 +163,19 @@ EOF
 }
 
 fix_broken() {
-  # Check if the output of the update contains "--fix-broken install"
   if apt-get update | grep -F -- '--fix-broken' | grep -F -- 'install'; then
-    # If it does, run apt-get --fix-broken install -y
     apt-get --fix-broken install -y
     apt-get update
     if [ $? -eq 0 ]; then
-      # Print a message indicating that the update was successful
       green "The apt-get update was successful."
+      exit 0
+    fi
+  fi
+  if apt-get install curl wget -y | grep -F -- '--fix-broken' ; then
+    apt-get --fix-broken install -y
+    apt-get update
+    if [ $? -eq 0 ]; then
+      green "The apt-get installation was successful."
       exit 0
     fi
   fi
