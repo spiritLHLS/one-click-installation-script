@@ -60,6 +60,14 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/network.sh -o network.sh && chmod +x network.sh && bash network.sh
 ```
 
+如果是纯V6的也可以不使用上面脚本的nat64，使用warp添加V4网络
+
+比如：https://github.com/fscarmen/warp
+
+```bash
+wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash menu.sh [option] [lisence]
+```
+
 ## 一键环境安装脚本
 
 只推荐在新服务器上安装，环境不纯净不保证不出bug
