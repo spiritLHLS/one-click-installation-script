@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.18
+#version: 2023.01.05
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -10,7 +10,7 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-  ver="2022.12.18"
+  ver="2023.01.05"
   changeLog="一键修复linux网络脚本"
   clear
   echo "#######################################################################"
