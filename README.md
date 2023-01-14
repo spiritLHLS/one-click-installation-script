@@ -89,6 +89,13 @@ wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash men
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
 ```
 
+安装后记得开放 13692 端口
+
+```bash
+apt install ufw -y
+ufw allow 13692
+```
+
 #### 一键安装rust环境 
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
