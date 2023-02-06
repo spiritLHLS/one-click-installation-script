@@ -125,6 +125,14 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 ## 部分手动命令
 
+一键屏蔽邮件端口避免被恶意程序使用
+
+```bash
+iptables -A INPUT -p tcp --dport 25 -j DROP
+iptables -A OUTPUT -p tcp --dport 25 -j DROP
+/sbin/iptables-save
+```
+
 ubuntu缺失公钥
 
 ```bash
