@@ -133,6 +133,19 @@ iptables -A OUTPUT -p tcp --dport 25 -j DROP
 /sbin/iptables-save
 ```
 
+设置语言包
+```bash
+sudo apt-get update
+sudo apt-get install language-pack-en-base
+sudo locale-gen en_US.UTF-8
+```
+下载UTF-8的环境，生成UTF-8的包，然后重启服务器
+```bash
+locale -a
+export LC_ALL=en_US.UTF-8
+```
+查看并设置语言包(乌班图系统)
+
 ubuntu缺失公钥
 
 ```bash
