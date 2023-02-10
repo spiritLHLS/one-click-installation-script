@@ -85,6 +85,8 @@ wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash men
 - 如果是初次安装无脑输入y回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行
 - 安装完毕后，如果需要在lab中安装第三方库需要在lab中使用terminal并使用conda进行下载而不是pip下载，这是需要注意的
 
+原始用途是方便快捷的在按小时计费的超大型服务器上部署python环境进行科学计算，充分利用时间别浪费在构建环境上。
+
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
 ```
