@@ -125,7 +125,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 ## 部分手动命令
 
-一键屏蔽邮件端口避免被恶意程序使用
+### 一键屏蔽邮件端口避免被恶意程序使用
 
 ```bash
 iptables -A INPUT -p tcp --dport 25 -j DROP
@@ -133,7 +133,8 @@ iptables -A OUTPUT -p tcp --dport 25 -j DROP
 /sbin/iptables-save
 ```
 
-设置语言包
+### 设置语言包
+
 ```bash
 sudo apt-get update
 sudo apt-get install language-pack-en-base
@@ -146,13 +147,13 @@ export LC_ALL=en_US.UTF-8
 ```
 查看并设置语言包(乌班图系统)
 
-ubuntu缺失公钥
+### ubuntu缺失公钥
 
 ```bash
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
 ```
 
-ubuntu更新源被锁
+### ubuntu更新源被锁
 
 ```bash
 sudo rm -rf /var/cache/apt/archives/lock
@@ -162,13 +163,13 @@ sudo rm -rf /var/cache/apt/archives/lock
 
 https://itsfoss.com/fix-ubuntu-install-error/
 
-debian缺失公钥
+### debian缺失公钥
 
 ```bash
 apt-get install debian-keyring debian-archive-keyring
 ```
 
-centos换源
+### centos换源
 
 ```bash
 sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
