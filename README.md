@@ -147,7 +147,9 @@ sudo locale-gen en_US.UTF-8
 locale -a
 export LC_ALL=en_US.UTF-8
 ```
-查看并设置语言包(乌班图系统)
+查看并设置语言包
+
+language-pack-en-base 在debian中好像没有，只有Ubuntu有好像，不知道是不是个例，有问题再说
 
 ### ubuntu缺失公钥
 
