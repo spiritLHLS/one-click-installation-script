@@ -170,7 +170,7 @@ https://itsfoss.com/fix-ubuntu-install-error/
 ### debian缺失公钥
 
 ```bash
-apt-get install debian-keyring debian-archive-keyring
+apt-get install debian-keyring debian-archive-keyring -y
 ```
 
 ### centos换源
