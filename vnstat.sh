@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.19
+#version: 2023.02.15
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -9,13 +9,13 @@ yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
-  ver="2022.12.19"
+  ver="2023.02.15"
   changeLog="一键安装vnstat脚本"
   clear
   echo "#######################################################################"
-  echo "#                     ${YELLOW}一键安装vnstat脚本${PLAIN}                        #"
+  echo "#                     ${YELLOW}一键安装vnstat脚本${PLAIN}                              #"
   echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog                                      #"
+  echo "# 更新日志：$changeLog                                        #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
   echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
