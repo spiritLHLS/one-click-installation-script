@@ -91,14 +91,14 @@ install_jupyter() {
     sleep 5
     cat nohup.out
   else
-    echo "你正在除了Ubuntu系统之外的系统执行，如果运行最后几行有如下提示"
+    echo "你正在除了Ubuntu系统之外的系统执行，运行的最后几行可能有如下提示"
     yellow "nohup: failed to run command 'jupyter': No such file or directory"
-    echo "你需要手动执行下面的命令"
+    echo "非Ubuntu的系统你需要手动执行下面的命令"
     yellow "source activate jupyter-env"
     yellow "nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root"
     green "等待5秒后关闭本窗口，开新窗口执行下面的命令查看登陆信息"
     yellow "cat nohup.out"
-    echo "非Ubuntu系统这样才能手动挂起jupyter后台执行"
+    echo "非Ubuntu系统只有上面这样才能手动挂起jupyter后台执行"
   fi  
   
   # Add the specified paths to the PATH variable
