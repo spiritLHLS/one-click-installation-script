@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.01.02
+#version: 2023.02.20
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -207,6 +207,18 @@ fix_locked() {
       elif [ -f /etc/lsb-release ]; then
         red "try sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys missing key"
       fi
+    fi
+    
+    output=$(apt-get update 2>&1)
+    if echo $output | grep -q "NO_PUBKEY"; then
+      echo "Some keys are missing, attempting to retrieve them now..."
+      missing_keys=$(echo $output | grep "NO_PUBKEY" | awk -F' ' '{print $NF}')
+      for key in $missing_keys; do
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
+      done
+      apt-get update
+    else
+      echo "All keys are present."
     fi
   fi
 }
