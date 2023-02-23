@@ -151,12 +151,6 @@ export LC_ALL=en_US.UTF-8
 
 language-pack-en-base 在debian中好像没有，只有Ubuntu有好像，不知道是不是个例，有问题再说
 
-### ubuntu缺失公钥
-
-```bash
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
-```
-
 ### ubuntu更新源被锁
 
 ```bash
@@ -171,6 +165,12 @@ https://itsfoss.com/fix-ubuntu-install-error/
 
 ```bash
 apt-get install debian-keyring debian-archive-keyring -y
+```
+
+### ubuntu或debian缺失公钥
+
+```bash
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
 ```
 
 ### centos换源
