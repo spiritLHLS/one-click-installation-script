@@ -128,6 +128,12 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 ## 部分手动命令
 
+### 一键开启root登陆并替换密码
+
+```
+bash <(curl -sSL https://raw.githubusercontent.com/fscarmen/tools/main/root.sh) [PASSWORD]
+```
+
 ### 一键屏蔽邮件端口避免被恶意程序使用
 
 ```bash
