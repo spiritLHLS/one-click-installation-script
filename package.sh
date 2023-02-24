@@ -10,7 +10,7 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2023.01.02"
+  ver="2023.02.24"
   changeLog="一键修复apt源，加载对应的源"
   clear
   echo "#######################################################################"
@@ -299,10 +299,29 @@ fix_sources() {
   fi
 }
 
+fix_install(){
+    if lsof /var/lib/dpkg/lock > /dev/null 2>&1; then
+        kill $(sudo lsof /var/lib/dpkg/lock | awk '{print $2}')
+        rm /var/lib/dpkg/lock
+    fi
+
+    if lsof /var/cache/apt/archives/lock > /dev/null 2>&1; then
+        kill $(sudo lsof /var/cache/apt/archives/lock | awk '{print $2}')
+        rm /var/cache/apt/archives/lock
+    fi
+
+    if sudo lsof /var/lib/apt/lists/lock > /dev/null 2>&1; then
+        kill $(sudo lsof /var/lib/apt/lists/lock | awk '{print $2}')
+        rm /var/lib/apt/lists/lock
+    fi
+    apt-get clean
+    apt-get update
+}
+
 check_again() {
   # Update the package list again to pick up the new sources
   sudo apt-get update
-
+  
   # Check the exit status of the update command
   if [ $? -eq 0 ]; then
     # Print a message indicating that the update was successful
@@ -320,6 +339,8 @@ check_again() {
 ##############################################################################################################################################
 
 head
+fix_install
+sleep 1
 fix_broken
 sleep 1
 fix_locked
