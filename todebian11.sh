@@ -64,17 +64,31 @@ elif [ $CURRENT_VERSION == "buster" ]; then
   sed -i 's/buster/bullseye/g' /etc/apt/sources.list
 fi
 
+replace(){
+  sed -i 's/^deb http:\/\/security.debian.org\/debian-security wheezy\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security wheezy\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb http:\/\/security.debian.org\/debian-security jessie\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security jessie\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb http:\/\/security.debian.org\/debian-security stretch\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security stretch\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb http:\/\/security.debian.org\/debian-security buster\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security buster\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb http:\/\/security.debian.org\/debian-security bullseye\/updates main/# &/' /etc/apt/sources.list
+  sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security bullseye\/updates main/# &/' /etc/apt/sources.list
+}
+
 apt-get update
+if [ $? -ne 0 ]; then
+    # 去除漏洞修补源避免更新异常
+    replace > /dev/null 2>&1
+    apt-get update
+fi
 apt-get upgrade -y
 apt-get full-upgrade -y
 
 # 清理系统
 apt-get autoremove -y
 apt-get autoclean
-
-# 去除漏洞修补源避免更新异常
-sed -i 's/^deb http:\/\/security.debian.org\/debian-security bullseye\/updates main/# &/' /etc/apt/sources.list
-sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security bullseye\/updates main/# &/' /etc/apt/sources.list
 
 # 备份系统配置文件
 cp -r /etc $BACKUP_DIR
