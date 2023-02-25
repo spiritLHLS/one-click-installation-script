@@ -28,6 +28,9 @@ CURRENT_VERSION=$(lsb_release -cs)
 if [ $CURRENT_VERSION == "bullseye" ]; then
   _blue "当前系统版本为最新版本"
   exit 0
+else
+  version=$(cat /etc/debian_version)
+  _blue "当前 Debian version: $version"
 fi
 
 # 检查脚本是否已经在执行
@@ -97,4 +100,3 @@ cp -r /etc $BACKUP_DIR
 rm /tmp/debian_upgrade_in_progress
 
 _green "脚本执行完毕系统内核应当已升级到最新版本，执行 reboot 重启系统以完成内核升级"
-exit 1
