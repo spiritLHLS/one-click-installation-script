@@ -126,6 +126,15 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/vnstat.sh -o vnstat.sh && chmod +x vnstat.sh && bash vnstat.sh 
 ```
 
+#### 一键升级低版本debian为debian11
+
+- 支持系统：debian 6+
+- 升级后需要重启系统加载内核
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/todebian11.sh -o todebian11.sh && chmod +x todebian11.sh && bash todebian11.sh
+```
+
 ## 部分手动命令
 
 ### 一键开启root登陆并替换密码
