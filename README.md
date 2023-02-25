@@ -31,7 +31,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 #### 一键尝试修复```sudo: unable to resolve host xxx: Name or service not known```警告(爆错)
 
-不要在生产环境上使用该脚本，否则容易造成网络hosts配置错误，配置的host名字不在外网IP上
+不要在生产环境上使用该脚本，否则容易造成网络hosts配置错误，配置的host名字不在外网IP上反而在内网IP(127.0.0.1)上
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/check_sudo.sh -o check_sudo.sh && chmod +x check_sudo.sh && bash check_sudo.sh
