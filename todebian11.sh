@@ -22,7 +22,7 @@ if [ ! -f /etc/debian_version ]; then
 fi
 
 # 从文件中读取当前版本代号
-CURRENT_VERSION=$(cat /etc/os-release | grep VERSION= | cut -d '"' -f2 | cut -d ' ' -f1)
+CURRENT_VERSION=$(lsb_release -cs)
 
 # 判断当前版本是否为最新版本
 if [ $CURRENT_VERSION == "bullseye" ]; then
