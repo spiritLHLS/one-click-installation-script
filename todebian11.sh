@@ -72,6 +72,10 @@ apt-get full-upgrade -y
 apt-get autoremove -y
 apt-get autoclean
 
+# 去除漏洞修补源避免更新异常
+sed -i 's/^deb http:\/\/security.debian.org\/debian-security bullseye\/updates main/# &/' /etc/apt/sources.list
+sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security bullseye\/updates main/# &/' /etc/apt/sources.list
+
 # 备份系统配置文件
 cp -r /etc $BACKUP_DIR
 
