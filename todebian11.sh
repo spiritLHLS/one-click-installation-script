@@ -3,15 +3,21 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2023.02.25
 
+# 打印信息
+_red() { echo -e "\033[31m\033[01m$@\033[0m"; }
+_green() { echo -e "\033[32m\033[01m$@\033[0m"; }
+_yellow() { echo -e "\033[33m\033[01m$@\033[0m"; }
+_blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
+
 # 检查是否为 root 用户
 if [ "$(id -u)" != "0" ]; then
-    echo "请使用 root 用户执行脚本"
+    _red "请使用 root 用户执行脚本"
     exit 1
 fi
 
 # 判断是否为 Debian 系统
 if [ ! -f /etc/debian_version ]; then
-  echo "当前系统不是 Debian 系统"
+  _red "当前系统不是 Debian 系统"
   exit 1
 fi
 
@@ -20,13 +26,13 @@ CURRENT_VERSION=$(cat /etc/os-release | grep VERSION= | cut -d '"' -f2 | cut -d 
 
 # 判断当前版本是否为最新版本
 if [ $CURRENT_VERSION == "bullseye" ]; then
-  echo "当前系统版本为最新版本"
+  _blue "当前系统版本为最新版本"
   exit 0
 fi
 
 # 检查脚本是否已经在执行
 if [ -f /tmp/debian_upgrade_in_progress ]; then
-  echo "升级正在进行中，请勿重复执行"
+  _yellow "升级正在进行中，请勿重复执行，如若已停止执行请重启服务器并删除文件 /tmp/debian_upgrade_in_progress "
   exit 1
 fi
 
@@ -72,4 +78,5 @@ cp -r /etc $BACKUP_DIR
 # 删除标记文件
 rm /tmp/debian_upgrade_in_progress
 
-echo "脚本执行完毕系统内核应当已升级到最新版本，执行 reboot 重启系统以完成内核升级"
+_green "脚本执行完毕系统内核应当已升级到最新版本，执行 reboot 重启系统以完成内核升级"
+exit 1
