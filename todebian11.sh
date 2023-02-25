@@ -3,6 +3,12 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2023.02.25
 
+# 检查是否为 root 用户
+if [ "$(id -u)" != "0" ]; then
+    echo "请使用 root 用户执行脚本"
+    exit 1
+fi
+
 # 判断是否为 Debian 系统
 if [ ! -f /etc/debian_version ]; then
   echo "当前系统不是 Debian 系统"
