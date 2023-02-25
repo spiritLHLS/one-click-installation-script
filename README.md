@@ -130,6 +130,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 - 支持系统：debian 6+
 - 升级后需要重启系统加载内核，升级过程中需要选择的都无脑按回车即可
+- 升级是一个版本迭代一个版本，所以如果版本低，每执行一次升级一个版本
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/todebian11.sh -o todebian11.sh && chmod +x todebian11.sh && bash todebian11.sh
