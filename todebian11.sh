@@ -30,7 +30,7 @@ if [ $CURRENT_VERSION == "bullseye" ]; then
   exit 0
 else
   version=$(cat /etc/debian_version)
-  _blue "当前 Debian version: $version"
+  _blue "当前 Debian version: $version , 代号 $CURRENT_VERSION "
 fi
 
 # 检查脚本是否已经在执行
