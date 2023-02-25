@@ -44,13 +44,13 @@ else
   exit 0
 fi
 
-apt update
-apt upgrade -y
-apt full-upgrade -y
+apt-get update
+apt-get upgrade -y
+apt-get full-upgrade -y
 
 # 清理系统
-apt autoremove -y
-apt autoclean
+apt-get autoremove -y
+apt-get autoclean
 
 # 备份系统配置文件
 cp -r /etc $BACKUP_DIR
