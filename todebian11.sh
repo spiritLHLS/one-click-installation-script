@@ -3,8 +3,20 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2023.02.25
 
+# 判断是否为 Debian 系统
+if [ ! -f /etc/debian_version ]; then
+  echo "当前系统不是 Debian 系统"
+  exit 1
+fi
+
 # 从文件中读取当前版本代号
 CURRENT_VERSION=$(cat /etc/os-release | grep VERSION= | cut -d '"' -f2 | cut -d ' ' -f1)
+
+# 判断当前版本是否为最新版本
+if [ $CURRENT_VERSION == "bullseye" ]; then
+  echo "当前系统版本为最新版本"
+  exit 0
+fi
 
 # 检查脚本是否已经在执行
 if [ -f /tmp/debian_upgrade_in_progress ]; then
@@ -38,10 +50,6 @@ elif [ $CURRENT_VERSION == "stretch" ]; then
   sed -i 's/stretch/buster/g' /etc/apt/sources.list
 elif [ $CURRENT_VERSION == "buster" ]; then
   sed -i 's/buster/bullseye/g' /etc/apt/sources.list
-else
-  echo "当前系统版本为最新版本"
-  rm /tmp/debian_upgrade_in_progress
-  exit 0
 fi
 
 apt-get update
