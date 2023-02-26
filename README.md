@@ -24,7 +24,7 @@
   * [debian缺失公钥](#debian缺失公钥)
   * [ubuntu或debian缺失公钥](#ubuntu或debian缺失公钥)
   * [centos换源](#centos换源)
-* [友链]
+* [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
   * [朋友fscarmen的常用一键工具仓库](#朋友fscarmen的常用一键工具仓库)
