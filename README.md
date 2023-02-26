@@ -17,13 +17,17 @@
   * [一键安装vnstat环境](#一键安装vnstat环境)
   * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
 * [部分手动命令](#部分手动命令)
-  *[一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
-  *[一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
-  *[设置语言包](#设置语言包)
-  *[ubuntu更新源被锁](#ubuntu更新源被锁)
-  *[debian缺失公钥](#debian缺失公钥)
-  *[ubuntu或debian缺失公钥](#ubuntu或debian缺失公钥)
-  *[centos换源](#centos换源)
+  * [一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
+  * [一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
+  * [设置语言包](#设置语言包)
+  * [ubuntu更新源被锁](#ubuntu更新源被锁)
+  * [debian缺失公钥](#debian缺失公钥)
+  * [ubuntu或debian缺失公钥](#ubuntu或debian缺失公钥)
+  * [centos换源](#centos换源)
+* [友链]
+  * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
+  * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
+  * [朋友fscarmen的常用一键工具仓库](#朋友fscarmen的常用一键工具仓库)
   
 ## 一键修复脚本
 
@@ -233,10 +237,10 @@ sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.
 
 https://github.com/spiritLHLS/ecs
 
-#### 一键批量开NAT服务器(LXC)
+#### 一键批量开NAT服务器LXC
 
 https://github.com/spiritLHLS/lxc
 
-#### 朋友 fscarmen 的常用一键工具仓库
+#### 朋友fscarmen的常用一键工具仓库
 
 https://github.com/fscarmen/tools
