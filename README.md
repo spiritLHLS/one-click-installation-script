@@ -2,6 +2,21 @@
 
 如果脚本有任何问题或者任何修复系统的需求，可在issues中提出，有空会解决或者回答
 
+# 目录
+
+* [一键修复脚本](#一键修复脚本)
+  * [一键尝试修复apt源](#一键尝试修复apt源)
+  * [一键尝试修复系统时间](#一键尝试修复系统时间)
+  * [一键尝试修复sudo警告](#一键尝试修复sudo警告)
+  * [一键修改系统自带的journal日志记录大小释放系统盘空间](#一键修改系统自带的journal日志记录大小释放系统盘空间)
+  * [一键尝试修复网络](#一键尝试修复网络)
+* [一键环境安装脚本](#一键环境安装脚本)
+  * [一键安装jupyter环境](#一键安装jupyter环境)
+  * [一键安装rust环境](#一键安装rust环境)
+  * [一键安装C++环境](#一键安装C环境)
+  * [一键安装vnstat环境](#一键安装vnstat环境)
+  * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
+
 ## 一键修复脚本
 
 运行所有一键修复脚本前注意看说明，以及保证服务器无重要数据，运行后造成的一切后果作者不负任何责任，自行评判风险！
@@ -29,7 +44,9 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/modify_time.sh -o modify_time.sh && chmod +x modify_time.sh && bash modify_time.sh
 ```
 
-#### 一键尝试修复```sudo: unable to resolve host xxx: Name or service not known```警告(爆错)
+#### 一键尝试修复sudo警告
+
+- 一键尝试修复```sudo: unable to resolve host xxx: Name or service not known```警告(爆错)
 
 不要在生产环境上使用该脚本，否则容易造成网络hosts配置错误，配置的host名字不在外网IP上反而在内网IP(127.0.0.1)上
 
@@ -110,8 +127,9 @@ ufw allow 13692
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
 ```
 
-#### 一键安装C++环境 
+#### 一键安装C环境
 
+- 一键安装C++环境
 - 支持系统：使用apt或者yum作为包管理器的系统
 - 如果未安装则安装，如果有安装则提示升级
 
