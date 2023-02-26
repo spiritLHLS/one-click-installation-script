@@ -16,7 +16,15 @@
   * [一键安装C++环境](#一键安装C环境)
   * [一键安装vnstat环境](#一键安装vnstat环境)
   * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
-
+* [部分手动命令](#部分手动命令)
+  *[一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
+  *[一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
+  *[设置语言包](#设置语言包)
+  *[ubuntu更新源被锁](#ubuntu更新源被锁)
+  *[debian缺失公钥](#debian缺失公钥)
+  *[ubuntu或debian缺失公钥](#ubuntu或debian缺失公钥)
+  *[centos换源](#centos换源)
+  
 ## 一键修复脚本
 
 运行所有一键修复脚本前注意看说明，以及保证服务器无重要数据，运行后造成的一切后果作者不负任何责任，自行评判风险！
@@ -205,6 +213,8 @@ apt-get install debian-keyring debian-archive-keyring -y
 ```
 
 ### ubuntu或debian缺失公钥
+
+后续这块有计划整理为一个一键脚本
 
 ```bash
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
