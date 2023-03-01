@@ -17,7 +17,6 @@
   * [一键安装vnstat环境](#一键安装vnstat环境)
   * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
   * [一键升级低版本ubuntu为ubuntu22](#一键升级低版本ubuntu为ubuntu22)
-  * [一键安装PVE](#一键安装PVE)
 * [部分手动命令](#部分手动命令)
   * [一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
   * [一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
@@ -29,6 +28,7 @@
 * [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
+  * [一键安装PVE](#一键安装PVE)
   * [朋友fscarmen的常用一键工具仓库](#朋友fscarmen的常用一键工具仓库)
   
 ## 一键修复脚本
@@ -180,10 +180,6 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/toubuntu22.sh -o toubuntu22.sh && chmod +x toubuntu22.sh && bash toubuntu22.sh
 ```
 
-#### 一键安装PVE
-
-https://github.com/spiritLHLS/pve
-
 ## 部分手动命令
 
 ### 一键开启root登陆并替换密码
@@ -256,6 +252,10 @@ https://github.com/spiritLHLS/ecs
 #### 一键批量开NAT服务器LXC
 
 https://github.com/spiritLHLS/lxc
+
+#### 一键安装PVE
+
+https://github.com/spiritLHLS/pve
 
 #### 朋友fscarmen的常用一键工具仓库
 
