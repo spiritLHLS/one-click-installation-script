@@ -17,6 +17,7 @@
   * [一键安装vnstat环境](#一键安装vnstat环境)
   * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
   * [一键升级低版本ubuntu为ubuntu22](#一键升级低版本ubuntu为ubuntu22)
+  * [一键安装PVE](#一键安装PVE)
 * [部分手动命令](#部分手动命令)
   * [一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
   * [一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
@@ -178,6 +179,10 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/toubuntu22.sh -o toubuntu22.sh && chmod +x toubuntu22.sh && bash toubuntu22.sh
 ```
+
+#### 一键安装PVE
+
+https://github.com/spiritLHLS/pve
 
 ## 部分手动命令
 
