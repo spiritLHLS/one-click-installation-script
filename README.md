@@ -16,6 +16,7 @@
   * [一键安装C++环境](#一键安装C环境)
   * [一键安装vnstat环境](#一键安装vnstat环境)
   * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
+  * [一键升级低版本ubuntu为ubuntu22](#一键升级低版本ubuntu为ubuntu22)
 * [部分手动命令](#部分手动命令)
   * [一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
   * [一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
@@ -166,6 +167,16 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/todebian11.sh -o todebian11.sh && chmod +x todebian11.sh && bash todebian11.sh
+```
+
+#### 一键升级低版本ubuntu为ubuntu22
+
+- 支持系统：debian 16+
+- 升级后需要重启系统加载内核，升级过程中需要选择的都无脑按回车即可
+- 升级是一个版本迭代一个版本，所以如果版本低，每执行一次升级一个版本，直至升级到ubuntu22
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/toubuntu22.sh -o toubuntu22.sh && chmod +x toubuntu22.sh && bash toubuntu22.sh
 ```
 
 ## 部分手动命令
