@@ -3,7 +3,7 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2023.04.01
 
-ver="2022.04.01"
+ver="2023.04.01"
 changeLog="一键安装R语言环境"
 source ~/.bashrc
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
@@ -31,7 +31,7 @@ clear
 echo "#######################################################################"
 echo "#                     ${YELLOW}一键安装R语言环境${PLAIN}                               #"
 echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                       #"
+echo "# 更新日志：$changeLog                                         #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
 echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
 echo "#######################################################################"
