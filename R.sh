@@ -4,7 +4,7 @@
 #version: 2023.04.01
 
 ver="2022.04.01"
-changeLog="一键安装R环境"
+changeLog="一键安装R语言环境"
 source ~/.bashrc
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -29,17 +29,17 @@ done
 apt-get --fix-broken install -y > /dev/null 2>&1
 clear
 echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装R环境${PLAIN}                             #"
+echo "#                     ${YELLOW}一键安装R语言环境${PLAIN}                               #"
 echo "# 版本：$ver                                                    #"
 echo "# 更新日志：$changeLog                                       #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
+echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
 echo "#######################################################################"
 echo "验证已支持的系统："
 echo "Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台"
 echo "Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示"
 echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
-yellow "如若已经安装jupyter环境则安装完毕后需要重启jupyter加载内核，安装jupyter环境详见对应仓库目录"
+yellow "安装前需安装jupyter环境，R环境和内核安装完毕后需要重启jupyter加载内核，安装jupyter环境详见对应仓库目录"
 yellow "如果是初次安装无脑回车即可，按照提示进行操作即可"
 
 checkupdate(){
