@@ -6,13 +6,10 @@
 ver="2022.04.01"
 changeLog="一键安装R环境(执行前需已安装jupyter notebook)"
 source ~/.bashrc
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[33m"
-PLAIN="\033[0m"
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
+blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
 reading(){ read -rp "$(green "$1")" "$2"; }
 REGEX=("debian" "ubuntu" "centos|red hat|kernel|oracle linux|alma|rocky" "'amazon linux'" "fedora" "arch")
 RELEASE=("Debian" "Ubuntu" "CentOS" "CentOS" "Fedora" "Arch")
