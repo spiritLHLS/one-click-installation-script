@@ -17,7 +17,7 @@ head() {
   echo "# 版本：$ver                                                    #"
   echo "# 更新日志：$changeLog                                        #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-  echo "# ${GREEN}作仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
+  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
   echo "#######################################################################"
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
   echo "加载官方文件编译安装，前置条件适配系统以及后置条件判断安装的版本"
