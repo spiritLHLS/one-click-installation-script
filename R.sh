@@ -39,7 +39,8 @@ echo "验证已支持的系统："
 echo "Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台"
 echo "Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示"
 echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
-yellow "安装前需安装jupyter环境，R环境和内核安装完毕后需要重启jupyter加载内核，安装jupyter环境详见对应仓库目录"
+yellow "安装前需用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，R环境和内核安装完毕后需要重启jupyter加载内核"
+yellow "简单的说，需要执行本仓库对应的jupyter安装脚本再运行本脚本安装R语言环境"
 yellow "如果是初次安装无脑回车即可，按照提示进行操作即可"
 
 checkupdate(){
@@ -73,7 +74,8 @@ checkR(){
 	if [ "$confirminstall" != "y" ]; then
 		exit 0
 	fi
-	R -q -e "install.packages('IRkernel', repos='https://cran.r-project.org/'); IRkernel::installspec()"
+	source activate jupyter-env
+	conda install -c r r-irkernel
 	green "Installed IRkernel package and registered kernel"
   else
 	blue "IRkernel is installed"
