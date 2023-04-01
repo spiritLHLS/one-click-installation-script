@@ -69,7 +69,6 @@ checkR(){
   
   source activate jupyter-env
   if ! Rscript -e "IRkernel::installspec()" &>/dev/null; then
-  then
 	reading "IRkernel is not installed on this system. Do you want to install it? (y/n) " confirminstall
 	echo ""
 	if [ "$confirminstall" != "y" ]; then
