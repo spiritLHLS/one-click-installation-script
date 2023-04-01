@@ -135,7 +135,7 @@ ufw allow 13692
 
 #### 一键安装R语言环境
 
-- **安装前需用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，R环境和内核安装完毕后需要重启jupyter加载内核**
+- **安装前需使用Miniconda3安装虚拟环境jupyter-env，然后进行jupyter和jupyterlab的安装，再然后才能安装本内核**
 - **简单的说，需要执行本仓库对应的jupyter安装脚本再运行本脚本安装R语言环境**
 - 验证已支持的系统：
   - Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台
