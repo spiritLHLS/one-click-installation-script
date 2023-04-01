@@ -135,11 +135,11 @@ ufw allow 13692
 
 #### 一键安装R语言环境
 
+- **安装前需安装jupyter环境，R环境和内核安装完毕后需要重启jupyter加载内核**
 - 验证已支持的系统：
   - Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台
   - Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示
 - 可能支持的系统(未验证)：centos 7+，Fedora，Almalinux 8.5+
-- 如若已经安装jupyter环境则安装完毕后需要重启jupyter加载内核
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/R.sh -o R.sh && chmod +x R.sh && bash R.sh
