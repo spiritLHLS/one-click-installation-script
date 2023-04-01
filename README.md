@@ -12,6 +12,7 @@
   * [一键尝试修复网络](#一键尝试修复网络)
 * [一键环境安装脚本](#一键环境安装脚本)
   * [一键安装jupyter环境](#一键安装jupyter环境)
+  * [一键安装R语言环境](#一键安装R语言环境)
   * [一键安装rust环境](#一键安装rust环境)
   * [一键安装C++环境](#一键安装C环境)
   * [一键安装vnstat环境](#一键安装vnstat环境)
@@ -130,6 +131,14 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 ```bash
 apt install ufw -y
 ufw allow 13692
+```
+
+#### 一键安装R语言环境
+
+- 安装前务必已安装jupyter环境
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/R.sh -o R.sh && chmod +x R.sh && bash R.sh
 ```
 
 #### 一键安装rust环境 
