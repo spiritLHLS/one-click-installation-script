@@ -16,7 +16,7 @@ echo "#                     ${YELLOW}一键安装jupyter环境${PLAIN}          
 echo "# 版本：$ver                                                    #"
 echo "# 更新日志：$changeLog                                       #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
+echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
 echo "#######################################################################"
 echo "验证已支持的系统："
 echo "Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台"
