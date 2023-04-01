@@ -55,18 +55,28 @@ checkroot(){
 checkR(){
   if ! command -v R &> /dev/null
   then
-      echo "R is not installed, install R language and dependent libraries..."
-      ${PACKAGE_INSTALL[int]} r-base libssl-dev libcurl4-openssl-dev libxml2-dev
+	reading "R is not installed on this system. Do you want to install it? (y/n) " confirminstall
+	echo ""
+	if [ "$confirminstall" != "y" ]; then
+		exit 0
+	fi
+	echo "R is not installed, install R language and dependent libraries..."
+	${PACKAGE_INSTALL[int]} r-base libssl-dev libcurl4-openssl-dev libxml2-dev
   else
-      echo "R is already installed, skip..."
+	echo "R is already installed, skip..."
   fi
     
   if ! R -q -e "library('IRkernel')" &> /dev/null
   then
-      R -q -e "install.packages('IRkernel', repos='https://cran.r-project.org/'); IRkernel::installspec()"
-      green "Installed IRkernel package and registered kernel"
+	reading "IRkernel is not installed on this system. Do you want to install it? (y/n) " confirminstall
+	echo ""
+	if [ "$confirminstall" != "y" ]; then
+		exit 0
+	fi
+	R -q -e "install.packages('IRkernel', repos='https://cran.r-project.org/'); IRkernel::installspec()"
+	green "Installed IRkernel package and registered kernel"
   else
-      blue "IRkernel is installed"
+	blue "IRkernel is installed"
   fi
 }
 
