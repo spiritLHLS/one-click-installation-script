@@ -18,7 +18,7 @@ head() {
   echo "# 版本：$ver                                                    #"
   echo "# 更新日志：$changeLog                               #"
   echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script #"
+  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
   echo "#######################################################################"
   echo "支持系统：Ubuntu 12+，Debian 6+"
   echo "0.修复apt源broken损坏"
