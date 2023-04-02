@@ -163,6 +163,7 @@ EOF
     fi
     sudo systemctl restart nginx
     green "Because nginx set the reverse proxy to bind the $domain_name, remember to set your domain name in the panel backend to enable it."
+    green "Fill in the options for Domains at http://$domain_name"
 }
 
 
