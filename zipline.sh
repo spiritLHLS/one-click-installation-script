@@ -89,7 +89,7 @@ build(){
       chmod +x /usr/local/bin/docker-compose
    fi
 
-  if ! docker ps --format '{{.Names}}' | grep -q -E 'postgres|zipline'; then
+  if ! docker ps -a | awk '{print $NF}' | grep -q -E 'postgres|zipline'; then
     green "\n Building \n "
     git clone https://github.com/diced/zipline
     if ! command -v git >/dev/null 2>&1; then
