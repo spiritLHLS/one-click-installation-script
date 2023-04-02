@@ -199,6 +199,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 - [zipline](https://github.com/diced/zipline) 平台为ShareX/文件上传服务器，易于使用，功能丰富，设置简单
+- 自动安装docker，docker-compose，如若已安装zipline在/root目录下，则自动更新
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/zipline.sh -o zipline.sh && chmod +x zipline.sh && bash zipline.sh
