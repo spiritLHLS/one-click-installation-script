@@ -62,9 +62,8 @@ check_ipv4(){
 }
 
 build(){
-  green "\n Install docker.\n "
   if ! systemctl is-active docker >/dev/null 2>&1; then
-    echo -e " \n Install docker \n " 
+    green "\n Install docker.\n "
     if [ $SYSTEM = "CentOS" ]; then
       ${PACKAGE_INSTALL[int]} yum-utils
       yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo &&
@@ -77,8 +76,8 @@ build(){
   
   if ! command -v docker-compose >/dev/null 2>&1; then
       green "\n Install Docker Compose \n"
-      echo -e "\nPackage manager installation failed, trying binary installation...\n"
       COMPOSE_URL=""
+      SYSTEM_ARCH=$(uname -m)
       case $SYSTEM_ARCH in
         "x86_64") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-x86_64" ;;
         "aarch64") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-arm64" ;;
@@ -90,9 +89,17 @@ build(){
       chmod +x /usr/local/bin/docker-compose
    fi
 
-  green "\n Building \n "
   if ! docker ps --format '{{.Names}}' | grep -q -E 'postgres|zipline'; then
+    green "\n Building \n "
     git clone https://github.com/diced/zipline
+    if ! command -v git >/dev/null 2>&1; then
+        green "\n Install git.\n "
+        if [ $SYSTEM = "CentOS" ]; then
+            ${PACKAGE_INSTALL[int]} git
+        else
+            ${PACKAGE_INSTALL[int]} git-core
+        fi
+    fi
     cd zipline
     docker compose up -d
     CORE_SECRET=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
@@ -100,6 +107,7 @@ build(){
     docker compose pull
     docker compose up -d
   else
+    green "\n Updating \n "
     cd zipline
     docker compose pull
     docker compose up -d
