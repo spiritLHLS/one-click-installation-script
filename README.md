@@ -201,6 +201,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 如若要设置反向代理绑定域名，安装前请保证原服务器未安装过nginx，如若已安装过nginx，请自行配置反向代理本机的3000端口
 - [zipline](https://github.com/diced/zipline) 平台为ShareX/文件上传服务器，易于使用，功能丰富，设置简单
 - 自动安装docker，docker-compose，如若已安装zipline在/root目录下，则自动更新
+- 反向代理如若已设置成功，还需要在面板设置中填写域名，绑定启用
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/zipline.sh -o zipline.sh && chmod +x zipline.sh && bash zipline.sh
