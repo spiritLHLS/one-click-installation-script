@@ -59,6 +59,7 @@ check_ipv4(){
 
   # 判断宿主机的 IPv4 、IPv6 和双栈情况
   ! curl -s4m8 $IP_API | grep -q '\.' && red " ERROR：The host must have IPv4. " && exit 1
+  IPV4=$(curl -s4m8 "$IP_API")
 }
 
 build(){
@@ -89,7 +90,7 @@ build(){
       chmod +x /usr/local/bin/docker-compose
    fi
 
-  if ! docker ps -a | awk '{print $NF}' | grep -q -E 'postgres|zipline'; then
+  if [ ! -d "zipline" ] && ! docker ps -a | awk '{print $NF}' | grep -q -E 'postgres|zipline'; then
     green "\n Building \n "
     git clone https://github.com/diced/zipline
     if ! command -v git >/dev/null 2>&1; then
@@ -100,20 +101,24 @@ build(){
             ${PACKAGE_INSTALL[int]} git-core
         fi
     fi
-    cd zipline
-    docker compose up -d
+    cd /root/zipline
+    docker-compose up -d
     CORE_SECRET=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
     sed -i "s/CORE_SECRET=changethis/CORE_SECRET=$CORE_SECRET/g" docker-compose.yml
-    docker compose pull
-    docker compose up -d
-  else
+    docker-compose pull
+    docker-compose up -d
+  elif [ -d "zipline" ] && docker ps -a | awk '{print $NF}' | grep -q -E 'postgres|zipline'; then
     green "\n Updating \n "
     cd zipline
-    docker compose pull
-    docker compose up -d
+    docker-compose pull
+    docker-compose up -d
   fi
   
-  green "Checking http://yourip:80/ "
+  green "Checking http://$IPV4:3000/ "
+  green "You may login to the dashboard with:"
+  green "Username: administrator" 
+  green "Password: password"
+  green "Remember to change this password in the manage user page"
 }
 
 check_ipv4
