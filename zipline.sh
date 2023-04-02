@@ -31,9 +31,9 @@ done
 apt-get --fix-broken install -y > /dev/null 2>&1
 clear
 echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装Zipline平台${PLAIN}                               #"
+echo "#                     ${YELLOW}一键安装Zipline平台${PLAIN}                             #"
 echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                         #"
+echo "# 更新日志：$changeLog                                       #"
 echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
 echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
 echo "#######################################################################"
@@ -76,14 +76,7 @@ build(){
   fi
   
   if ! command -v docker-compose >/dev/null 2>&1; then
-    green "\n Install Docker Compose \n"
-    if [ $SYSTEM = "CentOS" ]; then
-      ${PACKAGE_INSTALL[int]} docker-compose
-    else
-      ${PACKAGE_INSTALL[int]} docker-compose
-    fi
-
-    if ! command -v docker-compose >/dev/null 2>&1; then
+      green "\n Install Docker Compose \n"
       echo -e "\nPackage manager installation failed, trying binary installation...\n"
       COMPOSE_URL=""
       case $SYSTEM_ARCH in
@@ -93,11 +86,9 @@ build(){
         "armv7l") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-armhf" ;;
         *) echo -e "\nArchitecture not supported for binary installation of Docker Compose.\n"; exit 1 ;;
       esac
-
       curl -SL $COMPOSE_URL -o /usr/local/bin/docker-compose
       chmod +x /usr/local/bin/docker-compose
-    fi
-  fi
+   fi
 
   green "\n Building \n "
   if ! docker ps --format '{{.Names}}' | grep -q -E 'postgres|zipline'; then
