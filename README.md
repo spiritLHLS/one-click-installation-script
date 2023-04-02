@@ -123,7 +123,7 @@ wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash men
 原始用途是方便快捷的在按小时计费的超大型服务器上部署python环境进行科学计算，充分利用时间别浪费在构建环境上。
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
 ```
 
 安装后记得开放 13692 端口
@@ -143,7 +143,7 @@ ufw allow 13692
 - 可能支持的系统(未验证)：centos 7+，Fedora，Almalinux 8.5+
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/R.sh -o R.sh && chmod +x R.sh && bash R.sh
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/R.sh -o R.sh && chmod +x R.sh && bash R.sh
 ```
 
 #### 一键安装rust环境 
@@ -152,7 +152,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 加载官方脚本安装，前置条件适配系统以及后置条件判断安装的版本
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/rust.sh -o rust.sh && chmod +x rust.sh && bash rust.sh 
 ```
 
 #### 一键安装C环境
@@ -162,7 +162,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 如果未安装则安装，如果有安装则提示升级
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/cplusplus.sh -o cplusplus.sh && chmod +x cplusplus.sh && bash cplusplus.sh 
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/cplusplus.sh -o cplusplus.sh && chmod +x cplusplus.sh && bash cplusplus.sh 
 ```
 
 #### 一键安装vnstat环境
@@ -171,7 +171,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 加载官方文件编译安装，前置条件适配系统以及后置条件判断安装的版本
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/vnstat.sh -o vnstat.sh && chmod +x vnstat.sh && bash vnstat.sh 
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/vnstat.sh -o vnstat.sh && chmod +x vnstat.sh && bash vnstat.sh 
 ```
 
 #### 一键升级低版本debian为debian11
@@ -181,7 +181,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 升级是一个版本迭代一个版本，所以如果版本低，每执行一次升级一个版本，直至升级到debian11
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/todebian11.sh -o todebian11.sh && chmod +x todebian11.sh && bash todebian11.sh
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/todebian11.sh -o todebian11.sh && chmod +x todebian11.sh && bash todebian11.sh
 ```
 
 #### 一键升级低版本ubuntu为ubuntu22
@@ -191,7 +191,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 升级是一个版本迭代一个版本，所以如果版本低，每执行一次升级一个版本，直至升级到ubuntu22
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/toubuntu22.sh -o toubuntu22.sh && chmod +x toubuntu22.sh && bash toubuntu22.sh
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/toubuntu22.sh -o toubuntu22.sh && chmod +x toubuntu22.sh && bash toubuntu22.sh
 ```
 
 ## 部分手动命令
