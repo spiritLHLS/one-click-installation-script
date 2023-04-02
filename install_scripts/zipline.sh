@@ -121,5 +121,55 @@ build(){
   green "Remember to change this password in the manage user page"
 }
 
+check_nginx(){
+    if ! [ -x "$(command -v nginx)" ]; then
+        green "\n Install nginx.\n "
+        ${PACKAGE_UPDATE[int]}
+        ${PACKAGE_INSTALL[int]} nginx
+    fi
+}
+
+
+build_reverse_proxy() {
+    green "\n Build reverse proxy. \n "
+    reading "Enter the domain name to bind to (format: www.example.com): " domain_name
+    resolved_ip=$(dig +short $domain_name)
+    if [ "$resolved_ip" != "$IPV4" ]; then
+        echo "Error: $domain_name is not bound to the local IP address."
+        exit 1
+    fi
+
+    sudo tee /etc/nginx/sites-available/reverse-proxy <<EOF
+server {
+    listen 80 default_server;
+    client_max_body_size 100M;
+    server_name $domain_name;
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+EOF
+
+    sudo ln -s /etc/nginx/sites-available/reverse-proxy /etc/nginx/sites-enabled/
+    sudo nginx -t
+    if [ $? -ne 0 ]; then
+        echo "Error: There is an error in the reverse proxy configuration file. Please check and retry."
+        exit 1
+    fi
+    sudo systemctl restart nginx
+}
+
+
 check_ipv4
 build
+reading "Do you want to set up a reverse proxy for a domain name? (y/n): " answer
+if [ "$answer" != "y" ] && [ "$answer" != "Y" ]; then
+    echo "Exiting the script."
+    exit 0
+fi
+check_nginx
+build_reverse_proxy
