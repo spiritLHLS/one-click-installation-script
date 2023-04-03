@@ -27,6 +27,7 @@
   * [debian缺失公钥](#debian缺失公钥)
   * [ubuntu或debian缺失公钥](#ubuntu或debian缺失公钥)
   * [centos换源](#centos换源)
+  * [安装gitea](#安装gitea)
 * [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
@@ -270,6 +271,10 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 公钥
 sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.repo
 ```
+
+### 安装gitea
+
+https://gitlab.com/packaging/gitea
 
 ## 友链
 
