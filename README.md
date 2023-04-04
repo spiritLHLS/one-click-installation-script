@@ -202,7 +202,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 暂时只在Ubuntu上验证无问题
 - 如若要设置反向代理绑定域名，安装前请保证原服务器未安装过nginx，如若已安装过nginx，请自行配置反向代理本机的3000端口
 - 默认一路回车是不启用反代不安装nginx的，自行选择，如需通过本脚本配置反代系统一定要未安装过nginx并在填写y或Y开启安装
-- [zipline](https://github.com/diced/zipline) 平台可网址缩短转换，文件上传分享，多用户校验，易于使用，功能丰富，设置简单 (含pastebin)
+- [zipline](https://github.com/diced/zipline) 平台功能: ShareX，自定义短链接，文件上传分享，多用户校验，高亮显示，阅后即焚，设置简单 (含pastebin)
 - 自动安装docker，docker-compose，如若已安装zipline在/root目录下，则自动更新
 - 反向代理如若已设置成功，还需要在面板设置中填写域名，绑定启用
 
