@@ -209,6 +209,14 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/zipline.sh -o zipline.sh && chmod +x zipline.sh && bash zipline.sh
 ```
 
+如果需要删除0字节文件，打开```/root/zipline```文件夹，执行
+
+```
+docker-compose exec zipline yarn scripts:clear-zero-byte
+```
+
+按照提示操作
+
 ## 部分手动命令
 
 ### 一键开启root登陆并替换密码
