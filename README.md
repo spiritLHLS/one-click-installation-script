@@ -283,6 +283,8 @@ sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.
 
 ### 安装gitea
 
+Ubuntu 20无问题，Ubuntu 22好像不行
+
 https://gitlab.com/packaging/gitea
 
 ## 友链
