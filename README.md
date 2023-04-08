@@ -28,6 +28,7 @@
   * [ubuntu或debian缺失公钥](#ubuntu或debian缺失公钥)
   * [centos换源](#centos换源)
   * [安装gitea](#安装gitea)
+  * [卸载aapanel](#卸载aapanel)
 * [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
@@ -286,6 +287,12 @@ sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.
 Ubuntu 20无问题，Ubuntu 22好像不行
 
 https://gitlab.com/packaging/gitea
+
+### 卸载aapanel
+
+```bash
+apt install sysv-rc-conf -y && service bt stop && sysv-rc-conf bt off && rm -f /etc/init.d/bt && rm -rf /www/server/panel
+```
 
 ## 友链
 
