@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.04.01
+#version: 2023.04.08
 
-ver="2023.04.01"
+ver="2023.04.08"
 changeLog="一键安装R语言环境"
 source ~/.bashrc
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
@@ -54,19 +54,7 @@ checkroot(){
 }
 
 checkR(){
-#   if ! command -v R &> /dev/null
-#   then
-# 	reading "R is not installed on this system. Do you want to install it? (y/n) " confirminstall
-# 	echo ""
-# 	if [ "$confirminstall" != "y" ]; then
-# 		exit 0
-# 	fi
-# 	echo "R is not installed, install R language and dependent libraries..."
-# 	${PACKAGE_INSTALL[int]} r-base libssl-dev libcurl4-openssl-dev libxml2-dev
-#   else
-# 	echo "R is already installed, skip..."
-#   fi
-  
+  ${PACKAGE_INSTALL[int]} xorg xserver-xorg-dev libx11-dev libxt-dev libcairo2-dev
   source activate jupyter-env
   if ! Rscript -e "IRkernel::installspec()" &>/dev/null; then
 	reading "IRkernel is not installed on this system. Do you want to install it? (y/n) " confirminstall
