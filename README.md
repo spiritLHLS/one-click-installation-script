@@ -140,9 +140,7 @@ ufw allow 13692
 
 - **安装前需使用Miniconda3安装虚拟环境jupyter-env，然后进行jupyter和jupyterlab的安装，再然后才能安装本内核**
 - **简单的说，需要执行本仓库对应的jupyter安装脚本再运行本脚本安装R语言环境，会自动安装R环境内核和图形设备支持库**
-- 验证已支持的系统：
-  - Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台
-  - Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示
+- x11可能需要手动启动一下，执行```sudo /usr/bin/Xorg```
 - 可能支持的系统(未验证)：centos 7+，Fedora，Almalinux 8.5+
 
 ```bash
