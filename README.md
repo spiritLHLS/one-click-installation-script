@@ -19,6 +19,7 @@
   * [一键升级低版本debian为debian11](#一键升级低版本debian为debian11)
   * [一键升级低版本ubuntu为ubuntu22](#一键升级低版本ubuntu为ubuntu22)
   * [一键安装zipline平台](#一键安装zipline平台)
+  * [一键安装filebrowser平台](#一键安装filebrowser平台)
 * [部分手动命令](#部分手动命令)
   * [一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
   * [一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
@@ -216,6 +217,14 @@ docker-compose exec zipline yarn scripts:clear-zero-byte
 ```
 
 按照提示操作
+
+#### 一键安装filebrowser平台
+
+- 端口设置为3030了
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/filebrowser.sh -o filebrowser.sh && chmod +x filebrowser.sh && bash filebrowser.sh
+```
 
 ## 部分手动命令
 
