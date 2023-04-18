@@ -220,7 +220,8 @@ docker-compose exec zipline yarn scripts:clear-zero-byte
 
 #### 一键安装filebrowser平台
 
-- 端口设置为3030了
+- 端口设置为3030了，其他登陆信息详见提示
+- 方便下载上传文件到服务器上去，以及构建文件分享链接
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/filebrowser.sh -o filebrowser.sh && chmod +x filebrowser.sh && bash filebrowser.sh
