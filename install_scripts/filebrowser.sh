@@ -30,6 +30,20 @@ for ((int = 0; int < ${#REGEX[@]}; int++)); do
 done
 apt-get --fix-broken install -y > /dev/null 2>&1
 
+check_ipv4(){
+  API_NET=("ip.sb" "ipget.net" "ip.ping0.cc" "https://ip4.seeip.org" "https://api.my-ip.io/ip" "https://ipv4.icanhazip.com" "api.ipify.org")
+  for p in "${API_NET[@]}"; do
+    response=$(curl -s4m8 "$p")
+    sleep 1
+    if [ $? -eq 0 ] && ! echo "$response" | grep -q "error"; then
+      IP_API="$p"
+      break
+    fi
+  done
+  ! curl -s4m8 $IP_API | grep -q '\.' && red " ERROR：The host must have IPv4. " && exit 1
+  IPV4=$(curl -s4m8 "$IP_API")
+}
+
 checkwget() {
 	if  [ ! -e '/usr/bin/wget' ]; then
             yellow "Installing wget"
@@ -73,7 +87,13 @@ run(){
   nohup ./filebrowser -a 0.0.0.0 -p 3030 >/dev/null 2>&1 &
 }
 
+check_ipv4
 checkwget
 checktar
 build
 run
+green "Checking http://$IPV4:3030/ "
+green "You may login to the dashboard with:"
+green "Username: admin" 
+green "Password: admin"
+green "Remember to change this password in the manage user page"
