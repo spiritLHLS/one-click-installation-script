@@ -94,3 +94,4 @@ green "You may login to the dashboard with:"
 green "Username: admin" 
 green "Password: admin"
 green "Remember to change this password in the manage user page"
+rm -rf CHANGELOG.md LICENSE README.md
