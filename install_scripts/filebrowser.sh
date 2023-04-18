@@ -64,10 +64,7 @@ checktar() {
 }
 
 build(){
-  if [ ! -d "fb" ]; then
-    mkdir fb
-  fi
-  cd fb
+  cd /root >/dev/null 2>&1
   local sysarch="$(uname -m)"
   case "${sysarch}" in
       "x86_64"|"x86"|"amd64"|"x64") sys_bit="amd64";;
