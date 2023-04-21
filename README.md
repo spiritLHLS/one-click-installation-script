@@ -111,6 +111,8 @@ wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash men
 
 只推荐在新服务器上安装，环境不纯净不保证不出bug
 
+运行所有一键环境安装脚本前注意看说明，以及保证服务器无重要数据，运行后造成的一切后果作者不负任何责任，自行评判风险！
+
 #### 一键安装jupyter环境 
 
 - **本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！**
