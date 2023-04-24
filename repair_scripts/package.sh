@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.02.20
+#version: 2023.04.24
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -26,6 +26,7 @@ head() {
   echo "2.修复apt源公钥缺失"
   echo "3.修复替换系统可用的apt源列表，国内用阿里源，国外用官方源"
   echo "4.修复本机的Ubuntu系统是EOL非长期维护的版本，将替换为Ubuntu官方的old-releases仓库以支持apt的使用"
+  echo "5.修复只保证apt update不会报错，其他命令报错未修复"
   # Display prompt asking whether to proceed with checking
   reading "Do you want to proceed with checking? [y/n] " confirm
   echo ""
