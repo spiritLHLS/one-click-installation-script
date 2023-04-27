@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.04.24
+#version: 2023.04.27
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -300,24 +300,30 @@ fix_sources() {
   fi
 }
 
-fix_install(){
+fix_install() {
+    # ps aux | grep apt
+    sudo pkill apt
+    
     if lsof /var/lib/dpkg/lock > /dev/null 2>&1; then
-        kill $(sudo lsof /var/lib/dpkg/lock | awk '{print $2}')
-        rm /var/lib/dpkg/lock
+        sudo kill $(sudo lsof /var/lib/dpkg/lock | awk '{print $2}')
+        sudo rm /var/lib/dpkg/lock
     fi
 
     if lsof /var/cache/apt/archives/lock > /dev/null 2>&1; then
-        kill $(sudo lsof /var/cache/apt/archives/lock | awk '{print $2}')
-        rm /var/cache/apt/archives/lock
+        sudo kill $(sudo lsof /var/cache/apt/archives/lock | awk '{print $2}')
+        sudo rm -rf /var/cache/apt/archives/lock
     fi
 
     if sudo lsof /var/lib/apt/lists/lock > /dev/null 2>&1; then
-        kill $(sudo lsof /var/lib/apt/lists/lock | awk '{print $2}')
-        rm /var/lib/apt/lists/lock
+        sudo kill $(sudo lsof /var/lib/apt/lists/lock | awk '{print $2}')
+        sudo rm /var/lib/apt/lists/lock
     fi
-    apt-get clean
-    apt-get update
+
+    sudo apt-get clean
+    sudo apt-get update
+    sudo dpkg --configure -a
 }
+
 
 check_again() {
   # Update the package list again to pick up the new sources
@@ -337,6 +343,7 @@ check_again() {
   fi
 }
 
+
 ##############################################################################################################################################
 
 head
@@ -347,5 +354,7 @@ sleep 1
 fix_locked
 sleep 1
 fix_sources
+sleep 1
+fix_install2
 sleep 1
 check_again
