@@ -274,6 +274,8 @@ sudo rm /var/lib/dpkg/lock
 sudo dpkg --configure -a
 ```
 
+然后重启系统
+
 ### debian缺失公钥
 
 ```bash
