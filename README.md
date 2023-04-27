@@ -266,11 +266,13 @@ language-pack-en-base 在debian中好像没有，只有Ubuntu有好像，不知�
 
 ```bash
 sudo rm -rf /var/cache/apt/archives/lock
+sudo pkill apt
+sudo rm /var/lib/dpkg/lock-frontend
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+sudo dpkg --configure -a
 ```
-
-或查看下文
-
-https://itsfoss.com/fix-ubuntu-install-error/
 
 ### debian缺失公钥
 
