@@ -192,7 +192,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 #### 一键升级低版本ubuntu为ubuntu22
 
-- 支持系统：debian 16+
+- 支持系统：Ubuntu 16+
 - 升级后需要重启系统加载内核，升级过程中需要选择的都无脑按回车即可
 - 升级是一个版本迭代一个版本，所以如果版本低，每执行一次升级一个版本，直至升级到ubuntu22
 
