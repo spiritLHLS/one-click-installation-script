@@ -2,6 +2,8 @@
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.27
+
+
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
   echo "No UTF-8 locale found"
