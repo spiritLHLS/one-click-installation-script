@@ -27,6 +27,7 @@ head() {
   echo "3.修复替换系统可用的apt源列表，国内用阿里源，国外用官方源"
   echo "4.修复本机的Ubuntu系统是EOL非长期维护的版本，将替换为Ubuntu官方的old-releases仓库以支持apt的使用"
   echo "5.修复只保证apt update不会报错，其他命令报错未修复"
+  echo "6.如若修复后install还有问题，重启服务器解决问题"
   # Display prompt asking whether to proceed with checking
   reading "Do you want to proceed with checking? [y/n] " confirm
   echo ""
