@@ -89,7 +89,7 @@ build(){
 }
 
 run(){
-  nohup ./filebrowser -a $IPV4 -p 3030 >/dev/null 2>&1 &
+  nohup ./filebrowser -a 0.0.0.0 -p 3030 >/dev/null 2>&1 &
 }
 
 check_ipv4
