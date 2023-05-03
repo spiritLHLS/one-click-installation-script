@@ -226,6 +226,7 @@ docker-compose exec zipline yarn scripts:clear-zero-byte
 
 - 端口设置为3030了，其他登陆信息详见提示
 - 方便下载上传文件到服务器上去，以及构建文件分享链接
+- 如果本地有启用IPV6优先级可能绑定到V6去了，使用```lsof -i:3030```查看绑定情况，切换优先级后再安装就正常了
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/filebrowser.sh -o filebrowser.sh && chmod +x filebrowser.sh && bash filebrowser.sh
