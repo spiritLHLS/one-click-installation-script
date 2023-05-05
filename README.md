@@ -225,7 +225,7 @@ docker-compose exec zipline yarn scripts:clear-zero-byte
 #### 一键安装filebrowser平台
 
 - 端口设置为3030了，其他登陆信息详见提示
-- 方便下载上传文件到服务器上去，以及构建文件分享链接
+- [filebrowser](https://github.com/filebrowser/filebrowser)平台支持下载上传文件到服务器，批量下载多个文件(自定义压缩格式)，构建文件分享链接，设置分享时长
 - 如果本地有启用IPV6优先级可能绑定到V6去了，使用```lsof -i:3030```查看绑定情况，切换优先级后再安装就正常了
 
 ```bash
