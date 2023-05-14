@@ -13,6 +13,7 @@ else
   export LANGUAGE="$utf8_locale"
   echo "Locale set to $utf8_locale"
 fi
+cd /root >/dev/null 2>&1
 ver="2022.12.21"
 changeLog="一键安装jupyter环境"
 source ~/.bashrc
