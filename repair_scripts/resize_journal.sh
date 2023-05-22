@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.18
+#version: 2023.05.22
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -20,7 +20,7 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2022.12.18"
+  ver="2023.05.22"
   changeLog="一键修改journal日志记录大小，释放系统盘空间"
   clear
   echo "#######################################################################"
@@ -59,8 +59,24 @@ main() {
   awk -v size="$size" '{ if ($1 == "SystemMaxUse=") { print "SystemMaxUse=" size } else { print $0 } }' /etc/systemd/journald.conf > "$temp_file"
   sudo cp "$temp_file" /etc/systemd/journald.conf
   rm "$temp_file"
-
-  # Restart journald service
+  conf_file="/etc/systemd/journald.conf"
+  variable1="SystemMaxFileSize"
+  variable2="ForwardToSyslog"
+  new_value1="128M"
+  new_value2="no"
+  if [[ ! -f "$conf_file" ]]; then
+      exit 1
+  fi
+  if grep -q "^$variable1=" "$conf_file"; then
+      sed -i "s/^$variable1=.*/$variable1=$new_value1/" "$conf_file"
+  else
+      echo "$variable1=$new_value1" >> "$conf_file"
+  fi
+  if grep -q "^$variable2=" "$conf_file"; then
+      sed -i "s/^$variable2=.*/$variable2=$new_value2/" "$conf_file"
+  else
+      echo "$variable2=$new_value2" >> "$conf_file"
+  fi
   systemctl restart systemd-journald
 
   green "change /etc/systemd/journald.conf successfully"
