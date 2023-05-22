@@ -1,25 +1,41 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.24
-
-utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
-if [[ -z "$utf8_locale" ]]; then
-  echo "No UTF-8 locale found"
-else
-  export LC_ALL="$utf8_locale"
-  export LANG="$utf8_locale"
-  export LANGUAGE="$utf8_locale"
-  echo "Locale set to $utf8_locale"
-fi
+#version: 2023.05.22
 
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading(){ read -rp "$(green "$1")" "$2"; }
+REGEX=("debian" "ubuntu" "centos|red hat|kernel|oracle linux|alma|rocky" "'amazon linux'" "fedora" "arch")
+RELEASE=("Debian" "Ubuntu" "CentOS" "CentOS" "Fedora" "Arch")
+PACKAGE_UPDATE=("! apt-get update && apt-get --fix-broken install -y && apt-get update" "apt-get update" "yum -y update" "yum -y update" "yum -y update" "pacman -Sy")
+PACKAGE_INSTALL=("apt-get -y install" "apt-get -y install" "yum -y install" "yum -y install" "yum -y install" "pacman -Sy --noconfirm --needed")
+PACKAGE_REMOVE=("apt-get -y remove" "apt-get -y remove" "yum -y remove" "yum -y remove" "yum -y remove" "pacman -Rsc --noconfirm")
+PACKAGE_UNINSTALL=("apt-get -y autoremove" "apt-get -y autoremove" "yum -y autoremove" "yum -y autoremove" "yum -y autoremove" "")
+CMD=("$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)" "$(hostnamectl 2>/dev/null | grep -i system | cut -d : -f2)" "$(lsb_release -sd 2>/dev/null)" "$(grep -i description /etc/lsb-release 2>/dev/null | cut -d \" -f2)" "$(grep . /etc/redhat-release 2>/dev/null)" "$(grep . /etc/issue 2>/dev/null | cut -d \\ -f1 | sed '/^[ ]*$/d')" "$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)") 
+SYS="${CMD[0]}"
+[[ -n $SYS ]] || exit 1
+for ((int = 0; int < ${#REGEX[@]}; int++)); do
+    if [[ $(echo "$SYS" | tr '[:upper:]' '[:lower:]') =~ ${REGEX[int]} ]]; then
+        SYSTEM="${RELEASE[int]}"
+        [[ -n $SYSTEM ]] && break
+    fi
+done
+utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
+if [[ -z "$utf8_locale" ]]; then
+  yellow "No UTF-8 locale found"
+else
+  export LC_ALL="$utf8_locale"
+  export LANG="$utf8_locale"
+  export LANGUAGE="$utf8_locale"
+  green "Locale set to $utf8_locale"
+fi
+apt-get --fix-broken install -y > /dev/null 2>&1
+rm -rf test_result.txt > /dev/null 2>&1
 
 head() {
-  ver="2022.12.24"
+  ver="2023.05.22"
   changeLog="一键修复本机系统时间"
   clear
   echo "#######################################################################"
@@ -41,108 +57,17 @@ head() {
   fi
 }
 
-
-check_os() {
-    # 检测系统类型
-    if [ -f /etc/lsb-release ]; then
-        # Ubuntu/Debian/Almalinux
-        OS="Ubuntu/Debian/Almalinux"
-    elif [ -f /etc/redhat-release ]; then
-        # CentOS/Fedora
-        OS="CentOS/Fedora"
-    else
-        # 未知系统
-        OS="Unknown"
+check_time_zone(){
+    _yellow "adjusting the time"
+    if ! command -v chronyd > /dev/null 2>&1; then
+        ${PACKAGE_INSTALL[int]} chrony > /dev/null 2>&1
     fi
-}
-
-main(){
-    # 获取当前时区信息
-    TIMEZONE=$(date +%z)
-    # 获取当前时间和网络时间
-    CURRENT_TIME=$(date -u +%s)
-    NETWORK_TIME=$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)
-    NETWORK_TIME_SECONDS=$(TZ=":UTC" date -d "$NETWORK_TIME" +%s)
-
-    # 计算时间差
-    DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME))
-
-    # 根据时区信息增加或减少时间差的允许范围
-    HOUR_OFFSET=${TIMEZONE:0:3}
-    MINUTE_OFFSET=${TIMEZONE:3:2}
-    HOUR_OFFSET_SECONDS=$((HOUR_OFFSET * 3600))
-    MINUTE_OFFSET_SECONDS=$((MINUTE_OFFSET * 60))
-    ALLOWED_DIFF=$((300 + HOUR_OFFSET_SECONDS + MINUTE_OFFSET_SECONDS))
-
-    # 判断时间差是否在允许范围内
-    if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
-        # 在允许范围内，时间准确
-        green "Time on $OS system is accurate."
-        echo "Current time: $(date)"
-        exit 0
-    else
-        # 不在允许范围内，时间不准确，调整时间
-        yellow "Time on $OS system is NOT accurate. Adjusting system time to accurate time."
-        if [ "$OS" == "Ubuntu/Debian/Almalinux" ]; then
-            # Ubuntu/Debian/Almalinux 系统使用 ntpdate 命令
-            if [ ! -x "$(command -v ntpdate)" ]; then
-                # ntpdate 命令不存在，安装 ntpdate
-                sudo apt-get update
-                sudo apt-get install ntpdate -y
-            fi
-            sudo ntpdate -u time.nist.gov || sudo ntpdate pool.ntp.org || sudo ntpdate cn.pool.ntp.org
-        elif [ "$OS" == "CentOS/Fedora" ]; then
-            # CentOS/Fedora 系统使用 ntpdate 命令
-            if [ ! -x "$(command -v ntpdate)" ]; then
-                # ntpdate 命令不存在，安装 ntpdate
-                sudo yum update
-                sudo yum install ntpdate -y
-            fi
-            sudo ntpdate time.nist.gov || sudo ntpdate pool.ntp.org || sudo ntpdate cn.pool.ntp.org
-        else
-            # 未知系统
-            red "Unable to adjust system time on unknown system."
-        fi
-    fi
-}
-
-
-check_again(){
-    # 获取当前时间和网络时间
-    CURRENT_TIME=$(date -u +%s)
-    NETWORK_TIME=$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)
-    NETWORK_TIME_SECONDS=$(TZ=":UTC" date -d "$NETWORK_TIME" +%s)
-
-    # 获取当前时区信息
-    TIMEZONE=$(date +%z)
-    # 获取网络时间对应的时区信息
-    NETWORK_TZ=$(echo "$NETWORK_TIME" | awk '{print $5}')
-    # 计算时区差，单位是秒
-    TZ_DIFF=$((($(TZ=":$NETWORK_TZ" date -d "now" +%s)-$(TZ=":$TIMEZONE" date -d "now" +%s))/3600*3600))
-
-    # 计算时间差
-    DIFF=$(($NETWORK_TIME_SECONDS-$CURRENT_TIME-$TZ_DIFF))
-    
-    # 根据时区信息增加或减少时间差的允许范围
-    HOUR_OFFSET=${TIMEZONE:0:3}
-    MINUTE_OFFSET=${TIMEZONE:3:2}
-    HOUR_OFFSET_SECONDS=$((HOUR_OFFSET * 3600))
-    MINUTE_OFFSET_SECONDS=$((MINUTE_OFFSET * 60))
-    ALLOWED_DIFF=$((300 + HOUR_OFFSET_SECONDS + MINUTE_OFFSET_SECONDS))
-
-    # 判断时间差是否在允许范围内
-    if [ "$DIFF" -lt "$ALLOWED_DIFF" ] && [ "$DIFF" -gt "-$ALLOWED_DIFF" ]; then
-        # 在允许范围内，时间准确
-        green "Time on $OS system is accurate."
-        echo "Current time: $(date)"
-    else
-        # 不在允许范围内，时间不准确
-        red "Time on $OS system is NOT accurate. Please check your system time and time zone settings again!"
-    fi
+    systemctl stop chronyd
+    chronyd -q
+    systemctl start chronyd
+    sleep 0.5
 }
 
 head
-check_os
-main
+check_time_zone
 sleep 1
-check_again
