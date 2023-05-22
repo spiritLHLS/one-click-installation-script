@@ -61,7 +61,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 #### 一键尝试修复系统时间 
 
 - 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-- 检测修复本机系统时间，对应时区时间，如果相差超过300秒的合理范围则校准时间
+- 由于系统时间不准确都是未进行时区时间同步造成的，使用chronyd进行时区时间同步后应当解决了问题
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/repair_scripts/modify_time.sh -o modify_time.sh && chmod +x modify_time.sh && bash modify_time.sh
