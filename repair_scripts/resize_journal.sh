@@ -58,7 +58,7 @@ main() {
   yellow "Backed up /etc/systemd/journald.conf to $backup_file"
   awk -v size="$size" '{ if ($1 == "SystemMaxUse=") { print "SystemMaxUse=" size } else { print $0 } }' /etc/systemd/journald.conf > "$temp_file"
   sudo cp "$temp_file" /etc/systemd/journald.conf
-  rm "$temp_file"
+  rm -rf "$temp_file"
   conf_file="/etc/systemd/journald.conf"
   variable1="SystemMaxFileSize"
   variable2="ForwardToSyslog"
