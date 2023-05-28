@@ -111,6 +111,12 @@ curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spir
 wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash menu.sh [option] [lisence]
 ```
 
+非纯V6的，带V4切换优先级可用
+
+```bash
+sudo sed -i 's/.*precedence ::ffff:0:0\/96.*/precedence ::ffff:0:0\/96  100/g' /etc/gai.conf && sudo systemctl restart networking
+```
+
 ## 一键环境安装脚本
 
 只推荐在新服务器上安装，环境不纯净不保证不出bug
