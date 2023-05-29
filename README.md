@@ -32,6 +32,7 @@
   * [centos换源](#centos换源)
   * [安装gitea](#安装gitea)
   * [卸载aapanel](#卸载aapanel)
+  * [安装docker和docker-compose](#安装docker和docker-compose)
 * [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
@@ -317,6 +318,15 @@ https://gitlab.com/packaging/gitea
 
 ```bash
 apt install sysv-rc-conf -y && service bt stop && sysv-rc-conf bt off && rm -f /etc/init.d/bt && rm -rf /www/server/panel
+```
+
+### 安装docker和docker-compose
+
+```bash
+curl -sSL https://get.docker.com/ | sh
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
 ```
 
 ## 友链
