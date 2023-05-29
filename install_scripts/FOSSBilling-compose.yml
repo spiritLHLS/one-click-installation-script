@@ -17,6 +17,8 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - mysql:/var/lib/mysql
+    ports:
+      - 127.0.0.1:3306:3306
  
 volumes:
   fossbilling:
