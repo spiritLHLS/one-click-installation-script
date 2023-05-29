@@ -58,5 +58,5 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/FOSSBilling-compose.yml -o FOSSBilling-compose.yml && chmod +x FOSSBilling-compose.yml
 docker-compose -f FOSSBilling-compose.yml up
-echo "Please open http://${IPV4}/"
+echo "Please open http://${IPV4}/install/install.php"
 
