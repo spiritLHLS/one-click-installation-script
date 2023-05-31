@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.04.27
+#version: 2023.05.31
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -12,7 +12,7 @@ else
   export LANGUAGE="$utf8_locale"
   echo "Locale set to $utf8_locale"
 fi
-
+temp_file_apt_fix="/tmp/apt_fix.txt"
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
@@ -20,7 +20,7 @@ reading(){ read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2023.02.24"
+  ver="2023.05.31"
   changeLog="一键修复apt源，加载对应的源"
   clear
   echo "#######################################################################"
@@ -338,6 +338,17 @@ fix_install() {
 
 check_again() {
   # Update the package list again to pick up the new sources
+  apt_update_output=$(apt-get update 2>&1)
+  echo "$apt_update_output" > "$temp_file_apt_fix"
+  if grep -q 'NO_PUBKEY' "$temp_file_apt_fix"; then
+      public_keys=$(grep -oE 'NO_PUBKEY [0-9A-F]+' "$temp_file_apt_fix" | awk '{ print $2 }')
+      joined_keys=$(echo "$public_keys" | paste -sd " ")
+      yellow "No Public Keys: ${joined_keys}"
+      apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${joined_keys}
+      apt-get update
+  fi
+  rm "$temp_file_apt_fix"
+  
   sudo apt-get update
   
   # Check the exit status of the update command
