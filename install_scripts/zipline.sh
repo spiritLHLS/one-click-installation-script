@@ -85,16 +85,7 @@ build(){
   
   if ! command -v docker-compose >/dev/null 2>&1; then
       green "\n Install Docker Compose \n"
-      COMPOSE_URL=""
-      SYSTEM_ARCH=$(uname -m)
-      case $SYSTEM_ARCH in
-        "x86_64") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-x86_64" ;;
-        "aarch64") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-arm64" ;;
-        "armv6l") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-armhf" ;;
-        "armv7l") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-armhf" ;;
-        *) echo -e "\nArchitecture not supported for binary installation of Docker Compose.\n"; exit 1 ;;
-      esac
-      curl -SL $COMPOSE_URL -o /usr/local/bin/docker-compose
+      curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
       chmod +x /usr/local/bin/docker-compose
    fi
 
