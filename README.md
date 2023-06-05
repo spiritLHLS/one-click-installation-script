@@ -324,8 +324,17 @@ apt install sysv-rc-conf -y && service bt stop && sysv-rc-conf bt off && rm -f /
 
 ```bash
 curl -sSL https://get.docker.com/ | sh
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+COMPOSE_URL=""
+SYSTEM_ARCH=$(uname -m)
+case $SYSTEM_ARCH in
+  "x86_64") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-x86_64" ;;
+  "aarch64") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-arm64" ;;
+  "armv6l") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-armhf" ;;
+  "armv7l") COMPOSE_URL="https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-armhf" ;;
+  *) exit 1 ;;
+esac
+curl -SL $COMPOSE_URL -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
