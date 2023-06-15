@@ -22,6 +22,7 @@
   * [一键升级低版本ubuntu为ubuntu22](#一键升级低版本ubuntu为ubuntu22)
   * [一键安装zipline平台](#一键安装zipline平台)
   * [一键安装filebrowser平台](#一键安装filebrowser平台)
+  * [一键删除平台监控](#一键删除平台监控)
 * [部分手动命令](#部分手动命令)
   * [一键开启root登陆并替换密码](#一键开启root登陆并替换密码)
   * [一键屏蔽邮件端口避免被恶意程序使用](#一键屏蔽邮件端口避免被恶意程序使用)
@@ -239,6 +240,15 @@ docker-compose exec zipline yarn scripts:clear-zero-byte
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/filebrowser.sh -o filebrowser.sh && chmod +x filebrowser.sh && bash filebrowser.sh
+```
+
+#### 一键删除平台监控
+
+- 一键移除大多数云服务器监控
+- 涵盖阿里云、腾讯云、华为云、UCLOUD、甲骨文云
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/dlm.sh -o dlm.sh && chmod +x dlm.shh && bash dlm.sh
 ```
 
 ## 部分手动命令
