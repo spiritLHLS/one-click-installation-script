@@ -245,7 +245,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 #### 一键删除平台监控
 
 - 一键移除大多数云服务器监控
-- 涵盖阿里云、腾讯云、华为云、UCLOUD、甲骨文云
+- 涵盖阿里云、腾讯云、华为云、UCLOUD、甲骨文云、京东云
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/dlm.sh -o dlm.sh && chmod +x dlm.shh && bash dlm.sh
