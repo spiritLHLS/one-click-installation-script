@@ -32,6 +32,7 @@
   * [安装gitea](#安装gitea)
   * [卸载aapanel](#卸载aapanel)
   * [安装docker和docker-compose](#安装docker和docker-compose)
+  * [安装code-server](#安装code-server)
 * [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
@@ -335,6 +336,12 @@ curl -sSL https://get.docker.com/ | sh
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 docker-compose --version
+```
+
+### 安装code-server
+
+```shell
+curl -fsSL https://coder.com/install.sh | sh
 ```
 
 ## 友链
