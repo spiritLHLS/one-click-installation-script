@@ -358,6 +358,24 @@ docker run --restart=always --name code-server -p 0.0.0.0:8886:8080 \
 docker exec code-server cat /root/.config/code-server/config.yaml
 ```
 
+或
+
+```
+curl -fsSL https://code-server.dev/install.sh | sh -s -- --dry-run
+sudo systemctl enable --now code-server@root
+sed -i '1s/127.0.0.1:8080/0.0.0.0:8536/' ~/.config/code-server/config.yaml
+sudo systemctl restart code-server@root
+```
+
+卸载需要
+
+```
+sudo systemctl stop code-server@root
+sudo systemctl disable code-server@root
+rm -rf ~/.cache/coder
+sudo apt remove coder -y
+```
+
 ## 友链
 
 #### 一键测试服务器的融合怪脚本
