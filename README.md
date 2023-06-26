@@ -32,7 +32,7 @@
   * [安装gitea](#安装gitea)
   * [卸载aapanel](#卸载aapanel)
   * [安装docker和docker-compose](#安装docker和docker-compose)
-  * [安装code-server](#安装code-server)
+  * [通过docker安装code-server](#通过docker安装code-server)
 * [友链](#友链)
   * [一键测试服务器的融合怪脚本](#一键测试服务器的融合怪脚本)
   * [一键批量开NAT服务器LXC](#一键批量开NAT服务器LXC)
@@ -338,10 +338,24 @@ chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
-### 安装code-server
+### 通过docker安装code-server
+
+安装
 
 ```shell
-curl -fsSL https://coder.com/install.sh | sh
+mkdir -p ~/.config
+docker run --restart=always --name code-server -p 0.0.0.0:8886:8080 \
+  -v "$HOME/.config:/home/coder/.config" \
+  -v "$PWD:/home/coder/project" \
+  -u "$(id -u):$(id -g)" \
+  -e "DOCKER_USER=$USER" \
+  codercom/code-server:latest
+```
+
+新窗口
+
+```shell
+docker exec code-server cat /root/.config/code-server/config.yaml
 ```
 
 ## 友链
