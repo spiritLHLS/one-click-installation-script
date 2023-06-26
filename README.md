@@ -365,6 +365,7 @@ curl -fsSL https://code-server.dev/install.sh | sh -s -- --dry-run
 sudo systemctl enable --now code-server@root
 sed -i '1s/127.0.0.1:8080/0.0.0.0:8536/' ~/.config/code-server/config.yaml
 sudo systemctl restart code-server@root
+cat .config/code-server/config.yaml
 ```
 
 卸载需要
