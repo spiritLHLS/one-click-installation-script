@@ -338,6 +338,12 @@ chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
+卸载所有docker镜像和容器
+
+```
+docker rm -f $(docker ps -aq); docker rmi $(docker images -aq)
+```
+
 ### 通过docker安装code-server
 
 安装
