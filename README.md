@@ -1,5 +1,7 @@
 # 前言
 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FspiritLHLS%2Fone-click-installation-script&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 所有脚本如需在国内服务器使用，请在链接前加上```https://ghproxy.com/```确保命令可以下载本仓库的shell脚本执行
 
 # 目录
