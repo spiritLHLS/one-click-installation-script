@@ -109,6 +109,7 @@ install_jupyter() {
   source activate jupyter-env
   sleep 1
   conda install jupyter jupyterlab
+  check_china
   if [[ -n "${CN}" && "${CN}" == true ]]; then
     conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
     conda config --set show_channel_urls yes
@@ -192,7 +193,6 @@ query_jupyter_info() {
 }
 
 main() {
-  check_china
   source activate jupyter-env > /dev/null 2>&1
   # Check if jupyter is installed
   if jupyter --version &> /dev/null; then
