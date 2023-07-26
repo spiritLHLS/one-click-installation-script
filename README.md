@@ -130,7 +130,6 @@ sudo sed -i 's/.*precedence ::ffff:0:0\/96.*/precedence ::ffff:0:0\/96  100/g' /
 
 - **本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！**
 - **本脚本为实验性脚本可能会有各种bug，勿要轻易尝试！**
-- **安装前需要保证 sudo wget curl 已安装**
 - 验证已支持的系统：
   - Ubuntu 18/20/22 - 推荐，脚本自动挂起到后台
   - Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行安装完毕的后续提示
