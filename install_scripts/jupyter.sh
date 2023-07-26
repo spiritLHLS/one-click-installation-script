@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.21
+#version: 2023.07.26
 
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
@@ -14,7 +14,7 @@ else
   echo "Locale set to $utf8_locale"
 fi
 cd /root >/dev/null 2>&1
-ver="2022.12.21"
+ver="2023.07.26"
 changeLog="一键安装jupyter环境"
 source ~/.bashrc
 red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
@@ -36,6 +36,48 @@ echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
 red "本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！"
 yellow "执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息，如果已安装但未启动则自动启动后再打印信息"
 yellow "如果是初次安装无脑y无脑回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行"
+
+check_china(){
+    yellow "IP area being detected ......"
+    if [[ -z "${CN}" ]]; then
+        if [[ $(curl -m 6 -s https://ipapi.co/json | grep 'China') != "" ]]; then
+            yellow "根据ipapi.co提供的信息，当前IP可能在中国"
+            read -e -r -p "是否选用中国镜像完成相关组件安装? ([y]/n) " input
+            case $input in
+                [yY][eE][sS] | [yY])
+                    echo "使用中国镜像"
+                    CN=true
+                    ;;
+                [nN][oO] | [nN])
+                    echo "不使用中国镜像"
+                    ;;
+                *)
+                    echo "使用中国镜像"
+                    CN=true
+                    ;;
+            esac
+        else
+            if [[ $? -ne 0 ]]; then
+                if [[ $(curl -m 6 -s cip.cc) =~ "中国" ]]; then
+                    yellow "根据cip.cc提供的信息，当前IP可能在中国"
+                    read -e -r -p "是否选用中国镜像完成相关组件安装? [Y/n] " input
+                    case $input in
+                        [yY][eE][sS] | [yY])
+                            echo "使用中国镜像"
+                            CN=true
+                            ;;
+                        [nN][oO] | [nN])
+                            echo "不使用中国镜像"
+                            ;;
+                        *)
+                            echo "不使用中国镜像"
+                            ;;
+                    esac
+                fi
+            fi
+        fi
+    fi
+}
 
 
 install_jupyter() {
@@ -67,6 +109,10 @@ install_jupyter() {
   source activate jupyter-env
   sleep 1
   conda install jupyter jupyterlab
+  if [[ -n "${CN}" && "${CN}" == true ]]; then
+    conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+    conda config --set show_channel_urls yes
+  fi
 
   # Add the following line to /etc/profile
   echo 'export PATH="$PATH:~/.local/share/jupyter"' >> /etc/profile
@@ -146,6 +192,7 @@ query_jupyter_info() {
 }
 
 main() {
+  check_china
   source activate jupyter-env > /dev/null 2>&1
   # Check if jupyter is installed
   if jupyter --version &> /dev/null; then
