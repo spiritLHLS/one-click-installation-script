@@ -151,6 +151,46 @@ check_ufw() {
 	fi
 }
 
+is_private_ipv4() {
+    local ip_address=$1
+    local ip_parts
+    if [[ -z $ip_address ]]; then
+        return 0 # 输入为空
+    fi
+    IFS='.' read -r -a ip_parts <<< "$ip_address"
+    # 检查IP地址是否符合内网IP地址的范围
+    # 去除 回环，REC 1918，多播 地址
+    if [[ ${ip_parts[0]} -eq 10 ]] ||
+       [[ ${ip_parts[0]} -eq 172 && ${ip_parts[1]} -ge 16 && ${ip_parts[1]} -le 31 ]] ||
+       [[ ${ip_parts[0]} -eq 192 && ${ip_parts[1]} -eq 168 ]] ||
+       [[ ${ip_parts[0]} -eq 127 ]] ||
+       [[ ${ip_parts[0]} -eq 0 ]] ||
+       [[ ${ip_parts[0]} -ge 224 ]]
+    then
+        return 0  # 是内网IP地址
+    else
+        return 1  # 不是内网IP地址
+    fi
+}
+
+check_ipv4(){
+    IPV4=$(ip -4 addr show | grep global | awk '{print $2}' | cut -d '/' -f1 | head -n 1)
+    if is_private_ipv4 "$IPV4"; then # 由于是内网IPV4地址，需要通过API获取外网地址
+        IPV4=""
+        local API_NET=("ipv4.ip.sb" "ipget.net" "ip.ping0.cc" "https://ip4.seeip.org" "https://api.my-ip.io/ip" "https://ipv4.icanhazip.com" "api.ipify.org")
+        for p in "${API_NET[@]}"; do
+            response=$(curl -s4m8 "$p")
+            sleep 1
+            if [ $? -eq 0 ] && ! echo "$response" | grep -q "error"; then
+                IP_API="$p"
+                IPV4="$response"
+                break
+            fi
+        done
+    fi
+    export IPV4
+}
+
 install_jupyter() {
   rm -rf Miniconda3-latest-Linux-x86_64.sh*
   check_update
@@ -219,7 +259,10 @@ install_jupyter() {
   new_path=$(echo "$PATH" | tr ':' '\n' | awk '!x[$0]++' | tr '\n' ':')
   export PATH="$new_path"
   source ~/.bashrc
+  check_ipv4
+  jpyurl="http://${IPV4}:13692/"
   green "已安装jupyter lab的web端到外网端口13692上，请打开你的 外网IP:13692"
+  green "如果你是在云服务上运行，那么请打开 ${jpyurl} 如果是在本地安装的，请打开 http://127.0.0.1:13692/"
   green "初次安装会要求输入token设置密码，token详见上方打印信息或当前目录的nohup.out日志"
   green "同时已保存日志输出到当前目录的nohup.out中且已打印5秒日志如上"
   green "如果需要进一步查询，请关闭本窗口开一个新窗口再执行本脚本，否则无法加载一些预设的环境变量" 
