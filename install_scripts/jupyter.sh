@@ -169,7 +169,7 @@ install_jupyter() {
     source ~/.bashrc
     sleep 1
     export PATH="/home/user/miniconda3/bin:$PATH"
-    green "请关闭本窗口开一个新窗口再执行本脚本，否则无法加载一些预设的环境变量" && exit 0
+    green "请关闭本窗口开一个新窗口再执行本脚本，否则无法加载一些预设的环境变量(或断开SSH连接后重新连接)" && exit 0
   fi
   green "加载预设的conda环境变量成功，准备安装jupyter，无脑输入y和回车即可"
   conda create -n jupyter-env python=3
