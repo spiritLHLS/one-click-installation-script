@@ -145,13 +145,6 @@ sudo sed -i 's/.*precedence ::ffff:0:0\/96.*/precedence ::ffff:0:0\/96  100/g' /
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
 ```
 
-安装后记得开放 13692 端口
-
-```bash
-apt install ufw -y
-ufw allow 13692
-```
-
 #### 一键安装R语言环境
 
 - **安装前需使用Miniconda3安装虚拟环境jupyter-env，然后进行jupyter和jupyterlab的安装，再然后才能安装本内核**
