@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.05.31
+#version: 2023.07.30
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -377,6 +377,6 @@ fix_locked
 sleep 1
 fix_sources
 sleep 1
-fix_install2
+fix_install
 sleep 1
 check_again
