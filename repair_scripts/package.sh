@@ -87,7 +87,8 @@ change_debian_apt_sources() {
     9*) DEBIAN_RELEASE="stretch";;
     10*) DEBIAN_RELEASE="buster";;
     11*) DEBIAN_RELEASE="bullseye";;
-    *) echo "The system is not Debian 6/7/8/9/10/11 . No changes were made to the apt-get sources." && return 1;;
+    12*) DEBIAN_RELEASE="bookworm";;
+    *) echo "The system is not Debian 6/7/8/9/10/11/12 . No changes were made to the apt-get sources." && return 1;;
   esac
   
   # Write sources list in the desired format
