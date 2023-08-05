@@ -386,7 +386,7 @@ https://github.com/spiritLHLS/ecs
 
 #### 一键批量开NAT服务器LXC
 
-https://github.com/spiritLHLS/lxc
+https://github.com/spiritLHLS/lxd
 
 #### 一键安装PVE
 
