@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.07.26
+#version: 2023.08.07
 
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
@@ -52,7 +52,7 @@ echo "Debian 9/10/11 - 还行，需要手动挂起到后台，详看脚本运行
 echo "可能支持的系统：centos 7+，Fedora，Almalinux 8.5+"
 red "本脚本尝试使用Miniconda3安装虚拟环境jupyter-env再进行jupyter和jupyterlab的安装，如若安装机器不纯净勿要轻易使用本脚本！"
 yellow "执行脚本，之前有用本脚本安装过则直接打印设置的登陆信息，没安装过则进行安装再打印信息，如果已安装但未启动则自动启动后再打印信息"
-yellow "如果是初次安装无脑y无脑回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行"
+yellow "如果是初次安装无脑y无脑回车即可，按照提示进行操作即可，安装完毕将在后台常驻运行，自动添加常用的安装包通道源"
 
 check_china(){
     yellow "IP area being detected ......"
@@ -236,6 +236,12 @@ install_jupyter() {
       sudo firewall-cmd --reload
   fi
   ubuntu_version=$(lsb_release -rs)
+  channels_to_add=(
+    "dglteam"
+    "pytorch"
+    "conda-forge"
+    "anaconda"
+  )
   if [ "$ubuntu_version" == "18.04" ] || [ "$ubuntu_version" == "20.04" ] || [ "$ubuntu_version" == "22.04" ]; then
     source activate jupyter-env
     sleep 1
@@ -254,6 +260,14 @@ install_jupyter() {
     yellow "cat nohup.out"
     echo "非Ubuntu系统只有上面这样才能手动挂起jupyter后台执行"
   fi
+  current_channels=$(conda config --get channels)
+  for channel in "${channels_to_add[@]}"; do
+      if echo "$current_channels" | grep -q "$channel" >/dev/null 2>&1; then
+	:
+      else
+	conda config --add channels "$channel" >/dev/null 2>&1
+      fi
+  done
   paths="./miniconda3/envs/jupyter-env/etc/jupyter:./miniconda3/envs/jupyter-env/bin/jupyter:./miniconda3/envs/jupyter-env/share/jupyter"
   export PATH="$paths:$PATH"
   new_path=$(echo "$PATH" | tr ':' '\n' | awk '!x[$0]++' | tr '\n' ':')
