@@ -384,11 +384,11 @@ sudo apt remove coder -y
 
 https://github.com/spiritLHLS/ecs
 
-#### 一键批量开NAT服务器LXC
+#### 一键批量开NAT服务器的LXD脚本
 
 https://github.com/spiritLHLS/lxd
 
-#### 一键安装PVE
+#### 一键安装PVE和使用PVE批量开设虚拟机的脚本
 
 https://github.com/spiritLHLS/pve
 
