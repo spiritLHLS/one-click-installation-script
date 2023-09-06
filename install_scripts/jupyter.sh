@@ -293,6 +293,7 @@ query_jupyter_info() {
   check_ipv4
   jpyurl="http://${IPV4}:13692/"
   source activate jupyter-env && jupyter server list && conda deactivate
+  cat nohup.out
   green "已查询登陆信息如上"
   green "如果你是在云服务上运行，那么请打开 ${jpyurl} 如果是在本地安装的，请打开 http://127.0.0.1:13692/"
   green "token详见上方打印信息或当前目录的nohup.out日志"
