@@ -258,7 +258,7 @@ install_jupyter() {
         yellow "nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root"
         green "等待5秒后关闭本窗口，开新窗口执行下面的命令查看登陆信息"
         yellow "cat nohup.out"
-        echo "如若无成功输出，可尝试重新运行本脚本"
+        green "如若无成功输出，可尝试重新运行本脚本"
     fi
     current_channels=$(conda config --get channels)
     for channel in "${channels_to_add[@]}"; do
