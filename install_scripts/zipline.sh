@@ -16,27 +16,27 @@ cd /root >/dev/null 2>&1
 ver="2023.06.05"
 changeLog="一键安装Zipline平台"
 source ~/.bashrc
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 REGEX=("debian" "ubuntu" "centos|red hat|kernel|oracle linux|alma|rocky" "'amazon linux'" "fedora" "arch")
 RELEASE=("Debian" "Ubuntu" "CentOS" "CentOS" "Fedora" "Arch")
 PACKAGE_UPDATE=("! apt-get update && apt-get --fix-broken install -y && apt-get update" "apt-get update" "yum -y update" "yum -y update" "yum -y update" "pacman -Sy")
 PACKAGE_INSTALL=("apt-get -y install" "apt-get -y install" "yum -y install" "yum -y install" "yum -y install" "pacman -Sy --noconfirm --needed")
 PACKAGE_REMOVE=("apt-get -y remove" "apt-get -y remove" "yum -y remove" "yum -y remove" "yum -y remove" "pacman -Rsc --noconfirm")
 PACKAGE_UNINSTALL=("apt-get -y autoremove" "apt-get -y autoremove" "yum -y autoremove" "yum -y autoremove" "yum -y autoremove" "")
-CMD=("$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)" "$(hostnamectl 2>/dev/null | grep -i system | cut -d : -f2)" "$(lsb_release -sd 2>/dev/null)" "$(grep -i description /etc/lsb-release 2>/dev/null | cut -d \" -f2)" "$(grep . /etc/redhat-release 2>/dev/null)" "$(grep . /etc/issue 2>/dev/null | cut -d \\ -f1 | sed '/^[ ]*$/d')" "$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)") 
+CMD=("$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)" "$(hostnamectl 2>/dev/null | grep -i system | cut -d : -f2)" "$(lsb_release -sd 2>/dev/null)" "$(grep -i description /etc/lsb-release 2>/dev/null | cut -d \" -f2)" "$(grep . /etc/redhat-release 2>/dev/null)" "$(grep . /etc/issue 2>/dev/null | cut -d \\ -f1 | sed '/^[ ]*$/d')" "$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)")
 SYS="${CMD[0]}"
 [[ -n $SYS ]] || exit 1
 for ((int = 0; int < ${#REGEX[@]}; int++)); do
-    if [[ $(echo "$SYS" | tr '[:upper:]' '[:lower:]') =~ ${REGEX[int]} ]]; then
-        SYSTEM="${RELEASE[int]}"
-        [[ -n $SYSTEM ]] && break
-    fi
+  if [[ $(echo "$SYS" | tr '[:upper:]' '[:lower:]') =~ ${REGEX[int]} ]]; then
+    SYSTEM="${RELEASE[int]}"
+    [[ -n $SYSTEM ]] && break
+  fi
 done
-apt-get --fix-broken install -y > /dev/null 2>&1
+apt-get --fix-broken install -y >/dev/null 2>&1
 clear
 echo "#######################################################################"
 echo "#                     ${YELLOW}一键安装Zipline平台${PLAIN}                             #"
@@ -47,7 +47,7 @@ echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installa
 echo "#######################################################################"
 
 # 判断宿主机的 IPv4 或双栈情况 没有拉取不了 docker
-check_ipv4(){
+check_ipv4() {
   # 遍历本机可以使用的 IP API 服务商
   # 定义可能的 IP API 服务商
   API_NET=("ip.sb" "ipget.net" "ip.ping0.cc" "https://ip4.seeip.org" "https://api.my-ip.io/ip" "https://ipv4.icanhazip.com" "api.ipify.org")
@@ -70,35 +70,35 @@ check_ipv4(){
   IPV4=$(curl -s4m8 "$IP_API")
 }
 
-build(){
+build() {
   if ! systemctl is-active docker >/dev/null 2>&1; then
     green "\n Install docker.\n "
     if [ $SYSTEM = "CentOS" ]; then
       ${PACKAGE_INSTALL[int]} yum-utils
       yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo &&
-      ${PACKAGE_INSTALL[int]} docker-ce docker-ce-cli containerd.io
+        ${PACKAGE_INSTALL[int]} docker-ce docker-ce-cli containerd.io
       systemctl enable --now docker
     else
       ${PACKAGE_INSTALL[int]} docker.io
     fi
   fi
-  
+
   if ! command -v docker-compose >/dev/null 2>&1; then
-      green "\n Install Docker Compose \n"
-      curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
-      chmod +x /usr/local/bin/docker-compose
-   fi
+    green "\n Install Docker Compose \n"
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+  fi
 
   if [ ! -d "zipline" ] && ! docker ps -a | awk '{print $NF}' | grep -q -E 'postgres|zipline'; then
     green "\n Building \n "
     git clone https://github.com/diced/zipline
     if ! command -v git >/dev/null 2>&1; then
-        green "\n Install git.\n "
-        if [ $SYSTEM = "CentOS" ]; then
-            ${PACKAGE_INSTALL[int]} git
-        else
-            ${PACKAGE_INSTALL[int]} git-core
-        fi
+      green "\n Install git.\n "
+      if [ $SYSTEM = "CentOS" ]; then
+        ${PACKAGE_INSTALL[int]} git
+      else
+        ${PACKAGE_INSTALL[int]} git-core
+      fi
     fi
     cd /root/zipline
     docker-compose up -d
@@ -112,33 +112,32 @@ build(){
     docker-compose pull
     docker-compose up -d
   fi
-  
+
   green "Checking http://$IPV4:3000/ "
   green "You may login to the dashboard with:"
-  green "Username: administrator" 
+  green "Username: administrator"
   green "Password: password"
   green "Remember to change this password in the manage user page"
 }
 
-check_nginx(){
-    if ! [ -x "$(command -v nginx)" ]; then
-        green "\n Install nginx.\n "
-        ${PACKAGE_UPDATE[int]}
-        ${PACKAGE_INSTALL[int]} nginx
-    fi
+check_nginx() {
+  if ! [ -x "$(command -v nginx)" ]; then
+    green "\n Install nginx.\n "
+    ${PACKAGE_UPDATE[int]}
+    ${PACKAGE_INSTALL[int]} nginx
+  fi
 }
 
-
 build_reverse_proxy() {
-    green "\n Build reverse proxy. \n "
-    reading "Enter the domain name to bind to (format: www.example.com): " domain_name
-    resolved_ip=$(dig +short $domain_name)
-    if [ "$resolved_ip" != "$IPV4" ]; then
-        red "Error: $domain_name is not bound to the local IP address."
-        exit 1
-    fi
+  green "\n Build reverse proxy. \n "
+  reading "Enter the domain name to bind to (format: www.example.com): " domain_name
+  resolved_ip=$(dig +short $domain_name)
+  if [ "$resolved_ip" != "$IPV4" ]; then
+    red "Error: $domain_name is not bound to the local IP address."
+    exit 1
+  fi
 
-    sudo tee /etc/nginx/sites-available/reverse-proxy <<EOF
+  sudo tee /etc/nginx/sites-available/reverse-proxy <<EOF
 server {
     listen 80;
     client_max_body_size 100M;
@@ -153,25 +152,24 @@ server {
 }
 EOF
 
-    sudo ln -s /etc/nginx/sites-available/reverse-proxy /etc/nginx/sites-enabled/
-    sudo nginx -t
-    if [ $? -ne 0 ]; then
-        red "Error: There is an error in the reverse proxy configuration file. Please check："
-        yellow "https://zipline.diced.tech/docs/guides/nginx/nginx-no-ssl"
-        exit 1
-    fi
-    sudo systemctl restart nginx
-    green "Because nginx set the reverse proxy to bind the $domain_name, remember to set your domain name in the panel backend to enable it."
-    green "Fill in the options for Domains at http://$domain_name"
+  sudo ln -s /etc/nginx/sites-available/reverse-proxy /etc/nginx/sites-enabled/
+  sudo nginx -t
+  if [ $? -ne 0 ]; then
+    red "Error: There is an error in the reverse proxy configuration file. Please check："
+    yellow "https://zipline.diced.tech/docs/guides/nginx/nginx-no-ssl"
+    exit 1
+  fi
+  sudo systemctl restart nginx
+  green "Because nginx set the reverse proxy to bind the $domain_name, remember to set your domain name in the panel backend to enable it."
+  green "Fill in the options for Domains at http://$domain_name"
 }
-
 
 check_ipv4
 build
 reading "Do you want to set up a reverse proxy for a domain name? (y/n): " answer
 if [ "$answer" != "y" ] && [ "$answer" != "Y" ]; then
-    green "Exiting the script."
-    exit 0
+  green "Exiting the script."
+  exit 0
 fi
 check_nginx
 build_reverse_proxy

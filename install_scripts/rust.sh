@@ -3,7 +3,6 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.17
 
-
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
   echo "No UTF-8 locale found"
@@ -13,11 +12,10 @@ else
   export LANGUAGE="$utf8_locale"
   echo "Locale set to $utf8_locale"
 fi
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
-
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 
 # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 ver="2022.12.18"

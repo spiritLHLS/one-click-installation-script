@@ -1,7 +1,6 @@
 #!/bin/bash
 #from https://github.com/spiritLHLS/one-click-installation-script
 
-
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
   echo "No UTF-8 locale found"
@@ -17,7 +16,7 @@ _red() { echo -e "\033[31m\033[01m$@\033[0m"; }
 _green() { echo -e "\033[32m\033[01m$@\033[0m"; }
 _yellow() { echo -e "\033[33m\033[01m$@\033[0m"; }
 _blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
-reading(){ read -rp "$(_green "$1")" "$2"; }
+reading() { read -rp "$(_green "$1")" "$2"; }
 
 # 检查是否有sudo权限
 if [ $(id -u) -ne 0 ]; then
@@ -69,4 +68,3 @@ else
   _green "Upgrading Ubuntu 20/21 to 22..."
   do-release-upgrade -d -f DistUpgradeViewNonInteractive
 fi
-

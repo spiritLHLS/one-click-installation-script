@@ -3,7 +3,6 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2022.12.27
 
-
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
   echo "No UTF-8 locale found"
@@ -14,15 +13,15 @@ else
   echo "Locale set to $utf8_locale"
 fi
 # Check if C++ is installed
-if ! type "g++" > /dev/null; then
+if ! type "g++" >/dev/null; then
   # Install C++ if it is not installed
   echo "C++ is not installed. Installing C++..."
   # Check OS and install C++ using appropriate package manager
-  if type "apt-get" > /dev/null; then
+  if type "apt-get" >/dev/null; then
     # Ubuntu, Debian
     sudo apt-get update
     sudo apt-get install g++
-  elif type "yum" > /dev/null; then
+  elif type "yum" >/dev/null; then
     # CentOS, Fedora, AlmaLinux
     sudo yum update
     sudo yum install gcc-c++
@@ -40,11 +39,11 @@ else
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Updating C++..."
     # Check OS and update C++ using appropriate package manager
-    if type "apt-get" > /dev/null; then
+    if type "apt-get" >/dev/null; then
       # Ubuntu, Debian
       sudo apt-get update
       sudo apt-get install g++
-    elif type "yum" > /dev/null; then
+    elif type "yum" >/dev/null; then
       # CentOS, Fedora, AlmaLinux
       sudo yum update
       sudo yum install gcc-c++

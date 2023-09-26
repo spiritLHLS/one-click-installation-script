@@ -13,10 +13,10 @@ else
   echo "Locale set to $utf8_locale"
 fi
 
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
@@ -56,7 +56,7 @@ main() {
   backup_file="/etc/systemd/journald.conf-$(date +%Y%m%d%H%M%S).bak"
   sudo cp /etc/systemd/journald.conf "$backup_file"
   yellow "Backed up /etc/systemd/journald.conf to $backup_file"
-  awk -v size="$size" '{ if ($1 == "SystemMaxUse=") { print "SystemMaxUse=" size } else { print $0 } }' /etc/systemd/journald.conf > "$temp_file"
+  awk -v size="$size" '{ if ($1 == "SystemMaxUse=") { print "SystemMaxUse=" size } else { print $0 } }' /etc/systemd/journald.conf >"$temp_file"
   sudo cp "$temp_file" /etc/systemd/journald.conf
   rm -rf "$temp_file"
   conf_file="/etc/systemd/journald.conf"
@@ -65,24 +65,22 @@ main() {
   new_value1="128M"
   new_value2="no"
   if [[ ! -f "$conf_file" ]]; then
-      exit 1
+    exit 1
   fi
   if grep -q "^$variable1=" "$conf_file"; then
-      sed -i "s/^$variable1=.*/$variable1=$new_value1/" "$conf_file"
+    sed -i "s/^$variable1=.*/$variable1=$new_value1/" "$conf_file"
   else
-      echo "$variable1=$new_value1" >> "$conf_file"
+    echo "$variable1=$new_value1" >>"$conf_file"
   fi
   if grep -q "^$variable2=" "$conf_file"; then
-      sed -i "s/^$variable2=.*/$variable2=$new_value2/" "$conf_file"
+    sed -i "s/^$variable2=.*/$variable2=$new_value2/" "$conf_file"
   else
-      echo "$variable2=$new_value2" >> "$conf_file"
+    echo "$variable2=$new_value2" >>"$conf_file"
   fi
   systemctl restart systemd-journald
 
   green "change /etc/systemd/journald.conf successfully"
 }
-
-
 
 level() {
   # Set default values for variables
@@ -97,8 +95,7 @@ level() {
     find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
     green "change $journald_log_dir successfully"
   fi
-  
-  
+
   # Check if config file exists
   if [ ! -f /etc/rsyslog.conf ]; then
     red "Config file (/etc/rsyslog.conf) not found, so not modify" >&2
@@ -109,10 +106,10 @@ level() {
     sudo cp /etc/rsyslog.conf "$backup_file"
     yellow "Backed up /etc/rsyslog.conf to $backup_file"
     if grep -q "loglevel" /etc/rsyslog.conf; then
-      awk -v log_level="$log_level" '{ if ($1 == "loglevel") { print "loglevel = " log_level } else { print $0 } }' /etc/rsyslog.conf > "$temp_file"
+      awk -v log_level="$log_level" '{ if ($1 == "loglevel") { print "loglevel = " log_level } else { print $0 } }' /etc/rsyslog.conf >"$temp_file"
     else
-      cat /etc/rsyslog.conf > "$temp_file"
-      echo "loglevel = $log_level" >> "$temp_file"
+      cat /etc/rsyslog.conf >"$temp_file"
+      echo "loglevel = $log_level" >>"$temp_file"
     fi
     sudo cp "$temp_file" /etc/rsyslog.conf
     rm "$temp_file"
@@ -126,7 +123,7 @@ check_again() {
   count=0
   while [ $count -lt 5 ]; do
     journalctl --disk-usage
-    count=$((count+1))
+    count=$((count + 1))
     sleep 1
   done
 

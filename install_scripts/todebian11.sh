@@ -3,7 +3,6 @@
 #from https://github.com/spiritLHLS/one-click-installation-script
 #version: 2023.02.25
 
-
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
   echo "No UTF-8 locale found"
@@ -22,8 +21,8 @@ _blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
 
 # 检查是否为 root 用户
 if [ "$(id -u)" != "0" ]; then
-    _red "请使用 root 用户执行脚本"
-    exit 1
+  _red "请使用 root 用户执行脚本"
+  exit 1
 fi
 
 # 判断是否为 Debian 系统
@@ -78,7 +77,7 @@ elif [ $CURRENT_VERSION == "buster" ]; then
   sed -i 's/buster/bullseye/g' /etc/apt/sources.list
 fi
 
-replace(){
+replace() {
   sed -i 's/^deb http:\/\/security.debian.org\/debian-security wheezy\/updates main/# &/' /etc/apt/sources.list
   sed -i 's/^deb-src http:\/\/security.debian.org\/debian-security wheezy\/updates main/# &/' /etc/apt/sources.list
   sed -i 's/^deb http:\/\/security.debian.org\/debian-security jessie\/updates main/# &/' /etc/apt/sources.list
@@ -93,9 +92,9 @@ replace(){
 
 apt-get update
 if [ $? -ne 0 ]; then
-    # 去除漏洞修补源避免更新异常
-    replace > /dev/null 2>&1
-    apt-get update
+  # 去除漏洞修补源避免更新异常
+  replace >/dev/null 2>&1
+  apt-get update
 fi
 apt-get upgrade -y
 apt-get full-upgrade -y

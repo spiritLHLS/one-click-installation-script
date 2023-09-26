@@ -12,10 +12,10 @@ else
   export LANGUAGE="$utf8_locale"
   echo "Locale set to $utf8_locale"
 fi
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   ver="2023.02.15"
@@ -40,22 +40,21 @@ head() {
   fi
 }
 
-
 check_os() {
-    # 检测系统类型
-    if [ -f /etc/lsb-release ]; then
-        # Ubuntu/Debian/Almalinux
-        OS="Ubuntu/Debian/Almalinux"
-    elif [ -f /etc/redhat-release ]; then
-        # CentOS/Fedora
-        OS="CentOS/Fedora"
-    else
-        # 未知系统
-        OS="Unknown"
-    fi
+  # 检测系统类型
+  if [ -f /etc/lsb-release ]; then
+    # Ubuntu/Debian/Almalinux
+    OS="Ubuntu/Debian/Almalinux"
+  elif [ -f /etc/redhat-release ]; then
+    # CentOS/Fedora
+    OS="CentOS/Fedora"
+  else
+    # 未知系统
+    OS="Unknown"
+  fi
 }
 
-main(){
+main() {
   if [ "$OS" == "Ubuntu/Debian/Almalinux" ]; then
     # Update package repositories and install dependencies
     apt-get update
@@ -74,15 +73,15 @@ main(){
     # Enable and start the vnstat service
     systemctl enable vnstat
     systemctl start vnstat
-    
+
     apt-get install chkconfig -y
     if [ $? -ne 0 ]; then
-        apt-get install sysv-rc-conf -y
-        if [ $? -ne 0 ]; then
-            apt-get update && apt-get install sysv-rc-conf -y
-        fi
+      apt-get install sysv-rc-conf -y
+      if [ $? -ne 0 ]; then
+        apt-get update && apt-get install sysv-rc-conf -y
+      fi
     fi
-    ! chkconfig vnstat on && echo "replace chkconfig with sysv-rc-conf" && sysv-rc-conf vnstat on 
+    ! chkconfig vnstat on && echo "replace chkconfig with sysv-rc-conf" && sysv-rc-conf vnstat on
     service vnstat start
 
     # Check if vnstat is installed and working properly
@@ -91,9 +90,9 @@ main(){
 
     # Check if vnstati is installed and working properly
     if which vnstati >/dev/null; then
-        vnstati -v
+      vnstati -v
     else
-        echo "vnstat was compiled and installed without the vnstati tool. If you need to use it, please run 'apt-get install vnstati -y' to install the version from the package repository."
+      echo "vnstat was compiled and installed without the vnstati tool. If you need to use it, please run 'apt-get install vnstati -y' to install the version from the package repository."
     fi
   elif [ "$OS" == "CentOS/Fedora" ]; then
     yum update -y
@@ -119,9 +118,9 @@ main(){
 
     # Check if vnstati is installed and working properly
     if which vnstati >/dev/null; then
-        vnstati -v
+      vnstati -v
     else
-        echo "vnstat was compiled and installed without the vnstati tool. If you need to use it, please run 'yum install vnstati -y' or 'dnf install vnstati -y' to install the version from the package repository."
+      echo "vnstat was compiled and installed without the vnstati tool. If you need to use it, please run 'yum install vnstati -y' or 'dnf install vnstati -y' to install the version from the package repository."
     fi
   fi
 }

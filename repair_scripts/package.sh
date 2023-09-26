@@ -13,10 +13,10 @@ else
   echo "Locale set to $utf8_locale"
 fi
 temp_file_apt_fix="/tmp/apt_fix.txt"
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
@@ -51,11 +51,11 @@ head() {
 backup_source() {
   # Backup current sources list
   if test -f /etc/apt/sources.list.bak; then
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list2.bak
-      yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list2.bak"
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list2.bak
+    yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list2.bak"
   else
-      sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
-      yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list.bak"
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list.bak"
   fi
 }
 
@@ -63,11 +63,11 @@ change_debian_apt_sources() {
   # Check if the IP is in China
   ip=$(curl -s https://ipapi.co/ip)
   location=$(curl -s https://ipapi.co/$ip/country_name)
-  
+
   # Backup current sources list
   cp /etc/apt/sources.list /etc/apt/sources.list.bak
   yellow "backup the current /etc/apt/sources.list to /etc/apt/sources.list.bak"
-  
+
   # Determine Debian version
   DEBIAN_VERSION=$(lsb_release -sr)
 
@@ -81,18 +81,18 @@ change_debian_apt_sources() {
 
   # Set Debian release based on Debian version
   case $DEBIAN_VERSION in
-    6*) DEBIAN_RELEASE="squeeze";;
-    7*) DEBIAN_RELEASE="wheezy";;
-    8*) DEBIAN_RELEASE="jessie";;
-    9*) DEBIAN_RELEASE="stretch";;
-    10*) DEBIAN_RELEASE="buster";;
-    11*) DEBIAN_RELEASE="bullseye";;
-    12*) DEBIAN_RELEASE="bookworm";;
-    *) echo "The system is not Debian 6/7/8/9/10/11/12 . No changes were made to the apt-get sources." && return 1;;
+  6*) DEBIAN_RELEASE="squeeze" ;;
+  7*) DEBIAN_RELEASE="wheezy" ;;
+  8*) DEBIAN_RELEASE="jessie" ;;
+  9*) DEBIAN_RELEASE="stretch" ;;
+  10*) DEBIAN_RELEASE="buster" ;;
+  11*) DEBIAN_RELEASE="bullseye" ;;
+  12*) DEBIAN_RELEASE="bookworm" ;;
+  *) echo "The system is not Debian 6/7/8/9/10/11/12 . No changes were made to the apt-get sources." && return 1 ;;
   esac
-  
+
   # Write sources list in the desired format
-  cat > /etc/apt/sources.list <<EOF
+  cat >/etc/apt/sources.list <<EOF
 deb ${URL} ${DEBIAN_RELEASE} main contrib non-free
 deb ${URL} ${DEBIAN_RELEASE}-updates main contrib non-free
 deb ${URL} ${DEBIAN_RELEASE}-backports main contrib non-free
@@ -109,7 +109,7 @@ change_ubuntu_apt_sources() {
   # Check if the IP is in China
   ip=$(curl -s https://ipapi.co/ip)
   location=$(curl -s https://ipapi.co/$ip/country_name)
-  
+
   # Check the system's Ubuntu version
   UBUNTU_VERSION=$(lsb_release -r | awk '{print $2}')
 
@@ -123,19 +123,19 @@ change_ubuntu_apt_sources() {
 
   # Set Ubuntu release based on Ubuntu version
   case $UBUNTU_VERSION in
-    # 14*) UBUNTU_RELEASE="trusty";;
-    16*) UBUNTU_RELEASE="xenial";;
-    18*) UBUNTU_RELEASE="bionic";;
-    20*) UBUNTU_RELEASE="focal";;
-    22*) UBUNTU_RELEASE="groovy";;
-    *) echo "The system is not Ubuntu 14/16/18/20/22 . No changes were made to the apt-get sources." && return 1;;
+  # 14*) UBUNTU_RELEASE="trusty";;
+  16*) UBUNTU_RELEASE="xenial" ;;
+  18*) UBUNTU_RELEASE="bionic" ;;
+  20*) UBUNTU_RELEASE="focal" ;;
+  22*) UBUNTU_RELEASE="groovy" ;;
+  *) echo "The system is not Ubuntu 14/16/18/20/22 . No changes were made to the apt-get sources." && return 1 ;;
   esac
-  
+
   # 备份当前sources.list
   backup_source
-  
+
   # Write sources list in the desired format
-  cat > /etc/apt/sources.list <<EOF
+  cat >/etc/apt/sources.list <<EOF
 deb ${URL} ${UBUNTU_RELEASE} main restricted universe multiverse
 deb ${URL} ${UBUNTU_RELEASE}-security main restricted universe multiverse
 deb ${URL} ${UBUNTU_RELEASE}-updates main restricted universe multiverse
@@ -159,9 +159,9 @@ check_eol_and_switch_apt_source() {
     if [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]; then
       # 备份当前sources.list
       backup_source
-      
+
       # 修改apt源
-      cat > /etc/apt/sources.list <<EOF
+      cat >/etc/apt/sources.list <<EOF
 deb http://old-releases.ubuntu.com/ubuntu/ $version main restricted universe multiverse
 deb http://old-releases.ubuntu.com/ubuntu/ $version-security main restricted universe multiverse
 deb http://old-releases.ubuntu.com/ubuntu/ $version-updates main restricted universe multiverse
@@ -184,7 +184,7 @@ fix_broken() {
       exit 0
     fi
   fi
-  if apt-get install curl wget -y | grep -F -- '--fix-broken' ; then
+  if apt-get install curl wget -y | grep -F -- '--fix-broken'; then
     apt-get --fix-broken install -y
     apt-get update
     if [ $? -eq 0 ]; then
@@ -204,15 +204,15 @@ fix_locked() {
       sudo rm /var/lib/dpkg/lock
       sudo rm /var/cache/apt/archives/lock
     fi
-    
+
     sudo apt-get update
-    
+
     if [ $? -eq 0 ]; then
       # Print a message indicating that the update was successful
       green "The apt-get update was successful."
       exit 0
     fi
-  
+
     if [ $? -ne 0 ]; then
       yellow "The update still failed. Attempting to fix missing GPG keys..."
       if [ -f /etc/debian_version ]; then
@@ -221,7 +221,7 @@ fix_locked() {
         red "try sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys missing key"
       fi
     fi
-    
+
     output=$(apt-get update 2>&1)
     if echo $output | grep -q "NO_PUBKEY"; then
       echo "Some keys are missing, attempting to retrieve them now..."
@@ -241,14 +241,14 @@ fix_sources() {
   rm -rf update_output.log
   apt-get update 2>&1 | tee update_output.log
   exit_code=$?
-  
+
   # Check the update output for "does not have a Release file" error
   if grep -Eq "does not have a Release file|Malformed entry" update_output.log; then
     # Check if the system is Ubuntu or Debian
     if [ -f /etc/os-release ]; then
       # Get the value of the ID variable
       ID=$(lsb_release -i | awk '{print $3}')
-      
+
       # If the ID is ubuntu, run the change_ubuntu_apt_sources script
       if [ "$ID" == "ubuntu" ]; then
         yellow "ubuntu"
@@ -270,7 +270,7 @@ fix_sources() {
       exit 0
     fi
   fi
-  
+
   # Update the package list
   rm -rf update_output.log
   apt-get update 2>&1 | tee update_output.log
@@ -313,45 +313,44 @@ fix_sources() {
 }
 
 fix_install() {
-    # ps aux | grep apt
-    sudo pkill apt
-    
-    if lsof /var/lib/dpkg/lock > /dev/null 2>&1; then
-        sudo kill $(sudo lsof /var/lib/dpkg/lock | awk '{print $2}')
-        sudo rm /var/lib/dpkg/lock
-    fi
+  # ps aux | grep apt
+  sudo pkill apt
 
-    if lsof /var/cache/apt/archives/lock > /dev/null 2>&1; then
-        sudo kill $(sudo lsof /var/cache/apt/archives/lock | awk '{print $2}')
-        sudo rm -rf /var/cache/apt/archives/lock
-    fi
+  if lsof /var/lib/dpkg/lock >/dev/null 2>&1; then
+    sudo kill $(sudo lsof /var/lib/dpkg/lock | awk '{print $2}')
+    sudo rm /var/lib/dpkg/lock
+  fi
 
-    if sudo lsof /var/lib/apt/lists/lock > /dev/null 2>&1; then
-        sudo kill $(sudo lsof /var/lib/apt/lists/lock | awk '{print $2}')
-        sudo rm /var/lib/apt/lists/lock
-    fi
+  if lsof /var/cache/apt/archives/lock >/dev/null 2>&1; then
+    sudo kill $(sudo lsof /var/cache/apt/archives/lock | awk '{print $2}')
+    sudo rm -rf /var/cache/apt/archives/lock
+  fi
 
-    sudo apt-get clean
-    sudo apt-get update
-    sudo dpkg --configure -a
+  if sudo lsof /var/lib/apt/lists/lock >/dev/null 2>&1; then
+    sudo kill $(sudo lsof /var/lib/apt/lists/lock | awk '{print $2}')
+    sudo rm /var/lib/apt/lists/lock
+  fi
+
+  sudo apt-get clean
+  sudo apt-get update
+  sudo dpkg --configure -a
 }
-
 
 check_again() {
   # Update the package list again to pick up the new sources
   apt_update_output=$(apt-get update 2>&1)
-  echo "$apt_update_output" > "$temp_file_apt_fix"
+  echo "$apt_update_output" >"$temp_file_apt_fix"
   if grep -q 'NO_PUBKEY' "$temp_file_apt_fix"; then
-      public_keys=$(grep -oE 'NO_PUBKEY [0-9A-F]+' "$temp_file_apt_fix" | awk '{ print $2 }')
-      joined_keys=$(echo "$public_keys" | paste -sd " ")
-      yellow "No Public Keys: ${joined_keys}"
-      apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${joined_keys}
-      apt-get update
+    public_keys=$(grep -oE 'NO_PUBKEY [0-9A-F]+' "$temp_file_apt_fix" | awk '{ print $2 }')
+    joined_keys=$(echo "$public_keys" | paste -sd " ")
+    yellow "No Public Keys: ${joined_keys}"
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${joined_keys}
+    apt-get update
   fi
   rm "$temp_file_apt_fix"
-  
+
   sudo apt-get update
-  
+
   # Check the exit status of the update command
   if [ $? -eq 0 ]; then
     # Print a message indicating that the update was successful
@@ -365,7 +364,6 @@ check_again() {
       - Check for disk space issues"
   fi
 }
-
 
 ##############################################################################################################################################
 

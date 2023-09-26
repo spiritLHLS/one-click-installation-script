@@ -12,10 +12,10 @@ else
   export LANGUAGE="$utf8_locale"
   echo "Locale set to $utf8_locale"
 fi
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
@@ -59,7 +59,7 @@ else
     backup_file="/etc/hosts-$(date +%Y%m%d%H%M%S).bak"
     cp /etc/hosts "$backup_file"
     yellow "Backed up /etc/hosts to $backup_file"
-    awk -v new_ip="127.0.0.1" -v hostname="$HOSTNAME" '{ if ($2 == hostname) { print new_ip " " $2 } else { print $0 } }' /etc/hosts > "$temp_file"
+    awk -v new_ip="127.0.0.1" -v hostname="$HOSTNAME" '{ if ($2 == hostname) { print new_ip " " $2 } else { print $0 } }' /etc/hosts >"$temp_file"
     cp "$temp_file" /etc/hosts
     rm "$temp_file"
   else
@@ -67,7 +67,6 @@ else
     green "Hostname and IP address in /etc/hosts are correct."
   fi
 fi
-
 
 # Check if the sudo command works
 sudo yellow "Testing sudo command..."

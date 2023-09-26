@@ -13,10 +13,10 @@ else
   echo "Locale set to $utf8_locale"
 fi
 
-red(){ echo -e "\033[31m\033[01m$1$2\033[0m"; }
-green(){ echo -e "\033[32m\033[01m$1$2\033[0m"; }
-yellow(){ echo -e "\033[33m\033[01m$1$2\033[0m"; }
-reading(){ read -rp "$(green "$1")" "$2"; }
+red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
+green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
+yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
+reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
@@ -47,11 +47,11 @@ main() {
   external_ip=$(host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has" | awk '{print $4}')
   # 判断 IP 类型并执行对应的函数
   if [[ $external_ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-      main_v4
+    main_v4
   elif [[ $external_ip =~ ^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}$ ]]; then
-      main_v6
+    main_v6
   else
-      echo "无法识别外网 IP 地址类型"
+    echo "无法识别外网 IP 地址类型"
   fi
 }
 
@@ -70,17 +70,17 @@ main_v4() {
   fi
 
   # Try using Google's nameserver
-  echo "nameserver 8.8.8.8" > /etc/resolv.conf
+  echo "nameserver 8.8.8.8" >/etc/resolv.conf
   if ping -c 1 google.com; then
     return
   fi
 
   # Try using Cloudflare's nameserver
-  echo "nameserver 1.1.1.1" > /etc/resolv.conf
+  echo "nameserver 1.1.1.1" >/etc/resolv.conf
   if ping -c 1 google.com; then
     return
   fi
-  
+
   # Display prompt asking whether to proceed with checking and changing priority
   reading "Do you want to proceed with checking and changing network priority? [y/n] " priority
   echo ""
@@ -105,9 +105,9 @@ main_v4() {
 
   # Modify network priority if necessary
   if [ "$ip_type" = "IPv4" ] && [ "$priority" -gt "100" ]; then
-    echo "precedence ::ffff:0:0/96 50" > /etc/gai.conf
+    echo "precedence ::ffff:0:0/96 50" >/etc/gai.conf
   elif [ "$ip_type" = "IPv6" ] && [ "$priority" -lt "100" ]; then
-    echo "precedence ::/0 100" > /etc/gai.conf
+    echo "precedence ::/0 100" >/etc/gai.conf
   fi
 
   # Check if ping to google.com is successful after modifying network priority
@@ -124,55 +124,54 @@ main_v4() {
 }
 
 main_v6() {
-    # 定义 nameserver 列表
-    nameservers=(
-        "2001:67c:2960:5353:5353:5353:5353:5353"
-        "2001:67c:2960:6464:6464:6464:6464:6464"
-        "2602:fc23:18::7"
-        "2001:67c:27e4::60"
-        "2001:67c:27e4:15::64"
-        "2001:67c:27e4::64"
-        "2001:67c:27e4:15::6411"
-        "2a01:4f9:c010:3f02::1"
-        "2a00:1098:2c::1"
-        "2a00:1098:2b::1"
-        "2a01:4f8:c2c:123f::1"
-        "2001:67c:2960::64"
-        "2001:67c:2960::6464"
-        "2001:67c:2960::64"
-        "2001:67c:2960::6464"
-        "2001:67c:2b0::6"
-        "2001:67c:2b0::4"
-        "2a03:7900:2:0:31:3:104:161"
-    )
+  # 定义 nameserver 列表
+  nameservers=(
+    "2001:67c:2960:5353:5353:5353:5353:5353"
+    "2001:67c:2960:6464:6464:6464:6464:6464"
+    "2602:fc23:18::7"
+    "2001:67c:27e4::60"
+    "2001:67c:27e4:15::64"
+    "2001:67c:27e4::64"
+    "2001:67c:27e4:15::6411"
+    "2a01:4f9:c010:3f02::1"
+    "2a00:1098:2c::1"
+    "2a00:1098:2b::1"
+    "2a01:4f8:c2c:123f::1"
+    "2001:67c:2960::64"
+    "2001:67c:2960::6464"
+    "2001:67c:2960::64"
+    "2001:67c:2960::6464"
+    "2001:67c:2b0::6"
+    "2001:67c:2b0::4"
+    "2a03:7900:2:0:31:3:104:161"
+  )
 
-    # 保存当前 nameserver 的值，以便之后恢复
-    current_nameserver=$(cat /etc/resolv.conf | grep "nameserver" | awk '{print $2}')
+  # 保存当前 nameserver 的值，以便之后恢复
+  current_nameserver=$(cat /etc/resolv.conf | grep "nameserver" | awk '{print $2}')
 
-    # 循环尝试替换 nameserver 并测试网络
-    for nameserver in "${nameservers[@]}"; do
-        # 替换 nameserver
-        echo "nameserver $nameserver" > /etc/resolv.conf
+  # 循环尝试替换 nameserver 并测试网络
+  for nameserver in "${nameservers[@]}"; do
+    # 替换 nameserver
+    echo "nameserver $nameserver" >/etc/resolv.conf
 
-        # 让修改生效
-        resolvconf -u
-
-        # ping 测试
-        if ping -c 3 google.com &> /dev/null && ping -c 3 github.com &> /dev/null; then
-            green "网络恢复成功"
-            return
-        fi
-    done
-
-    # 如果所有 nameserver 都尝试过了仍然无法修复，则恢复为原来的 nameserver
-    echo "nameserver $current_nameserver" > /etc/resolv.conf
+    # 让修改生效
     resolvconf -u
-}
 
+    # ping 测试
+    if ping -c 3 google.com &>/dev/null && ping -c 3 github.com &>/dev/null; then
+      green "网络恢复成功"
+      return
+    fi
+  done
+
+  # 如果所有 nameserver 都尝试过了仍然无法修复，则恢复为原来的 nameserver
+  echo "nameserver $current_nameserver" >/etc/resolv.conf
+  resolvconf -u
+}
 
 head
 main
 # ping 测试
-if ping -c 3 google.com &> /dev/null && ping -c 3 github.com &> /dev/null; then
-    green "V4网络恢复成功"
+if ping -c 3 google.com &>/dev/null && ping -c 3 github.com &>/dev/null; then
+  green "V4网络恢复成功"
 fi
