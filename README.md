@@ -242,7 +242,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 - 涵盖阿里云、腾讯云、华为云、UCLOUD、甲骨文云、京东云
 
 ```bash
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/dlm.sh -o dlm.sh && chmod +x dlm.shh && bash dlm.sh
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/dlm.sh -o dlm.sh && chmod +x dlm.sh && bash dlm.sh
 ```
 
 ## 部分手动命令
