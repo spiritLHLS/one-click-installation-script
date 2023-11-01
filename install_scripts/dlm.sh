@@ -3,21 +3,39 @@
 # from https://github.com/spiritLHLS/one-click-installation-script
 # version: 2023.11.01
 
+
 export DEBIAN_FRONTEND=noninteractive
-var=$(lsb_release -a | grep Gentoo)
-if [ -z "${var}" ]; then
-    var=$(cat /etc/issue | grep Gentoo)
+AEGIS_INSTALL_DIR="/usr/local/aegis"
+AEGIS_SYSTEMD_SERVICE_PATH="/etc/systemd/system/aegis.service"
+#check linux Gentoo os 
+var=`lsb_release -a | grep Gentoo`
+if [ -z "${var}" ]; then 
+	var=`cat /etc/issue | grep Gentoo`
 fi
+checkCoreos=`cat /etc/os-release 2>/dev/null | grep coreos`
 if [ -d "/etc/runlevels/default" -a -n "${var}" ]; then
-    LINUX_RELEASE="GENTOO"
-else
-    LINUX_RELEASE="OTHER"
+	LINUX_RELEASE="GENTOO"
+elif [ -f "/etc/os-release" -a -n "${checkCoreos}" ]; then
+	LINUX_RELEASE="COREOS"
+	AEGIS_INSTALL_DIR="/opt/aegis"
+else 
+	LINUX_RELEASE="OTHER"
 fi
 
+_red() { echo -e "\033[31m\033[01m$@\033[0m"; }
+_green() { echo -e "\033[32m\033[01m$@\033[0m"; }
+_yellow() { echo -e "\033[33m\033[01m$@\033[0m"; }
+_blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
+reading() { read -rp "$(_green "$1")" "$2"; }
+
 uninstall_qcloud() {
+    # 删除腾讯云监控组件
     /usr/local/qcloud/stargate/admin/uninstall.sh
     /usr/local/qcloud/YunJing/uninst.sh
     /usr/local/qcloud/monitor/barad/admin/uninstall.sh
+    rm -f /etc/cron.d/sgagenttask
+    crontab -l | grep -v '/usr/local/qcloud/stargate/admin' | crontab -
+    rm -rf /usr/local/qcloud
 }
 
 kill_processes() {
@@ -41,13 +59,15 @@ pkill_processes() {
 }
 
 uninstall_aegis() {
-    if [ -d "/usr/local/aegis" ]; then
-        rm -rf "/usr/local/aegis/aegis_client" "/usr/local/aegis/aegis_update" "/usr/local/aegis/alihids"
+    if [ -d "$AEGIS_INSTALL_DIR" ]; then
+        rm -rf "$AEGIS_INSTALL_DIR/aegis_client" 
+        rm -rf "$AEGIS_INSTALL_DIR/aegis_update"
+        rm -rf "$AEGIS_INSTALL_DIR/alihids"
     fi
 
-    if [ -d "/usr/local/aegis/aegis_debug" ]; then
-        umount "/usr/local/aegis/aegis_debug"
-        rm -rf "/usr/local/aegis/aegis_debug"
+    if [ -d "$AEGIS_INSTALL_DIR/aegis_debug" ]; then
+        umount "$AEGIS_INSTALL_DIR/aegis_debug"
+        rm -rf "$AEGIS_INSTALL_DIR/aegis_debug"
     fi
 
     if [ -f "/etc/init.d/aegis" ]; then
@@ -70,6 +90,25 @@ uninstall_aegis() {
     fi
 }
 
+wait_aegis_exit()
+{
+    var=1
+    limit=10
+    echo "wait aegis exit";
+
+    while [[ $var -lt $limit ]]; do 
+        if [ -n "$(ps -ef|grep aegis_client|grep -v grep)" ]; then
+            sleep 1
+        else
+            return
+        fi
+         
+        ((var++))
+    done     
+    
+    _red "wait AliYunDun process exit fail, possibly due to self-protection, please uninstall aegis or disable self-protection from the aegis console."
+}
+
 uninstall_cloud_monitoring() {
     # 阿里云
     ARCH=$(arch)
@@ -79,8 +118,8 @@ uninstall_cloud_monitoring() {
 
     service aegis stop
     update-rc.d aegis disable
-    chkconfig --del aegis
-    sysv-rc-conf --del aegis
+    chkconfig --del aegis >/dev/null 2>&1
+    sysv-rc-conf --del aegis >/dev/null 2>&1
 
     /usr/local/cloudmonitor/wrapper/bin/cloudmonitor.sh stop
     /usr/local/cloudmonitor/wrapper/bin/cloudmonitor.sh remove
@@ -99,7 +138,7 @@ uninstall_cloud_monitoring() {
     rm -rf "/usr/sbin/aliyun-service"
     rm -rf "/usr/sbin/aliyun-service.backup"
     rm -rf "/usr/sbin/agetty"
-    rm -rf "/usr/local/aegis"
+    rm -rf "$AEGIS_INSTALL_DIR"
     rm -rf "/usr/local/share/aliyun-assist"
     rm -rf "/usr/local/cloudmonitor"
 
@@ -122,7 +161,8 @@ uninstall_cloud_monitoring() {
     fi
 
     if [[ -f "/etc/centos-release" && $(grep ' 6' "/etc/centos-release") ]]; then
-        chkconfig --level 2345 expand-root off
+        chkconfig --level 2345 expand-root off >/dev/null 2>&1
+        sysv-rc-conf --level 2345 expand-root off >/dev/null 2>&1
         rm -rf "/usr/share/dracut/modules.d/50growroot"
         dracut --force
         rm -f "/usr/bin/sgdisk"
@@ -141,8 +181,10 @@ uninstall_cloud_monitoring() {
     fi
     service jcs-entry stop
     service jcs-shutdown-scripts stop
-    chkconfig jcs-entry off
-    chkconfig jcs-shutdown-scripts off
+    chkconfig jcs-entry off >/dev/null 2>&1
+    chkconfig jcs-shutdown-scripts off >/dev/null 2>&1
+    sysv-rc-conf jcs-entry off >/dev/null 2>&1
+    sysv-rc-conf jcs-shutdown-scripts off >/dev/null 2>&1
     update-rc.d jcs-entry remove
     update-rc.d jcs-shutdown-scripts remove
     pkill jdog
@@ -158,20 +200,52 @@ check_root() {
 }
 
 remove_aegis() {
-    if [ -d /usr/local/aegis ]; then
+    if [ -d $AEGIS_INSTALL_DIR ]; then
         systemctl stop aegis.service
         systemctl disable aegis.service
-        umount /usr/local/aegis/aegis_debug
-        rm -rf /usr/local/aegis/* >/dev/null 2>&1
+        umount $AEGIS_INSTALL_DIR/aegis_debug
+        rm -rf $AEGIS_INSTALL_DIR/* >/dev/null 2>&1
         rm -rf /usr/local/share/assist-daemon/* >/dev/null 2>&1
         rm -rf /usr/local/share/aliyun* >/dev/null 2>&1
         rm -rf /sys/fs/cgroup/devices/system.slice/aegis.service >/dev/null 2>&1
     fi
-    if [ -d /usr/local/aegis/aegis_debug ]; then
-        if [ -d /usr/local/aegis/aegis_debug/tracing/instances/aegis ]; then
-            echo >/usr/local/aegis/aegis_debug/tracing/instances/aegis/set_event
+
+    kprobeArr=(
+        "/sys/kernel/debug/tracing/instances/aegis_do_sys_open/set_event"
+        "/sys/kernel/debug/tracing/instances/aegis_inet_csk_accept/set_event"
+        "/sys/kernel/debug/tracing/instances/aegis_tcp_connect/set_event"
+        "/sys/kernel/debug/tracing/instances/aegis/set_event"
+        "/sys/kernel/debug/tracing/instances/aegis_/set_event"
+        "/sys/kernel/debug/tracing/instances/aegis_accept/set_event"
+        "/sys/kernel/debug/tracing/kprobe_events"
+        "$AEGIS_INSTALL_DIR/aegis_debug/tracing/set_event"
+        "$AEGIS_INSTALL_DIR/aegis_debug/tracing/kprobe_events"
+    )
+    for value in ${kprobeArr[@]}
+    do
+        if [ -f "$value" ]; then
+            echo > $value
+        fi
+    done
+
+    if [ -d "${AEGIS_INSTALL_DIR}" ];then
+        umount ${AEGIS_INSTALL_DIR}/aegis_debug
+        if [ -d "${AEGIS_INSTALL_DIR}/cgroup/cpu" ];then
+            umount ${AEGIS_INSTALL_DIR}/cgroup/cpu
+        fi
+        if [ -d "${AEGIS_INSTALL_DIR}/cgroup" ];then
+            umount ${AEGIS_INSTALL_DIR}/cgroup
+        fi
+        rm -rf ${AEGIS_INSTALL_DIR}/aegis_client
+        rm -rf ${AEGIS_INSTALL_DIR}/aegis_update
+        rm -rf ${AEGIS_INSTALL_DIR}/alihids
+        rm -f ${AEGIS_INSTALL_DIR}/globalcfg/domaincfg.ini >/dev/null 2>&1
+    fi
+    if [ -d $AEGIS_INSTALL_DIR/aegis_debug ]; then
+        if [ -d $AEGIS_INSTALL_DIR/aegis_debug/tracing/instances/aegis ]; then
+            echo >$AEGIS_INSTALL_DIR/aegis_debug/tracing/instances/aegis/set_event
         else
-            echo >/usr/local/aegis/aegis_debug/tracing/set_event
+            echo >$AEGIS_INSTALL_DIR/aegis_debug/tracing/set_event
         fi
     fi
 }
@@ -232,12 +306,13 @@ touch /etc/cloud/cloud-init.disabled
 uninstall_qcloud
 kill_processes
 pkill_processes
-remove_aegis
+wait_aegis_exit
 uninstall_aegis
+remove_aegis
 uninstall_cloud_monitoring
 remove_aegis
 remove_agentwatch
 remove_all_aliyunfiles
 remove_cloud_monitor
 rescue_localhost_name
-echo "Uninstallation complete, please reboot to change completely."
+_green "Uninstallation complete, please reboot to change completely."
