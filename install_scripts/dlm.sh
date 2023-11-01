@@ -4,6 +4,15 @@
 # version: 2023.11.01
 
 export DEBIAN_FRONTEND=noninteractive
+var=`lsb_release -a | grep Gentoo`
+if [ -z "${var}" ]; then 
+    var=`cat /etc/issue | grep Gentoo`
+fi
+if [ -d "/etc/runlevels/default" -a -n "${var}" ]; then
+    LINUX_RELEASE="GENTOO"
+else
+    LINUX_RELEASE="OTHER"
+fi
 
 uninstall_qcloud(){
     /usr/local/qcloud/stargate/admin/uninstall.sh
