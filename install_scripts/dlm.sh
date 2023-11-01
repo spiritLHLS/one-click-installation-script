@@ -27,13 +27,69 @@ _blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
 reading() { read -rp "$(_green "$1")" "$2"; }
 
 uninstall_qcloud() {
-    # 删除腾讯云监控组件
+    # 腾讯云
     /usr/local/qcloud/stargate/admin/uninstall.sh
     /usr/local/qcloud/YunJing/uninst.sh
     /usr/local/qcloud/monitor/barad/admin/uninstall.sh
     rm -f /etc/cron.d/sgagenttask
     crontab -l | grep -v '/usr/local/qcloud/stargate/admin' | crontab -
     rm -rf /usr/local/qcloud
+}
+
+uninstall_oralce() {
+    # 甲骨文云
+    systemctl stop oracle-cloud-agent
+    systemctl disable oracle-cloud-agent
+    systemctl stop oracle-cloud-agent-updater
+    systemctl disable oracle-cloud-agent-updater
+    systemctl disable --now qemu-guest-agent
+    if command -v snap >/dev/null 2>&1; then
+        snap remove oracle-cloud-agent
+    fi
+}
+
+uninstall_jdcloud() {
+    # 其他云
+    /etc/KsyunAgent/uninstall.py
+    service uma stop
+    systemctl disable --now uma
+    /usr/local/uniagent/extension/install/telescope/telescoped stop
+    # 京东云
+    systemctl stop --no-block jcs-agent-core
+    systemctl --no-reload disable jcs-agent-core
+    if command -v stop >/dev/null 2>&1; then
+        stop --no-wait jcs-agent-core /etc/init.d/jcs-agent-core
+    fi
+
+    if [[ -f "/etc/centos-release" && $(grep ' 6' "/etc/centos-release") ]]; then
+        chkconfig --level 2345 expand-root off >/dev/null 2>&1
+        sysv-rc-conf --level 2345 expand-root off >/dev/null 2>&1
+        rm -rf "/usr/share/dracut/modules.d/50growroot"
+        dracut --force
+        rm -f "/usr/bin/sgdisk"
+        rm -f "/usr/bin/growpart"
+    fi
+
+    systemctl stop --no-block jcs-shutdown-scripts
+    systemctl stop --no-block jcs-entry
+    systemctl --no-reload disable jcs-shutdown-scripts
+    systemctl --no-reload disable jcs-entry
+    if command -v stop >/dev/null 2>&1; then
+        stop --no-wait jcs-shutdown-scripts
+        stop --no-wait jcs-entry
+        stop --no-wait /etc/init.d/jcs-shutdown-scripts
+        stop --no-wait /etc/init.d/jcs-entry
+    fi
+    service jcs-entry stop
+    service jcs-shutdown-scripts stop
+    chkconfig jcs-entry off >/dev/null 2>&1
+    chkconfig jcs-shutdown-scripts off >/dev/null 2>&1
+    sysv-rc-conf jcs-entry off >/dev/null 2>&1
+    sysv-rc-conf jcs-shutdown-scripts off >/dev/null 2>&1
+    update-rc.d jcs-entry remove
+    update-rc.d jcs-shutdown-scripts remove
+    pkill jdog
+    rm -rf "/usr/local/share/jcloud"
 }
 
 kill_processes() {
@@ -138,55 +194,6 @@ uninstall_cloud_monitoring() {
     rm -rf "$AEGIS_INSTALL_DIR"
     rm -rf "/usr/local/share/aliyun-assist"
     rm -rf "/usr/local/cloudmonitor"
-
-    # 甲骨文云
-    systemctl stop oracle-cloud-agent
-    systemctl disable oracle-cloud-agent
-    systemctl stop oracle-cloud-agent-updater
-    systemctl disable oracle-cloud-agent-updater
-    systemctl disable --now qemu-guest-agent
-
-    # 其他云的卸载
-    /etc/KsyunAgent/uninstall.py
-    service uma stop
-    systemctl disable --now uma
-    /usr/local/uniagent/extension/install/telescope/telescoped stop
-    systemctl stop --no-block jcs-agent-core
-    systemctl --no-reload disable jcs-agent-core
-    if command -v stop >/dev/null 2>&1; then
-        stop --no-wait jcs-agent-core /etc/init.d/jcs-agent-core
-    fi
-
-    if [[ -f "/etc/centos-release" && $(grep ' 6' "/etc/centos-release") ]]; then
-        chkconfig --level 2345 expand-root off >/dev/null 2>&1
-        sysv-rc-conf --level 2345 expand-root off >/dev/null 2>&1
-        rm -rf "/usr/share/dracut/modules.d/50growroot"
-        dracut --force
-        rm -f "/usr/bin/sgdisk"
-        rm -f "/usr/bin/growpart"
-    fi
-
-    systemctl stop --no-block jcs-shutdown-scripts
-    systemctl stop --no-block jcs-entry
-    systemctl --no-reload disable jcs-shutdown-scripts
-    systemctl --no-reload disable jcs-entry
-    if command -v stop >/dev/null 2>&1; then
-        stop --no-wait jcs-shutdown-scripts
-        stop --no-wait jcs-entry
-        stop --no-wait /etc/init.d/jcs-shutdown-scripts
-        stop --no-wait /etc/init.d/jcs-entry
-    fi
-    service jcs-entry stop
-    service jcs-shutdown-scripts stop
-    chkconfig jcs-entry off >/dev/null 2>&1
-    chkconfig jcs-shutdown-scripts off >/dev/null 2>&1
-    sysv-rc-conf jcs-entry off >/dev/null 2>&1
-    sysv-rc-conf jcs-shutdown-scripts off >/dev/null 2>&1
-    update-rc.d jcs-entry remove
-    update-rc.d jcs-shutdown-scripts remove
-    pkill jdog
-    rm -rf "/usr/local/share/jcloud"
-
 }
 
 check_root() {
@@ -301,6 +308,8 @@ rescue_localhost_name() {
 check_root
 touch /etc/cloud/cloud-init.disabled
 uninstall_qcloud
+uninstall_oralce
+uninstall_jdcloud
 kill_processes
 pkill_processes
 wait_aegis_exit
