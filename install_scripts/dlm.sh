@@ -6,7 +6,6 @@
 
 export DEBIAN_FRONTEND=noninteractive
 AEGIS_INSTALL_DIR="/usr/local/aegis"
-AEGIS_SYSTEMD_SERVICE_PATH="/etc/systemd/system/aegis.service"
 #check linux Gentoo os 
 var=`lsb_release -a | grep Gentoo`
 if [ -z "${var}" ]; then 
@@ -201,9 +200,10 @@ check_root() {
 
 remove_aegis() {
     if [ -d $AEGIS_INSTALL_DIR ]; then
-        systemctl stop aegis.service
-        systemctl disable aegis.service
-        umount $AEGIS_INSTALL_DIR/aegis_debug
+        systemctl stop aegis.service 2>/dev/null
+        systemctl disable aegis.service 2>/dev/null
+        rm -rf "/etc/systemd/system/aegis.service"
+        umount "$AEGIS_INSTALL_DIR/aegis_debug"
         rm -rf $AEGIS_INSTALL_DIR/* >/dev/null 2>&1
         rm -rf /usr/local/share/assist-daemon/* >/dev/null 2>&1
         rm -rf /usr/local/share/aliyun* >/dev/null 2>&1
