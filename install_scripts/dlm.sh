@@ -78,7 +78,9 @@ uninstall_cloud_monitoring() {
     rm -rf "/usr/local/cloudmonitor"
 
     service aegis stop
+    update-rc.d aegis disable
     chkconfig --del aegis
+    sysv-rc-conf --del aegis
 
     /usr/local/cloudmonitor/wrapper/bin/cloudmonitor.sh stop
     /usr/local/cloudmonitor/wrapper/bin/cloudmonitor.sh remove
@@ -115,7 +117,9 @@ uninstall_cloud_monitoring() {
     /usr/local/uniagent/extension/install/telescope/telescoped stop
     systemctl stop --no-block jcs-agent-core
     systemctl --no-reload disable jcs-agent-core
-    stop --no-wait jcs-agent-core /etc/init.d/jcs-agent-core
+    if command -v stop >/dev/null 2>&1; then
+        stop --no-wait jcs-agent-core /etc/init.d/jcs-agent-core
+    fi
 
     if [[ -f "/etc/centos-release" && $(grep ' 6' "/etc/centos-release") ]]; then
         chkconfig --level 2345 expand-root off
@@ -129,10 +133,12 @@ uninstall_cloud_monitoring() {
     systemctl stop --no-block jcs-entry
     systemctl --no-reload disable jcs-shutdown-scripts
     systemctl --no-reload disable jcs-entry
-    stop --no-wait jcs-shutdown-scripts
-    stop --no-wait jcs-entry
-    stop --no-wait /etc/init.d/jcs-shutdown-scripts
-    stop --no-wait /etc/init.d/jcs-entry
+    if command -v stop >/dev/null 2>&1; then
+        stop --no-wait jcs-shutdown-scripts
+        stop --no-wait jcs-entry
+        stop --no-wait /etc/init.d/jcs-shutdown-scripts
+        stop --no-wait /etc/init.d/jcs-entry
+    fi
     service jcs-entry stop
     service jcs-shutdown-scripts stop
     chkconfig jcs-entry off
