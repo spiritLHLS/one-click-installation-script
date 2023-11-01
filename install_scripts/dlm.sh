@@ -3,22 +3,21 @@
 # from https://github.com/spiritLHLS/one-click-installation-script
 # version: 2023.11.01
 
-
 export DEBIAN_FRONTEND=noninteractive
 AEGIS_INSTALL_DIR="/usr/local/aegis"
-#check linux Gentoo os 
-var=`lsb_release -a | grep Gentoo`
-if [ -z "${var}" ]; then 
-	var=`cat /etc/issue | grep Gentoo`
+#check linux Gentoo os
+var=$(lsb_release -a | grep Gentoo)
+if [ -z "${var}" ]; then
+    var=$(cat /etc/issue | grep Gentoo)
 fi
-checkCoreos=`cat /etc/os-release 2>/dev/null | grep coreos`
+checkCoreos=$(cat /etc/os-release 2>/dev/null | grep coreos)
 if [ -d "/etc/runlevels/default" -a -n "${var}" ]; then
-	LINUX_RELEASE="GENTOO"
+    LINUX_RELEASE="GENTOO"
 elif [ -f "/etc/os-release" -a -n "${checkCoreos}" ]; then
-	LINUX_RELEASE="COREOS"
-	AEGIS_INSTALL_DIR="/opt/aegis"
-else 
-	LINUX_RELEASE="OTHER"
+    LINUX_RELEASE="COREOS"
+    AEGIS_INSTALL_DIR="/opt/aegis"
+else
+    LINUX_RELEASE="OTHER"
 fi
 
 _red() { echo -e "\033[31m\033[01m$@\033[0m"; }
@@ -59,7 +58,7 @@ pkill_processes() {
 
 uninstall_aegis() {
     if [ -d "$AEGIS_INSTALL_DIR" ]; then
-        rm -rf "$AEGIS_INSTALL_DIR/aegis_client" 
+        rm -rf "$AEGIS_INSTALL_DIR/aegis_client"
         rm -rf "$AEGIS_INSTALL_DIR/aegis_update"
         rm -rf "$AEGIS_INSTALL_DIR/alihids"
     fi
@@ -89,22 +88,21 @@ uninstall_aegis() {
     fi
 }
 
-wait_aegis_exit()
-{
+wait_aegis_exit() {
     var=1
     limit=10
-    echo "wait aegis exit";
+    echo "wait aegis exit"
 
-    while [[ $var -lt $limit ]]; do 
-        if [ -n "$(ps -ef|grep aegis_client|grep -v grep)" ]; then
+    while [[ $var -lt $limit ]]; do
+        if [ -n "$(ps -ef | grep aegis_client | grep -v grep)" ]; then
             sleep 1
         else
             return
         fi
-         
+
         ((var++))
-    done     
-    
+    done
+
     _red "wait AliYunDun process exit fail, possibly due to self-protection, please uninstall aegis or disable self-protection from the aegis console."
 }
 
@@ -221,19 +219,18 @@ remove_aegis() {
         "$AEGIS_INSTALL_DIR/aegis_debug/tracing/set_event"
         "$AEGIS_INSTALL_DIR/aegis_debug/tracing/kprobe_events"
     )
-    for value in ${kprobeArr[@]}
-    do
+    for value in ${kprobeArr[@]}; do
         if [ -f "$value" ]; then
-            echo > $value
+            echo >$value
         fi
     done
 
-    if [ -d "${AEGIS_INSTALL_DIR}" ];then
+    if [ -d "${AEGIS_INSTALL_DIR}" ]; then
         umount ${AEGIS_INSTALL_DIR}/aegis_debug
-        if [ -d "${AEGIS_INSTALL_DIR}/cgroup/cpu" ];then
+        if [ -d "${AEGIS_INSTALL_DIR}/cgroup/cpu" ]; then
             umount ${AEGIS_INSTALL_DIR}/cgroup/cpu
         fi
-        if [ -d "${AEGIS_INSTALL_DIR}/cgroup" ];then
+        if [ -d "${AEGIS_INSTALL_DIR}/cgroup" ]; then
             umount ${AEGIS_INSTALL_DIR}/cgroup
         fi
         rm -rf ${AEGIS_INSTALL_DIR}/aegis_client
