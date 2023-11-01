@@ -4,9 +4,9 @@
 # version: 2023.11.01
 
 export DEBIAN_FRONTEND=noninteractive
-var=`lsb_release -a | grep Gentoo`
-if [ -z "${var}" ]; then 
-    var=`cat /etc/issue | grep Gentoo`
+var=$(lsb_release -a | grep Gentoo)
+if [ -z "${var}" ]; then
+    var=$(cat /etc/issue | grep Gentoo)
 fi
 if [ -d "/etc/runlevels/default" -a -n "${var}" ]; then
     LINUX_RELEASE="GENTOO"
@@ -14,7 +14,7 @@ else
     LINUX_RELEASE="OTHER"
 fi
 
-uninstall_qcloud(){
+uninstall_qcloud() {
     /usr/local/qcloud/stargate/admin/uninstall.sh
     /usr/local/qcloud/YunJing/uninst.sh
     /usr/local/qcloud/monitor/barad/admin/uninstall.sh
@@ -29,7 +29,7 @@ kill_processes() {
     done
 }
 
-pkill_processes(){
+pkill_processes() {
     local process
     local pkill_processes=("assist_daemon" "assist-daemon" "aliyun*" "AliYunDun*" "AliSecure*" "aegis*")
     for process in "${pkill_processes[@]}"; do
@@ -39,7 +39,6 @@ pkill_processes(){
     killall -9 aegis_quartz >/dev/null 2>&1
     printf "%-40s %40s\n" "Killall aegis_quartz" "[  OK  ]"
 }
-
 
 uninstall_aegis() {
     if [ -d "/usr/local/aegis" ]; then
@@ -91,12 +90,12 @@ uninstall_cloud_monitoring() {
     pkill agetty
     pkill AliYunDunUpdate
 
-    rm -rf "/etc/init.d/aegis" 
+    rm -rf "/etc/init.d/aegis"
     rm -rf "/etc/init.d/agentwatch"
     rm -rf "/etc/systemd/system/aliyun.service"
-    rm -rf "/usr/sbin/aliyun_installer" 
-    rm -rf "/usr/sbin/aliyun-service" 
-    rm -rf "/usr/sbin/aliyun-service.backup" 
+    rm -rf "/usr/sbin/aliyun_installer"
+    rm -rf "/usr/sbin/aliyun-service"
+    rm -rf "/usr/sbin/aliyun-service.backup"
     rm -rf "/usr/sbin/agetty"
     rm -rf "/usr/local/aegis"
     rm -rf "/usr/local/share/aliyun-assist"
@@ -109,7 +108,7 @@ uninstall_cloud_monitoring() {
     systemctl disable oracle-cloud-agent-updater
     systemctl disable --now qemu-guest-agent
 
-    # 其他卸载
+    # 其他云的卸载
     /etc/KsyunAgent/uninstall.py
     service uma stop
     systemctl disable --now uma
@@ -130,11 +129,11 @@ uninstall_cloud_monitoring() {
     systemctl stop --no-block jcs-entry
     systemctl --no-reload disable jcs-shutdown-scripts
     systemctl --no-reload disable jcs-entry
-    stop --no-wait jcs-shutdown-scripts 
-    stop --no-wait jcs-entry 
-    stop --no-wait /etc/init.d/jcs-shutdown-scripts 
+    stop --no-wait jcs-shutdown-scripts
+    stop --no-wait jcs-entry
+    stop --no-wait /etc/init.d/jcs-shutdown-scripts
     stop --no-wait /etc/init.d/jcs-entry
-    service jcs-entry stop 
+    service jcs-entry stop
     service jcs-shutdown-scripts stop
     chkconfig jcs-entry off
     chkconfig jcs-shutdown-scripts off
@@ -146,7 +145,10 @@ uninstall_cloud_monitoring() {
 }
 
 check_root() {
-    [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
+    [ $(id -u) != "0" ] && {
+        echo "Error: You must be root to run this script"
+        exit 1
+    }
 }
 
 remove_aegis() {
@@ -154,10 +156,10 @@ remove_aegis() {
         systemctl stop aegis.service
         systemctl disable aegis.service
         umount /usr/local/aegis/aegis_debug
-        rm -rf /usr/local/aegis/*
-        rm -rf /usr/local/share/assist-daemon/*
-        rm -rf /usr/local/share/aliyun*
-        rm -rf /sys/fs/cgroup/devices/system.slice/aegis.service
+        rm -rf /usr/local/aegis/* >/dev/null 2>&1
+        rm -rf /usr/local/share/assist-daemon/* >/dev/null 2>&1
+        rm -rf /usr/local/share/aliyun* >/dev/null 2>&1
+        rm -rf /sys/fs/cgroup/devices/system.slice/aegis.service >/dev/null 2>&1
     fi
     if [ -d /usr/local/aegis/aegis_debug ]; then
         if [ -d /usr/local/aegis/aegis_debug/tracing/instances/aegis ]; then
@@ -165,28 +167,6 @@ remove_aegis() {
         else
             echo >/usr/local/aegis/aegis_debug/tracing/set_event
         fi
-    fi
-}
-
-uninstall_service() {
-    if [ -f "/etc/init.d/aegis" ]; then
-        /etc/init.d/aegis stop  >/dev/null 2>&1
-	rm -f /etc/init.d/aegis 
-    fi
-    if [ $LINUX_RELEASE = "GENTOO" ]; then
-        rc-update del aegis default 2>/dev/null
-	if [ -f "/etc/runlevels/default/aegis" ]; then
-            rm -f "/etc/runlevels/default/aegis" >/dev/null 2>&1;
-	fi
-    elif [ -f /etc/init.d/aegis ]; then
-        /etc/init.d/aegis  uninstall
-	for ((var=2; var<=5; var++)) do
-	    if [ -d "/etc/rc${var}.d/" ];then
-	        rm -f "/etc/rc${var}.d/S80aegis"
-            elif [ -d "/etc/rc.d/rc${var}.d" ];then
-		rm -f "/etc/rc.d/rc${var}.d/S80aegis"
-	    fi
-	done
     fi
 }
 
@@ -212,10 +192,10 @@ remove_all_aliyunfiles() {
 
         rm -fr /usr/sbin/aliyun-service /usr/sbin/aliyun_installer
         rm /etc/systemd/system/aliyun-util.service
-        rm -rf /etc/aliyun-util
+        rm -rf /etc/aliyun-util >/dev/null 2>&1
 
-        rm -rf /etc/systemd/system/multi-user.target.wants/ecs_mq.service
-        rm -rf /etc/systemd/system/multi-user.target.wants/aliyun.service
+        rm -rf /etc/systemd/system/multi-user.target.wants/ecs_mq.service >/dev/null 2>&1
+        rm -rf /etc/systemd/system/multi-user.target.wants/aliyun.service >/dev/null 2>&1
 
         find . -iname "*aliyu*" -type f -print -exec rm -rf {} \;
         find . -iname "*aliyu*" | xargs rm -rf
@@ -236,11 +216,10 @@ remove_cloud_monitor() {
 
 rescue_localhost_name() {
     hostname=$(cat /etc/hostname)
-    echo "" > /etc/hostname
-    echo "localhost" > /etc/hostname
+    echo "" >/etc/hostname
+    echo "localhost" >/etc/hostname
     sed -i "s/${hostname}/localhost/g" /etc/hosts
 }
-
 
 check_root
 touch /etc/cloud/cloud-init.disabled
@@ -250,7 +229,6 @@ pkill_processes
 remove_aegis
 uninstall_aegis
 uninstall_cloud_monitoring
-uninstall_service
 remove_aegis
 remove_agentwatch
 remove_all_aliyunfiles
