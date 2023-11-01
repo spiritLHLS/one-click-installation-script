@@ -308,6 +308,10 @@ uninstall_aegis
 remove_aegis
 uninstall_cloud_monitoring
 remove_aegis
+if [ -d "$AEGIS_INSTALL_DIR/aegis_debug" ]; then
+    umount "$AEGIS_INSTALL_DIR/aegis_debug"
+    rm -rf "$AEGIS_INSTALL_DIR/aegis_debug"
+fi
 remove_agentwatch
 remove_all_aliyunfiles
 remove_cloud_monitor
