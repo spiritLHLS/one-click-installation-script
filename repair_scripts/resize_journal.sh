@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.05.22
+#version: 2023.11.24
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -92,7 +92,8 @@ level() {
     yellow "Log directory not found, so no delete" >&2
   else
     # Set log retention period
-    find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
+    # find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
+    rm -rf "$journald_log_dir"/*
     green "change $journald_log_dir successfully"
   fi
 
