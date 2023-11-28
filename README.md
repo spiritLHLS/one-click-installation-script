@@ -2,7 +2,7 @@
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FspiritLHLS%2Fone-click-installation-script&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
-所有脚本如需在国内服务器使用，请在链接前加上```https://ghproxy.com/```确保命令可以下载本仓库的shell脚本执行
+所有脚本如需在国内服务器使用，请在链接前加上```https://cdn.spiritlhl.net/```确保命令可以下载本仓库的shell脚本执行
 
 # 目录
 
@@ -108,7 +108,7 @@ curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spir
 
 如果是纯V6的也可以不使用上面脚本的nat64，使用warp添加V4网络
 
-比如：https://github.com/fscarmen/warp
+比如：https://gitlab.com/fscarmen/warp
 
 ```bash
 wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash menu.sh [option] [lisence]
