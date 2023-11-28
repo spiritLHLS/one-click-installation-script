@@ -111,7 +111,7 @@ curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spir
 比如：https://gitlab.com/fscarmen/warp
 
 ```bash
-wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash menu.sh [option] [lisence]
+wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
 ```
 
 非纯V6的，带V4切换优先级到IPV4可用以下命令
