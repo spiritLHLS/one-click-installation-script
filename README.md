@@ -34,6 +34,7 @@
   * [安装gitea](#安装gitea)
   * [卸载aapanel](#卸载aapanel)
   * [查询是什么东西占用硬盘大于100M](#查询是什么东西占用硬盘大于100M)
+  * [卸载dns缓存机制避免配置覆写](#卸载dns缓存机制避免配置覆写)
   * [安装docker和docker-compose](#安装docker和docker-compose)
   * [通过docker安装code-server](#通过docker安装code-server)
 * [友链](#友链)
@@ -329,6 +330,13 @@ apt install sysv-rc-conf -y && service bt stop && sysv-rc-conf bt off && rm -f /
 
 ```bash
 find / -type f -size +100M -exec ls -lh {} \;
+```
+
+### 卸载dns缓存机制避免配置覆写
+
+```bash
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
 ```
 
 ### 安装docker和docker-compose
