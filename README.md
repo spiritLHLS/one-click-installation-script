@@ -354,6 +354,12 @@ docker-compose --version
 docker rm -f $(docker ps -aq); docker rmi $(docker images -aq)
 ```
 
+删除累积的docker日志
+
+```
+cd /var/lib/docker/containers/ && for container_id in */; do container_path="/var/lib/docker/containers/${container_id}"; log_file="${container_id%/}-json.log"; rm -rf "${container_path}${log_file}" && echo "已删除 ${container_path}${log_file}"; done
+```
+
 ### 通过docker安装code-server
 
 安装
