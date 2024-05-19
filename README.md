@@ -266,18 +266,19 @@ iptables -A OUTPUT -p tcp --dport 25 -j DROP
 ### 设置语言包
 
 ```bash
-sudo apt-get update
-sudo apt-get install language-pack-en-base
+sudo apt update
+sudo apt install -y locales
 sudo locale-gen en_US.UTF-8
-```
-下载UTF-8的环境，生成UTF-8的包，然后重启服务器
-```bash
-locale -a
+echo 'LANG=en_US.UTF-8' | sudo tee /etc/default/locale
+echo 'LC_ALL=en_US.UTF-8' | sudo tee -a /etc/default/locale
+sudo sed -i '/^#.* en_US.UTF-8 /s/^#//' /etc/locale.gen
+sudo locale-gen
+export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+locale
 ```
-查看并设置语言包
 
-language-pack-en-base 在debian中好像没有，只有Ubuntu有好像，不知道是不是个例，有问题再说
+重新连接SSH或重启服务器以使得设置生效
 
 ### ubuntu更新源被锁
 
