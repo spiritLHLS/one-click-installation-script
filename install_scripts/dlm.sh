@@ -283,8 +283,8 @@ remove_all_aliyunfiles() {
 
         find . -iname "*aliyu*" -type f -print -exec rm -rf {} \;
         find . -iname "*aliyu*" | xargs rm -rf
-        find . -iname "*aegis*" -type f -print -exec rm -rf {} \;
-        find . -iname "*aegis*" | xargs rm -rf
+        # find . -iname "*aegis*" -type f -print -exec rm -rf {} \;
+        # find . -iname "*aegis*" | xargs rm -rf
         find . -iname "*AliVulfix*" -type f -print -exec rm -rf {} \;
         find . -iname "*AliVulfix*" | xargs rm -rf
     fi
