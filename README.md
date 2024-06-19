@@ -342,8 +342,21 @@ systemctl disable systemd-resolved
 
 ### 安装docker和docker-compose
 
+安装24版本的docker
+
 ```bash
 curl -sSL https://get.docker.com/ | sh
+```
+
+或安装最新版本的docker(都选官方源即可)
+
+```
+bash <(curl -sSL https://linuxmirrors.cn/docker.sh)
+```
+
+安装docker-compose最新版本
+
+```
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 docker-compose --version
