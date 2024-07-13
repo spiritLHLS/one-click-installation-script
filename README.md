@@ -324,9 +324,25 @@ sudo sed -i 's/^mirrorlist=http/mirrorlist=https/' /etc/yum.repos.d/CentOS-Base.
 
 ### 安装gitea
 
-Ubuntu 20无问题，Ubuntu 22好像不行
+安装时使用这里的方法：
 
 https://gitlab.com/packaging/gitea
+
+但不要设置无人值守自动升级版本，容易升级到一个有BUG的新版本
+
+更改默认配置需要更改文件```/etc/gitea/app.ini```
+
+比如设置文件上传无限制
+
+```
+[repository.upload]
+ENABLED = true
+ALLOWED_TYPES =
+FILE_MAX_SIZE = 1024
+MAX_FILES = 100
+```
+
+写在```[security]```上面，每个模块```[]```的内容之间间隔一个空行
 
 ### 卸载aapanel
 
