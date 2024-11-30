@@ -14,6 +14,7 @@
   * [一键尝试修复网络](#一键尝试修复网络)
   * [一键解除进程数限制](#一键解除进程数限制)
 * [一键环境安装脚本](#一键环境安装脚本)
+  * [一键安装golang环境](#一键安装golang环境)
   * [一键安装jupyter环境](#一键安装jupyter环境)
   * [一键安装R语言环境](#一键安装R语言环境)
   * [一键安装rust环境](#一键安装rust环境)
@@ -134,6 +135,12 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 只推荐在新服务器上安装，环境不纯净不保证不出bug
 
 运行所有一键环境安装脚本前注意看说明，以及保证服务器无重要数据，运行后造成的一切后果作者不负任何责任，自行评判风险！
+
+#### 一键安装golang环境
+
+```shell
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/golang.sh -o golang.sh && chmod +x golang.sh && bash golang.sh
+```
 
 #### 一键安装jupyter环境 
 
