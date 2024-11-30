@@ -91,11 +91,6 @@ setup_go_env() {
         echo "export GOPATH=$GOPATH" >> /etc/profile
         echo 'export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin' >> /etc/profile
     fi
-
-    # 立即生效
-    source /etc/profile
-    source "$HOME/.bashrc" 2>/dev/null
-    source "$HOME/.zshrc" 2>/dev/null
 }
 
 check_network(){
@@ -216,3 +211,6 @@ main(){
 }
 
 main
+source /etc/profile
+source "$HOME/.bashrc" 2>/dev/null
+source "$HOME/.zshrc" 2>/dev/null
