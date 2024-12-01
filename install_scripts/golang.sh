@@ -1,258 +1,180 @@
 #!/bin/bash
-#by spiritlhl
-#from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2024.12.01
+# Author: spiritLHLS
+# GitHub: https://github.com/spiritLHLS/one-click-installation-script
+# Version: 2024.12.02
 
-# 取消CentOS别名
-[[ -f /etc/redhat-release ]] && unalias -a
+# 严格模式，提高脚本健壮性
+set -euo pipefail
 
-can_google=1
-force_mode=0
-sudo=""
-os="Linux"
-install_version=""
-proxy_url="https://goproxy.cn"
+# 日志文件
+LOG_FILE="/tmp/golang_install_$(date +%Y%m%d_%H%M%S).log"
 
-#######颜色代码########
-red="31m"      
-green="32m"  
-yellow="33m" 
-blue="36m"
-fuchsia="35m"
+# 颜色定义
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[36m"
+RESET="\033[0m"
 
-color_echo(){
-    echo -e "\033[$1${@:2}\033[0m"
+# 日志记录函数
+log() {
+    echo -e "$1" | tee -a "$LOG_FILE"
 }
 
-#######获取参数#########
-while [[ $# > 0 ]];do
-    case "$1" in
-        -v|--version)
-        install_version="$2"
-        echo -e "准备安装$(color_echo ${blue} $install_version)版本golang..\n"
-        shift
-        ;;
-        -f)
-        force_mode=1
-        echo -e "强制更新golang..\n"
-        ;;
+# 彩色输出函数
+color_echo() {
+    local color="$1"
+    local message="${@:2}"
+    echo -e "\033[${color}${message}${RESET}" | tee -a "$LOG_FILE"
+}
+
+# 错误处理函数
+error_exit() {
+    color_echo "$RED" "错误: $1"
+    exit 1
+}
+
+# 网络连接检测函数
+network_check() {
+    local host="$1"
+    if ping -c 2 -W 2 "$host" > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# 获取系统架构
+get_system_arch() {
+    local arch=$(uname -m)
+    local os=$(uname -s)
+
+    case "$os" in 
+        "Darwin")
+            os="darwin"
+            ;;
+        "Linux")
+            os="linux"
+            ;;
         *)
-        ;;
+            error_exit "不支持的操作系统: $os"
+            ;;
     esac
-    shift
-done
 
-ip_is_connect(){
-    ping -c2 -i0.3 -W1 $1 &>/dev/null
-    if [ $? -eq 0 ];then
-        return 0
-    else
-        return 1
-    fi
+    case "$arch" in
+        "x86_64")     arch="amd64" ;;
+        "aarch64")    arch="arm64" ;;
+        "armv7l")     arch="armv6l" ;;
+        "i686"|"i386")arch="386" ;;
+        *)            arch="amd64" ;;
+    esac
+
+    echo "${os}-${arch}"
 }
 
-setup_go_env() {
-    local profile_paths=("/etc/profile" "$HOME/.bashrc" "$HOME/.zshrc")
-    local default_gopath="/home/$(whoami)/go"
-    local go_bin_path="/usr/local/go/bin"
+# 获取最新Go版本
+get_latest_go_version() {
+    local versions
+    local proxy_url="https://goproxy.cn"
 
-    # 交互式设置GOPATH
-    while :
-    do
-        read -p "默认GOPATH路径: $(color_echo $blue $default_gopath), 回车直接使用或输入自定义绝对路径: " GOPATH
-        if [[ $GOPATH ]];then
-            if [[ ${GOPATH:0:1} != "/" ]];then
-                color_echo $yellow "请输入绝对路径!"
-                continue
-            fi
-        else
-            GOPATH="$default_gopath"
-        fi
-        break
-    done
-
-    # 确保GOPATH目录存在并有正确权限
-    mkdir -p "$GOPATH/bin" "$GOPATH/src" "$GOPATH/pkg"
-    chmod -R 755 "$GOPATH"
-
-    # 为每个配置文件添加Go环境变量
-    for path in "${profile_paths[@]}"; do
-        if [[ -f "$path" ]]; then
-            # 防止重复添加
-            if ! grep -q "GOPATH=" "$path"; then
-                echo "export GOPATH=$GOPATH" >> "$path"
-                echo 'export PATH=$PATH:$GOPATH/bin:$GOPATH/bin:/usr/local/go/bin' >> "$path"
-            fi
+    # 尝试获取版本，支持多种代理
+    for url in "https://go.dev/dl/" "https://golang.google.cn/dl/" "https://github.com/golang/go/tags"; do
+        versions=$(curl -s --connect-timeout 10 "$url" | grep -oE 'go[0-9]+\.[0-9]+(\.[0-9]+)?' | sort -V | tail -n 1)
+        
+        if [[ -n "$versions" ]]; then
+            echo "${versions#go}"
+            return 0
         fi
     done
 
-    # 为root用户设置环境变量
-    if [[ $EUID -eq 0 ]]; then
-        echo "export GOPATH=$GOPATH" >> /etc/profile
-        echo 'export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin' >> /etc/profile
-    fi
+    error_exit "无法获取Go版本"
 }
 
-check_network(){
-    ip_is_connect "golang.org"
-    [[ ! $? -eq 0 ]] && can_google=0
-}
+# 设置Go环境变量
+setup_go_environment() {
+    local gopath="${HOME}/go"
+    local go_bin="/usr/local/go/bin"
 
-setup_proxy(){
-    if [[ $can_google == 0 ]]; then
-        go env -w GO111MODULE=on
-        go env -w GOPROXY=$proxy_url,direct
-        color_echo $green "当前网络环境为国内环境, 成功设置goproxy代理!"
-    fi
-}
+    mkdir -p "${gopath}/"{src,pkg,bin}
 
-sys_arch(){
-    arch=$(uname -m)
-    if [[ `uname -s` == "Darwin" ]];then
-        os="Darwin"
-        if [[ "$arch" == "arm64" ]];then
-            vdis="darwin-arm64"
-        else
-            vdis="darwin-amd64"
-        fi
-    else
-        if [[ "$arch" == "i686" ]] || [[ "$arch" == "i386" ]]; then
-            vdis="linux-386"
-        elif [[ "$arch" == *"armv7"* ]] || [[ "$arch" == "armv6l" ]]; then
-            vdis="linux-armv6l"
-        elif [[ "$arch" == *"armv8"* ]] || [[ "$arch" == "aarch64" ]]; then
-            vdis="linux-arm64"
-        elif [[ "$arch" == *"s390x"* ]]; then
-            vdis="linux-s390x"
-        elif [[ "$arch" == "ppc64le" ]]; then
-            vdis="linux-ppc64le"
-        elif [[ "$arch" == "x86_64" ]]; then
-            vdis="linux-amd64"
-        fi
-    fi
-    [ $(id -u) != "0" ] && sudo="sudo"
-}
-
-install_go(){
-    if [[ -z $install_version ]];then
-        echo "正在获取最新版golang..."
-        count=0
-        while :
-        do
-            install_version=""
-            if [[ $can_google == 0 ]];then
-                install_version=`curl -s --connect-timeout 15 -H 'Cache-Control: no-cache' https://go.dev/dl/|grep -w downloadBox|grep src|grep -oE '[0-9]+\.[0-9]+\.?[0-9]*'|head -n 1`
-            else
-                install_version=`curl -s --connect-timeout 15 -H 'Cache-Control: no-cache' https://github.com/golang/go/tags|grep releases/tag|grep -v rc|grep -v beta|grep -oE '[0-9]+\.[0-9]+\.?[0-9]*'|head -n 1`
-            fi
-            [[ ${install_version: -1} == '.' ]] && install_version=${install_version%?}
-            if [[ -z $install_version ]];then
-                if [[ $count < 3 ]];then
-                    color_echo $yellow "获取go版本号超时, 正在重试..."
-                else
-                    color_echo $red "\n获取go版本号失败!"
-                    exit 1
-                fi
-            else
-                break
-            fi
-            count=$(($count+1))
-        done
-        echo "最新版golang: `color_echo $blue $install_version`"
-    fi
-    if [[ $force_mode == 0 && `command -v go` ]];then
-        if [[ `go version|awk '{print $3}'|grep -Eo "[0-9.]+"` == $install_version ]];then
-            return
-        fi
-    fi
-    file_name="go${install_version}.$vdis.tar.gz"
-    local temp_path=`mktemp -d`
-
-    curl -H 'Cache-Control: no-cache' -L https://dl.google.com/go/$file_name -o $file_name
-    tar -C $temp_path -xzf $file_name
-    if [[ $? != 0 ]];then
-        color_echo $yellow "\n解压失败! 正在重新下载..."
-        rm -rf $file_name
-        curl -H 'Cache-Control: no-cache' -L https://dl.google.com/go/$file_name -o $file_name
-        tar -C $temp_path -xzf $file_name
-        [[ $? != 0 ]] && { color_echo $yellow "\n解压失败!"; rm -rf $temp_path $file_name; exit 1; }
-
-    fi
-    [[ -e /usr/local/go ]] && $sudo rm -rf /usr/local/go
-    $sudo mv $temp_path/go /usr/local/
-    rm -rf $temp_path $file_name
-}
-
-install_updater(){
-    if [[ $os == "Linux" ]];then
-        if [[ ! -e /usr/local/bin/goupdate || -z `cat /usr/local/bin/goupdate|grep '$@'` ]];then
-            echo 'source <(curl -L https://go-install.netlify.app/install.sh) $@' > /usr/local/bin/goupdate
-            chmod +x /usr/local/bin/goupdate
-        fi
-    elif [[ $os == "Darwin" ]];then
-        if [[ ! -e $HOME/go/bin/goupdate || -z `cat $HOME/go/bin/goupdate|grep '$@'` ]];then
-            cat > $HOME/go/bin/goupdate << 'EOF'
-#!/bin/zsh
-source <(curl -L https://go-install.netlify.app/install.sh) $@
-EOF
-            chmod +x $HOME/go/bin/goupdate
-        fi
-    fi
-}
-
-ensure_go_path() {
-    # 确保 Go 的 bin 目录被添加到 PATH
-    local go_bin_path="/usr/local/go/bin"
-    local profile_paths=("/etc/profile" "$HOME/.bashrc" "$HOME/.zshrc")
-    # 检查并添加到各个配置文件
-    for path in "${profile_paths[@]}"; do
-        if [[ -f "$path" ]]; then
-            if ! grep -q "$go_bin_path" "$path"; then
-                echo "export PATH=\$PATH:$go_bin_path" >> "$path"
+    # 更新多个配置文件
+    local profiles=("${HOME}/.bashrc" "${HOME}/.zshrc" "/etc/profile")
+    for profile in "${profiles[@]}"; do
+        if [[ -f "$profile" ]]; then
+            if ! grep -q "GOPATH" "$profile"; then
+                {
+                    echo "export GOPATH=${gopath}"
+                    echo "export GOMODCACHE=\${GOPATH}/pkg/mod"
+                    echo "export PATH=\$PATH:${go_bin}:\${GOPATH}/bin"
+                } >> "$profile"
             fi
         fi
     done
-    # 为 root 用户额外确保
-    if [[ $EUID -eq 0 ]]; then
-        echo "export PATH=\$PATH:$go_bin_path" >> /etc/profile
-    fi
-    # 创建软链接，确保系统范围可用
-    if [[ -f "$go_bin_path/go" ]]; then
-        ln -sf "$go_bin_path/go" /usr/bin/go 2>/dev/null
-        ln -sf "$go_bin_path/go" /usr/local/bin/go 2>/dev/null
-    fi
+
+    # 立即生效
+    export GOPATH="${gopath}"
+    export GOMODCACHE="${gopath}/pkg/mod"
+    export PATH="${PATH}:${go_bin}:${gopath}/bin"
 }
 
-verify_go_installation() {
-    # 验证 Go 安装是否成功
-    local go_version=$(go version 2>/dev/null)
-    if [[ -z "$go_version" ]]; then
-        color_echo $red "Go 安装可能存在问题，未找到可用的 go 命令"
-        return 1
-    else
-        color_echo $green "Go 安装验证成功: $go_version"
-        return 0
-    fi
-}
+# 下载并安装Go
+install_golang() {
+    local version="$1"
+    local platform="$2"
+    local filename="go${version}.${platform}.tar.gz"
+    local download_url="https://golang.google.cn/dl/${filename}"
+    local temp_dir=$(mktemp -d)
 
-main(){
-    sys_arch
-    check_network
-    install_go
-    setup_go_env
-    setup_proxy
-    install_updater
-    ensure_go_path  # 新增的路径确保函数
-    echo -e "golang `color_echo $blue $install_version` 安装成功!"
+    color_echo "$BLUE" "准备下载Go ${version}"
     
-    # 添加验证步骤
-    verify_go_installation
+    if ! curl -L "${download_url}" -o "${temp_dir}/${filename}"; then
+        error_exit "下载失败，请检查网络"
+    fi
+
+    # 解压并移动
+    tar -C "${temp_dir}" -xzf "${temp_dir}/${filename}"
+    
+    # 删除旧版本（如果存在）
+    [[ -d "/usr/local/go" ]] && sudo rm -rf /usr/local/go
+
+    sudo mv "${temp_dir}/go" /usr/local/
+    
+    # 清理临时文件
+    rm -rf "${temp_dir}"
+
+    color_echo "$GREEN" "Go ${version} 安装成功！"
 }
 
+# 主安装流程
+main() {
+    # 检查是否为root或有sudo权限
+    if [[ $EUID -ne 0 ]]; then
+        error_exit "此脚本需要root权限运行"
+    fi
+
+    # 网络检查
+    if ! network_check "golang.org"; then
+        color_echo "$YELLOW" "国外网络不通，将使用国内代理"
+        export GOPROXY=https://goproxy.cn,direct
+    fi
+
+    # 获取系统架构
+    local platform=$(get_system_arch)
+    
+    # 获取最新版本
+    local version=$(get_latest_go_version)
+
+    # 安装Go
+    install_golang "$version" "$platform"
+
+    # 设置Go环境
+    setup_go_environment
+
+    # 验证安装
+    go version
+
+    color_echo "$GREEN" "Golang 安装和配置完成！"
+}
+
+# 运行主流程
 main
-# 确保多个常用 shell 的配置文件都被重新加载
-source /etc/profile
-source "$HOME/.bashrc" 2>/dev/null
-source "$HOME/.zshrc" 2>/dev/null
-# 最后再次验证
-go version || color_echo $yellow "Go 命令仍然无法使用，请检查系统配置"
