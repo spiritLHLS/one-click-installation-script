@@ -4,6 +4,7 @@
 # Version: 2024.12.02
 
 set -euo pipefail
+HOME="${HOME:-/root}"
 LOG_FILE="/tmp/golang_install_$(date +%Y%m%d_%H%M%S).log"
 RED="\033[31m"
 GREEN="\033[32m"
