@@ -200,6 +200,41 @@ EOF
     fi
 }
 
+ensure_go_path() {
+    # 确保 Go 的 bin 目录被添加到 PATH
+    local go_bin_path="/usr/local/go/bin"
+    local profile_paths=("/etc/profile" "$HOME/.bashrc" "$HOME/.zshrc")
+    # 检查并添加到各个配置文件
+    for path in "${profile_paths[@]}"; do
+        if [[ -f "$path" ]]; then
+            if ! grep -q "$go_bin_path" "$path"; then
+                echo "export PATH=\$PATH:$go_bin_path" >> "$path"
+            fi
+        fi
+    done
+    # 为 root 用户额外确保
+    if [[ $EUID -eq 0 ]]; then
+        echo "export PATH=\$PATH:$go_bin_path" >> /etc/profile
+    fi
+    # 创建软链接，确保系统范围可用
+    if [[ -f "$go_bin_path/go" ]]; then
+        ln -sf "$go_bin_path/go" /usr/bin/go 2>/dev/null
+        ln -sf "$go_bin_path/go" /usr/local/bin/go 2>/dev/null
+    fi
+}
+
+verify_go_installation() {
+    # 验证 Go 安装是否成功
+    local go_version=$(go version 2>/dev/null)
+    if [[ -z "$go_version" ]]; then
+        color_echo $red "Go 安装可能存在问题，未找到可用的 go 命令"
+        return 1
+    else
+        color_echo $green "Go 安装验证成功: $go_version"
+        return 0
+    fi
+}
+
 main(){
     sys_arch
     check_network
@@ -207,10 +242,17 @@ main(){
     setup_go_env
     setup_proxy
     install_updater
+    ensure_go_path  # 新增的路径确保函数
     echo -e "golang `color_echo $blue $install_version` 安装成功!"
+    
+    # 添加验证步骤
+    verify_go_installation
 }
 
 main
+# 确保多个常用 shell 的配置文件都被重新加载
 source /etc/profile
 source "$HOME/.bashrc" 2>/dev/null
 source "$HOME/.zshrc" 2>/dev/null
+# 最后再次验证
+go version || color_echo $yellow "Go 命令仍然无法使用，请检查系统配置"
