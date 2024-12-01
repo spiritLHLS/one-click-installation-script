@@ -88,12 +88,15 @@ setup_go_environment() {
                     echo "export GOPATH=${gopath}"
                     echo "export GOMODCACHE=\${GOPATH}/pkg/mod"
                     echo "export PATH=\$PATH:${go_bin}:\${GOPATH}/bin"
+                    echo "export GOCACHE=${gopath}/.cache/go-build"
                 } >> "$profile"
             fi
         fi
     done
     export GOPATH="${gopath}"
     export GOMODCACHE="${gopath}/pkg/mod"
+    export GOCACHE="${gopath}/.cache/go-build"
+    mkdir -p $GOCACHE
     export PATH="${PATH}:${go_bin}:${gopath}/bin"
 }
 
