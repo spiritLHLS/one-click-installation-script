@@ -128,7 +128,7 @@ sudo sed -i 's/.*precedence ::ffff:0:0\/96.*/precedence ::ffff:0:0\/96  100/g' /
 #### 一键给纯IPV6服务器添加最优的nat64网络
 
 ```bash
-
+curl -L https://cdn.spiritlhl.workers.dev/https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/repair_scripts/nat64_optimizer.sh -o nat64_optimizer.sh && chmod +x nat64_optimizer.sh && bash nat64_optimizer.sh
 ```
 
 #### 一键解除进程数限制
