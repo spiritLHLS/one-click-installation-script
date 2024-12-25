@@ -12,6 +12,7 @@
   * [一键尝试修复sudo警告](#一键尝试修复sudo警告)
   * [一键修改系统自带的journal日志记录大小释放系统盘空间](#一键修改系统自带的journal日志记录大小释放系统盘空间)
   * [一键尝试修复网络](#一键尝试修复网络)
+  * [一键给纯IPV6服务器添加最优的nat64网络](一键给纯IPV6服务器添加最优的nat64网络)
   * [一键解除进程数限制](#一键解除进程数限制)
 * [一键环境安装脚本](#一键环境安装脚本)
   * [一键安装golang环境](#一键安装golang环境)
@@ -122,6 +123,12 @@ wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [opt
 
 ```bash
 sudo sed -i 's/.*precedence ::ffff:0:0\/96.*/precedence ::ffff:0:0\/96  100/g' /etc/gai.conf && sudo systemctl restart networking
+```
+
+#### 一键给纯IPV6服务器添加最优的nat64网络
+
+```bash
+
 ```
 
 #### 一键解除进程数限制
