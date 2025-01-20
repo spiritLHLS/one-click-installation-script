@@ -1,6 +1,6 @@
 # 前言
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FspiritLHLS%2Fone-click-installation-script&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FspiritLHLS%2Fone-click-installation-script&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) [<img src="https://api.gitsponsors.com/api/badge/img?id=575839367" height="20">](https://api.gitsponsors.com/api/badge/link?p=sflVnu/gW9S45TksvLSMApmx4O0jOJaN1ZnlK55oWqz514x+iqtrVq490fq9EdrAtxMWCbg8J5QqEkuBaZqCPCLFsigA1fg6BgTyC5Hupq7vyvHG1k1pnAkDy8hLBQE2wZBrOc8zX57SzQ6p9gZupQ==)
 
 所有脚本如需在国内服务器使用，请在链接前加上```https://cdn.spiritlhl.net/```确保命令可以下载本仓库的shell脚本执行
 
