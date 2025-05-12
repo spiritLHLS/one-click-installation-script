@@ -168,6 +168,8 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/jupyter.sh -o jupyter.sh && chmod +x jupyter.sh && bash jupyter.sh
 ```
 
+如果有别的环境需求，推荐宿主机安装好docker环境后，使用 https://github.com/oneclickvirt/dockerfile-templates/ 自行制作在线IDE镜像，后续使用只需要挂载共享文件夹即可开设容器进行使用
+
 #### 一键安装R语言环境
 
 - **安装前需使用Miniconda3安装虚拟环境jupyter-env，然后进行jupyter和jupyterlab的安装，再然后才能安装本内核**
