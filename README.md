@@ -18,6 +18,7 @@
   * [一键安装golang环境](#一键安装golang环境)
   * [一键安装jupyter环境](#一键安装jupyter环境)
   * [一键安装R语言环境](#一键安装R语言环境)
+  * [一键安装golang环境](#一键安装golang环境)
   * [一键安装rust环境](#一键安装rust环境)
   * [一键安装C++环境](#一键安装C环境)
   * [一键安装vnstat环境](#一键安装vnstat环境)
@@ -179,6 +180,12 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/R.sh -o R.sh && chmod +x R.sh && bash R.sh
+```
+
+#### 一键安装rust环境 
+
+```bash
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/go.sh -o go.sh && chmod +x go.sh && bash go.sh 
 ```
 
 #### 一键安装rust环境 
