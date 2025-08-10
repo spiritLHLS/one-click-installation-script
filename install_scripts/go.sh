@@ -303,29 +303,16 @@ verify_installation(){
         if [[ -n "$gopath" ]]; then
             echo "Go工作空间: $gopath"
         fi
-        
         echo
         echo "Go环境变量:"
         go env GOROOT GOPATH GOPROXY GOSUMDB 2>/dev/null | sed 's/^/  /'
-        
         echo
         color_echo $green "========== 安装成功 =========="
-        echo "现在可以开始Go开发了!"
-        echo
-        echo "快速开始:"
-        echo "  mkdir -p \$GOPATH/src/hello && cd \$GOPATH/src/hello"
-        echo "  echo 'package main' > main.go"
-        echo "  echo 'import \"fmt\"' >> main.go" 
-        echo "  echo 'func main() { fmt.Println(\"Hello, Go!\") }' >> main.go"
-        echo "  go run main.go"
-        
-    else
-        color_echo $red "✗ Go命令不可用"
-        echo
-        color_echo $yellow "解决方法 (选择其一):"
+        color_echo $yellow "当前如何使用Go环境 (选择其一):"
         echo "  1. 重新加载环境变量: source $profile_path"
         echo "  2. 重新打开终端窗口"
         echo "  3. 重新登录系统"
+        echo "现在可以开始Go开发了!"
         return 1
     fi
 }
