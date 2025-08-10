@@ -182,7 +182,7 @@ curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-scri
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/R.sh -o R.sh && chmod +x R.sh && bash R.sh
 ```
 
-#### 一键安装rust环境 
+#### 一键安装golang环境 
 
 ```bash
 curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/go.sh -o go.sh && chmod +x go.sh && bash go.sh 
