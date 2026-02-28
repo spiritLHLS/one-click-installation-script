@@ -1,7 +1,7 @@
 #!/bin/bash
 # by spiritlhl
 # from https://github.com/spiritLHLS/one-click-installation-script
-# version: 2023.11.01
+# version: 2026.02.28
 
 export DEBIAN_FRONTEND=noninteractive
 AEGIS_INSTALL_DIR="/usr/local/aegis"

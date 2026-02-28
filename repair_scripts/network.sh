@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.01.05
+#version: 2026.02.28
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -20,7 +20,7 @@ reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
-  ver="2023.01.05"
+  ver="2026.02.28"
   changeLog="一键修复linux网络脚本"
   clear
   echo "#######################################################################"

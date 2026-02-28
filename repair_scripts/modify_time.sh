@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.05.22
+#version: 2026.02.28
 
 red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
@@ -35,7 +35,7 @@ apt-get --fix-broken install -y >/dev/null 2>&1
 rm -rf test_result.txt >/dev/null 2>&1
 
 head() {
-  ver="2023.05.22"
+  ver="2026.02.28"
   changeLog="一键修复本机系统时间"
   clear
   echo "#######################################################################"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.06.05
+#version: 2026.02.28
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -13,7 +13,7 @@ else
   echo "Locale set to $utf8_locale"
 fi
 cd /root >/dev/null 2>&1
-ver="2023.06.05"
+ver="2026.02.28"
 changeLog="一键安装Zipline平台"
 source ~/.bashrc
 red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
@@ -101,7 +101,6 @@ build() {
       fi
     fi
     cd /root/zipline
-    docker-compose up -d
     CORE_SECRET=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
     sed -i "s/CORE_SECRET=changethis/CORE_SECRET=$CORE_SECRET/g" docker-compose.yml
     docker-compose pull

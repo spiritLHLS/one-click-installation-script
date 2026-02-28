@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.11.24
+#version: 2026.02.28
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -20,7 +20,7 @@ reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2023.05.22"
+  ver="2026.02.28"
   changeLog="一键修改journal日志记录大小，释放系统盘空间"
   clear
   echo "#######################################################################"

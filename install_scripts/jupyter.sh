@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.09.26
+#version: 2026.02.28
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -13,7 +13,7 @@ else
     echo "Locale set to $utf8_locale"
 fi
 cd /root >/dev/null 2>&1
-ver="2023.07.26"
+ver="2026.02.28"
 changeLog="一键安装jupyter环境"
 source ~/.bashrc
 red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
@@ -190,7 +190,7 @@ check_ipv4() {
 }
 
 install_jupyter() {
-    rm -rf Miniconda3-latest-Linux-x86_64.sh*
+    rm -rf Miniconda3-latest-Linux-*.sh*
     check_update
     check_sudo
     check_wget
@@ -319,8 +319,7 @@ main() {
             green "后台未启动jupyter，正在启动"
             nohup jupyter lab --port 13692 --no-browser --ip=0.0.0.0 --allow-root &
             green $!
-            sleep 1
-            jupyter lab
+            sleep 3
         fi
     else
         reading "Jupyter is not installed on this system. Do you want to install it? (y/n) " confirminstall

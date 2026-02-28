@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: spiritLHLS
 # GitHub: https://github.com/spiritLHLS/one-click-installation-script
-# Version: 2024.12.02
+# Version: 2026.02.28
 
 set -euo pipefail
 HOME="${HOME:-/root}"

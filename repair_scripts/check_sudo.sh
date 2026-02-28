@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2022.12.18
+#version: 2026.02.28
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -19,7 +19,7 @@ reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2022.12.18"
+  ver="2026.02.28"
   changeLog="修复sudo: unable to resolve host警告"
   clear
   echo "#######################################################################"
@@ -69,8 +69,9 @@ else
   fi
 fi
 
-# Check if the sudo command works
-sudo yellow "Testing sudo command..."
+# Check if the sudo command works (use sudo -v to validate, not a shell function)
+yellow "Testing sudo command..."
+sudo -v >/dev/null 2>&1
 if [ $? -eq 0 ]; then
   # Sudo command works. Exit the script.
   green "Fix successful. Exiting script."
@@ -80,7 +81,8 @@ else
   sudo service networking restart
 
   # Check if the sudo command works after restarting the networking interface
-  sudo echo "Testing sudo command after restarting networking interface..."
+  yellow "Testing sudo command after restarting networking interface..."
+  sudo -v >/dev/null 2>&1
   if [ $? -eq 0 ]; then
     # Sudo command works. Exit the script.
     green "Fix successful. Exiting script."
@@ -90,7 +92,8 @@ else
     sudo service bind9 restart
 
     # Check if the sudo command works after restarting the DNS server
-    sudo echo "Testing sudo command after restarting DNS server..."
+    yellow "Testing sudo command after restarting DNS server..."
+    sudo -v >/dev/null 2>&1
     if [ $? -eq 0 ]; then
       # Sudo command works. Exit the script.
       green "Fix successful. Exiting script."

@@ -1,7 +1,7 @@
 #!/bin/bash
 # by spiritlhl
 # from https://github.com/spiritLHLS/one-click-installation-script
-# version: 2025.08.10
+# version: 2026.02.28
 
 # 使用方法:
 #   chmod +x go-install-fixed.sh

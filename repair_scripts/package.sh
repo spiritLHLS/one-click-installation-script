@@ -1,7 +1,7 @@
 #!/bin/bash
 #by spiritlhl
 #from https://github.com/spiritLHLS/one-click-installation-script
-#version: 2023.07.30
+#version: 2026.02.28
 
 utf8_locale=$(locale -a 2>/dev/null | grep -i -m 1 -E "UTF-8|utf8")
 if [[ -z "$utf8_locale" ]]; then
@@ -20,7 +20,7 @@ reading() { read -rp "$(green "$1")" "$2"; }
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
-  ver="2023.05.31"
+  ver="2026.02.28"
   changeLog="一键修复apt源，加载对应的源"
   clear
   echo "#######################################################################"
@@ -152,8 +152,12 @@ check_eol_and_switch_apt_source() {
   # 获取系统版本
   version=$(lsb_release -cs)
 
-  # 检查系统版本是否已经过期
-  eol=$(curl -s https://ubuntu.com/dists/${version}/Release | grep "EOL" | wc -l)
+  # 检查系统版本是否已经过期（通过访问官方发行版 Release 文件，404 即为 EOL）
+  http_code=$(curl -s -o /dev/null -w "%{http_code}" "https://archive.ubuntu.com/ubuntu/dists/${version}/Release")
+  eol=0
+  if [ "$http_code" != "200" ]; then
+    eol=1
+  fi
   if [ $eol -gt 0 ]; then
     # 版本已经过期
     reading "This version of Ubuntu is EOL. Do you want to switch to the old-releases repository? [y/n] " confirm
@@ -196,44 +200,40 @@ fix_broken() {
 }
 
 fix_locked() {
-  if [ $? -ne 0 ]; then
-    echo "The update failed. Attempting to unlock the apt-get sources..."
-    if [ -f /etc/debian_version ]; then
-      sudo rm /var/lib/apt/lists/lock
-      sudo rm /var/cache/apt/archives/lock
-    elif [ -f /etc/lsb-release ]; then
-      sudo rm /var/lib/dpkg/lock
-      sudo rm /var/cache/apt/archives/lock
-    fi
+  echo "Attempting to unlock the apt-get sources..."
+  if [ -f /etc/debian_version ]; then
+    sudo rm /var/lib/apt/lists/lock
+    sudo rm /var/cache/apt/archives/lock
+  elif [ -f /etc/lsb-release ]; then
+    sudo rm /var/lib/dpkg/lock
+    sudo rm /var/cache/apt/archives/lock
+  fi
 
-    sudo apt-get update
+  sudo apt-get update
 
-    if [ $? -eq 0 ]; then
-      # Print a message indicating that the update was successful
-      green "The apt-get update was successful."
-      exit 0
-    fi
+  if [ $? -eq 0 ]; then
+    # Print a message indicating that the update was successful
+    green "The apt-get update was successful."
+    exit 0
+  fi
 
-    if [ $? -ne 0 ]; then
-      yellow "The update still failed. Attempting to fix missing GPG keys..."
-      if [ -f /etc/debian_version ]; then
-        sudo apt-key update
-      elif [ -f /etc/lsb-release ]; then
-        red "try sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys missing key"
-      fi
-    fi
+  yellow "The update still failed. Attempting to fix missing GPG keys..."
+  if [ -f /etc/debian_version ]; then
+    sudo apt-key update
+  elif [ -f /etc/lsb-release ]; then
+    red "try sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys missing key"
+  fi
 
-    output=$(apt-get update 2>&1)
-    if echo $output | grep -q "NO_PUBKEY"; then
-      echo "Some keys are missing, attempting to retrieve them now..."
-      missing_keys=$(echo $output | grep "NO_PUBKEY" | awk -F' ' '{print $NF}')
-      for key in $missing_keys; do
-        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
-      done
-      apt-get update
-    else
-      echo "All keys are present."
-    fi
+  output=$(apt-get update 2>&1)
+  if echo $output | grep -q "NO_PUBKEY"; then
+    echo "Some keys are missing, attempting to retrieve them now..."
+    missing_keys=$(echo $output | grep "NO_PUBKEY" | awk -F' ' '{print $NF}')
+    for key in $missing_keys; do
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
+    done
+    apt-get update
+  else
+    echo "All keys are present."
   fi
 }
 
