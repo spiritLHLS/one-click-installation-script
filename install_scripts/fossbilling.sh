@@ -54,6 +54,6 @@ curl -sSL https://get.docker.com/ | sh
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
-curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/FOSSBilling-compose.yml -o FOSSBilling-compose.yml && chmod +x FOSSBilling-compose.yml
+curl -L https://raw.githubusercontent.com/spiritLHLS/one-click-installation-script/main/install_scripts/FOSSBilling-compose.yml -o FOSSBilling-compose.yml
 docker-compose -f FOSSBilling-compose.yml up -d
 echo "Please open http://${IPV4}/install/install.php"

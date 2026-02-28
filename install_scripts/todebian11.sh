@@ -36,7 +36,7 @@ CURRENT_VERSION=$(lsb_release -cs)
 
 # 判断当前版本是否为最新版本
 version=$(cat /etc/debian_version)
-if [ $CURRENT_VERSION == "bullseye" ]; then
+if [ $CURRENT_VERSION == "bullseye" ] || [ $CURRENT_VERSION == "bookworm" ]; then
   _blue "当前系统版本为最新版本，Debian version: $version , 代号 $CURRENT_VERSION"
   exit 0
 else

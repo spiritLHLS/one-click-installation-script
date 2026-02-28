@@ -16,18 +16,22 @@ red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 
 # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
 ver="2022.12.18"
 changeLog="一键安装rust，加载官方脚本"
 clear
-echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装rust脚本${PLAIN}                                #"
-echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                #"
-echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-echo "#######################################################################"
+echo -e "#######################################################################"
+echo -e "#                     ${YELLOW}一键安装rust脚本${PLAIN}                                #"
+echo -e "# 版本：$ver                                                    #"
+echo -e "# 更新日志：$changeLog                                #"
+echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+echo -e "#######################################################################"
 echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
 # Display prompt asking whether to proceed with installation
 reading "Do you want to proceed with the Rust installation? [y/n] " confirm

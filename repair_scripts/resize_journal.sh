@@ -46,6 +46,14 @@ head() {
   fi
   reading "Enter the desired day of the journal retention days (eg: 7): " retention_days
   reading "Enter the desired size of the journal directory in MB (eg: 500): " size
+  if [[ -z "$size" ]] || ! [[ "$size" =~ ^[0-9]+$ ]]; then
+    red "错误：日志大小必须为正整数(MB)，已退出。"
+    exit 1
+  fi
+  if [[ -z "$retention_days" ]] || ! [[ "$retention_days" =~ ^[0-9]+$ ]]; then
+    red "错误：保留天数必须为正整数，已退出。"
+    exit 1
+  fi
 }
 
 main() {

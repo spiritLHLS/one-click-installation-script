@@ -206,9 +206,9 @@ install_go(){
         do
             install_version=""
             if [[ $can_google == 0 ]];then
-                install_version=`curl -s --connect-timeout 15 -H 'Cache-Control: no-cache' https://go.dev/dl/|grep -w downloadBox|grep src|grep -oE '[0-9]+\.[0-9]+\.?[0-9]*'|head -n 1`
-            else
                 install_version=`curl -s --connect-timeout 15 -H 'Cache-Control: no-cache' https://github.com/golang/go/tags|grep releases/tag|grep -v rc|grep -v beta|grep -oE '[0-9]+\.[0-9]+\.?[0-9]*'|head -n 1`
+            else
+                install_version=`curl -s --connect-timeout 15 -H 'Cache-Control: no-cache' https://go.dev/dl/|grep -w downloadBox|grep src|grep -oE '[0-9]+\.[0-9]+\.?[0-9]*'|head -n 1`
             fi
             [[ ${install_version: -1} == '.' ]] && install_version=${install_version%?}
             if [[ -z $install_version ]];then
@@ -237,8 +237,13 @@ install_go(){
     file_name="go${install_version}.$vdis.tar.gz"
     local temp_path=`mktemp -d`
 
+    if [[ $can_google == 0 ]]; then
+        dl_base="https://golang.google.cn/dl"
+    else
+        dl_base="https://dl.google.com/go"
+    fi
     echo "正在下载 $file_name ..."
-    if ! curl -H 'Cache-Control: no-cache' -L https://dl.google.com/go/$file_name -o $file_name; then
+    if ! curl -H 'Cache-Control: no-cache' -L $dl_base/$file_name -o $file_name; then
         color_echo $red "下载失败!"
         rm -rf $temp_path $file_name
         exit 1
@@ -248,7 +253,7 @@ install_go(){
     if ! tar -C $temp_path -xzf $file_name; then
         color_echo $yellow "\n解压失败! 正在重新下载..."
         rm -rf $file_name
-        if ! curl -H 'Cache-Control: no-cache' -L https://dl.google.com/go/$file_name -o $file_name; then
+        if ! curl -H 'Cache-Control: no-cache' -L $dl_base/$file_name -o $file_name; then
             color_echo $red "重新下载失败!"
             rm -rf $temp_path
             exit 1

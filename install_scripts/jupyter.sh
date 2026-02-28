@@ -20,6 +20,10 @@ red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 temp_file_apt_fix="apt_fix.txt"
 REGEX=("debian|astra" "ubuntu" "centos|red hat|kernel|oracle linux|alma|rocky" "'amazon linux'" "fedora" "arch" "freebsd")
 RELEASE=("Debian" "Ubuntu" "CentOS" "CentOS" "Fedora" "Arch" "FreeBSD")
@@ -38,13 +42,13 @@ for ((int = 0; int < ${#REGEX[@]}; int++)); do
 done
 
 clear
-echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装jupyter环境${PLAIN}                             #"
-echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                       #"
-echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-echo "#######################################################################"
+echo -e "#######################################################################"
+echo -e "#                     ${YELLOW}一键安装jupyter环境${PLAIN}                             #"
+echo -e "# 版本：$ver                                                    #"
+echo -e "# 更新日志：$changeLog                                       #"
+echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+echo -e "#######################################################################"
 echo "验证已支持的系统："
 echo "Ubuntu 系 - 推荐，脚本自动挂起到后台"
 echo "Debian 系 - 部分可能需要手动挂起到后台，详看脚本运行安装完毕的后续提示"
@@ -56,7 +60,10 @@ yellow "如果是初次安装无脑y无脑回车即可，按照提示进行操�
 check_china() {
     yellow "IP area being detected ......"
     if [[ -z "${CN}" ]]; then
-        if [[ $(curl -m 6 -s https://ipapi.co/json | grep 'China') != "" ]]; then
+        local ipapi_result
+        ipapi_result=$(curl -m 6 -s https://ipapi.co/json)
+        local ipapi_exit=$?
+        if [[ $(echo "$ipapi_result" | grep 'China') != "" ]]; then
             yellow "根据ipapi.co提供的信息，当前IP可能在中国"
             read -e -r -p "是否选用中国镜像完成相关组件安装? ([y]/n) " input
             case $input in
@@ -73,7 +80,7 @@ check_china() {
                 ;;
             esac
         else
-            if [[ $? -ne 0 ]]; then
+            if [[ $ipapi_exit -ne 0 ]]; then
                 if [[ $(curl -m 6 -s cip.cc) =~ "中国" ]]; then
                     yellow "根据cip.cc提供的信息，当前IP可能在中国"
                     read -e -r -p "是否选用中国镜像完成相关组件安装? [Y/n] " input

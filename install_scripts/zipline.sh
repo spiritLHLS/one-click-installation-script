@@ -21,6 +21,10 @@ green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 REGEX=("debian" "ubuntu" "centos|red hat|kernel|oracle linux|alma|rocky" "'amazon linux'" "fedora" "arch")
 RELEASE=("Debian" "Ubuntu" "CentOS" "CentOS" "Fedora" "Arch")
 PACKAGE_UPDATE=("! apt-get update && apt-get --fix-broken install -y && apt-get update" "apt-get update" "yum -y update" "yum -y update" "yum -y update" "pacman -Sy")
@@ -38,13 +42,13 @@ for ((int = 0; int < ${#REGEX[@]}; int++)); do
 done
 apt-get --fix-broken install -y >/dev/null 2>&1
 clear
-echo "#######################################################################"
-echo "#                     ${YELLOW}一键安装Zipline平台${PLAIN}                             #"
-echo "# 版本：$ver                                                    #"
-echo "# 更新日志：$changeLog                                       #"
-echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-echo "#######################################################################"
+echo -e "#######################################################################"
+echo -e "#                     ${YELLOW}一键安装Zipline平台${PLAIN}                             #"
+echo -e "# 版本：$ver                                                    #"
+echo -e "# 更新日志：$changeLog                                       #"
+echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+echo -e "#######################################################################"
 
 # 判断宿主机的 IPv4 或双栈情况 没有拉取不了 docker
 check_ipv4() {
@@ -91,7 +95,6 @@ build() {
 
   if [ ! -d "zipline" ] && ! docker ps -a | awk '{print $NF}' | grep -q -E 'postgres|zipline'; then
     green "\n Building \n "
-    git clone https://github.com/diced/zipline
     if ! command -v git >/dev/null 2>&1; then
       green "\n Install git.\n "
       if [ $SYSTEM = "CentOS" ]; then
@@ -100,6 +103,7 @@ build() {
         ${PACKAGE_INSTALL[int]} git-core
       fi
     fi
+    git clone https://github.com/diced/zipline
     cd /root/zipline
     CORE_SECRET=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
     sed -i "s/CORE_SECRET=changethis/CORE_SECRET=$CORE_SECRET/g" docker-compose.yml

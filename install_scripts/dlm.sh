@@ -302,7 +302,8 @@ rescue_localhost_name() {
     hostname=$(cat /etc/hostname)
     echo "" >/etc/hostname
     echo "localhost" >/etc/hostname
-    sed -i "s/${hostname}/localhost/g" /etc/hosts
+    escaped_hostname=$(echo "$hostname" | sed 's/[][\.^$*+?{}()|]/\\&/g')
+    sed -i "s/${escaped_hostname}/localhost/g" /etc/hosts
 }
 
 check_root
