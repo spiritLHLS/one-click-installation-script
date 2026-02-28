@@ -17,19 +17,23 @@ red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
   ver="2026.02.28"
   changeLog="一键修复apt源，加载对应的源"
   clear
-  echo "#######################################################################"
-  echo "#                     ${YELLOW}一键修复apt源脚本${PLAIN}                               #"
-  echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog                               #"
-  echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-  echo "#######################################################################"
+  echo -e "#######################################################################"
+  echo -e "#                     ${YELLOW}一键修复apt源脚本${PLAIN}                               #"
+  echo -e "# 版本：$ver                                                    #"
+  echo -e "# 更新日志：$changeLog                               #"
+  echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+  echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+  echo -e "#######################################################################"
   echo "支持系统：Ubuntu 12+，Debian 6+"
   echo "0.修复apt源broken损坏"
   echo "1.修复apt源锁死"
@@ -201,12 +205,20 @@ fix_broken() {
 
 fix_locked() {
   echo "Attempting to unlock the apt-get sources..."
-  if [ -f /etc/debian_version ]; then
-    sudo rm /var/lib/apt/lists/lock
-    sudo rm /var/cache/apt/archives/lock
+  # Ubuntu 同时存在 /etc/debian_version 和 /etc/lsb-release，需先判断 Ubuntu
+  local distro_id
+  distro_id=$(lsb_release -si 2>/dev/null | tr '[:upper:]' '[:lower:]')
+  if [[ "$distro_id" == "ubuntu" ]]; then
+    sudo rm -f /var/lib/dpkg/lock
+    sudo rm -f /var/lib/dpkg/lock-frontend
+    sudo rm -f /var/cache/apt/archives/lock
+    sudo dpkg --configure -a 2>/dev/null
+  elif [ -f /etc/debian_version ]; then
+    sudo rm -f /var/lib/apt/lists/lock
+    sudo rm -f /var/cache/apt/archives/lock
   elif [ -f /etc/lsb-release ]; then
-    sudo rm /var/lib/dpkg/lock
-    sudo rm /var/cache/apt/archives/lock
+    sudo rm -f /var/lib/dpkg/lock
+    sudo rm -f /var/cache/apt/archives/lock
   fi
 
   sudo apt-get update
@@ -247,18 +259,16 @@ fix_sources() {
   if grep -Eq "does not have a Release file|Malformed entry" update_output.log; then
     # Check if the system is Ubuntu or Debian
     if [ -f /etc/os-release ]; then
-      # Get the value of the ID variable
-      ID=$(lsb_release -i | awk '{print $3}')
+      # Get the value of the ID variable (convert to lowercase for comparison)
+      ID=$(lsb_release -i | awk '{print $3}' | tr '[:upper:]' '[:lower:]')
 
       # If the ID is ubuntu, run the change_ubuntu_apt_sources script
       if [ "$ID" == "ubuntu" ]; then
         yellow "ubuntu"
         check_eol_and_switch_apt_source
         change_ubuntu_apt_sources
-      fi
-
       # If the ID is debian, run the change_debian_apt_sources script
-      if [ "$ID" == "debian" ]; then
+      elif [ "$ID" == "debian" ]; then
         yellow "debian"
         change_debian_apt_sources
       fi
@@ -282,19 +292,9 @@ fix_sources() {
     # Print a message indicating that the update failed
     yellow "The update failed. Attempting to replace the apt-get sources..."
 
-    # Check if the system is Debian or Ubuntu
-    if [ -f /etc/debian_version ]; then
-      # Display prompt asking whether to proceed with updating
-      reading "Do you want to proceed with updating? [y/n] " updating
-      echo ""
-
-      # Check user's input and exit if they do not want to proceed
-      if [ "$updating" != "y" ]; then
-        exit 0
-      else
-        change_debian_apt_sources
-      fi
-    elif [ -f /etc/lsb-release ]; then
+    # Check if the system is Ubuntu or Debian (Ubuntu first, as it also has /etc/debian_version)
+    DISTRO_ID=$(lsb_release -si 2>/dev/null | tr '[:upper:]' '[:lower:]')
+    if [ "$DISTRO_ID" == "ubuntu" ]; then
       # Display prompt asking whether to proceed with updating
       reading "Do you want to proceed with updating? [y/n] " updating
       echo ""
@@ -305,6 +305,17 @@ fix_sources() {
       else
         check_eol_and_switch_apt_source
         change_ubuntu_apt_sources
+      fi
+    elif [ "$DISTRO_ID" == "debian" ] || [ -f /etc/debian_version ]; then
+      # Display prompt asking whether to proceed with updating
+      reading "Do you want to proceed with updating? [y/n] " updating
+      echo ""
+
+      # Check user's input and exit if they do not want to proceed
+      if [ "$updating" != "y" ]; then
+        exit 0
+      else
+        change_debian_apt_sources
       fi
     else
       # Print a message indicating that the system is not supported

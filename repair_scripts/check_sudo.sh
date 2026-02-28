@@ -16,19 +16,23 @@ red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
   ver="2026.02.28"
   changeLog="修复sudo: unable to resolve host警告"
   clear
-  echo "#######################################################################"
-  echo "#           ${YELLOW}修复sudo: unable to resolve host xxx: Name or service not known警告${PLAIN}                        #"
-  echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog                                      #"
-  echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-  echo "#######################################################################"
+  echo -e "#######################################################################"
+  echo -e "#           ${YELLOW}修复sudo: unable to resolve host xxx: Name or service not known警告${PLAIN}                        #"
+  echo -e "# 版本：$ver                                                    #"
+  echo -e "# 更新日志：$changeLog                                      #"
+  echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+  echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+  echo -e "#######################################################################"
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
   echo "检测修复sudo: unable to resolve host xxx: Name or service not known爆错"
   # Display prompt asking whether to proceed with fixing
@@ -44,7 +48,7 @@ head() {
 # Check if the hostname is set correctly in /etc/hosts
 head
 HOSTNAME=$(cat /etc/hostname)
-HOSTS_LINE="$(grep $HOSTNAME /etc/hosts)"
+HOSTS_LINE="$(grep -F "$HOSTNAME" /etc/hosts)"
 
 if [ -z "$HOSTS_LINE" ]; then
   # Hostname not found in /etc/hosts. Add it.

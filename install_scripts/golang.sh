@@ -65,8 +65,14 @@ get_system_arch() {
 
 get_latest_go_version() {
     local versions
-    local proxy_url="https://goproxy.cn"
-    for url in "https://go.dev/dl/" "https://golang.google.cn/dl/" "https://github.com/golang/go/tags"; do
+    # 先探测是否能访问 golang.org，决定 URL 优先顺序
+    local url_list
+    if ping -c 2 -W 2 golang.org > /dev/null 2>&1; then
+        url_list=("https://go.dev/dl/" "https://golang.google.cn/dl/" "https://github.com/golang/go/tags")
+    else
+        url_list=("https://golang.google.cn/dl/" "https://github.com/golang/go/tags" "https://go.dev/dl/")
+    fi
+    for url in "${url_list[@]}"; do
         versions=$(curl -s --connect-timeout 10 "$url" | grep -oE 'go[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)
         if [[ -n "$versions" ]]; then
             echo "${versions#go}"

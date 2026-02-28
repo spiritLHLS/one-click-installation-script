@@ -17,19 +17,23 @@ red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 
 head() {
   # 支持系统：Ubuntu 12+，Debian 6+
   ver="2026.02.28"
   changeLog="一键修改journal日志记录大小，释放系统盘空间"
   clear
-  echo "#######################################################################"
-  echo "#                     ${YELLOW}一键修改journal大小脚本${PLAIN}                         #"
-  echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog               #"
-  echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-  echo "#######################################################################"
+  echo -e "#######################################################################"
+  echo -e "#                     ${YELLOW}一键修改journal大小脚本${PLAIN}                         #"
+  echo -e "# 版本：$ver                                                    #"
+  echo -e "# 更新日志：$changeLog               #"
+  echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+  echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+  echo -e "#######################################################################"
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
   echo "1.自定义修改大小，单位为MB，一般500或者1000即可，有的系统日志默认给了5000甚至更多，不是做站啥的没必要"
   echo "请注意，修改journal目录大小会影响系统日志的记录，因此，在修改journal目录大小之前如果需要之前的日志，建议先备份系统日志到本地"
@@ -99,10 +103,13 @@ level() {
   if [ ! -d "$journald_log_dir" ]; then
     yellow "Log directory not found, so no delete" >&2
   else
-    # Set log retention period
-    # find "$journald_log_dir" -mtime +$retention_days -exec rm {} \;
-    rm -rf "$journald_log_dir"/*
-    green "change $journald_log_dir successfully"
+    # 按用户指定的保留天数清理超期日志文件
+    if [[ -n "$retention_days" ]] && [[ "$retention_days" =~ ^[0-9]+$ ]]; then
+      find "$journald_log_dir" -type f -mtime +"$retention_days" -exec rm -f {} \;
+      green "Cleaned journal logs older than ${retention_days} days in $journald_log_dir"
+    else
+      yellow "retention_days not set, skipping log cleanup"
+    fi
   fi
 
   # Check if config file exists

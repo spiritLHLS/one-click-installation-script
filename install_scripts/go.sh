@@ -193,6 +193,10 @@ sys_arch(){
             vdis="linux-ppc64le"
         elif [[ "$arch" == "x86_64" ]]; then
             vdis="linux-amd64"
+        else
+            # 未知架构，默认 amd64
+            color_echo $yellow "未识别架构 $arch，默认使用 linux-amd64"
+            vdis="linux-amd64"
         fi
     fi
     [ $(id -u) != "0" ] && sudo="sudo"

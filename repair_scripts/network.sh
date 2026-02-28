@@ -17,19 +17,23 @@ red() { echo -e "\033[31m\033[01m$1$2\033[0m"; }
 green() { echo -e "\033[32m\033[01m$1$2\033[0m"; }
 yellow() { echo -e "\033[33m\033[01m$1$2\033[0m"; }
 reading() { read -rp "$(green "$1")" "$2"; }
+YELLOW="\033[33m\033[01m"
+GREEN="\033[32m\033[01m"
+RED="\033[31m\033[01m"
+PLAIN="\033[0m"
 
 head() {
   # 支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+
   ver="2026.02.28"
   changeLog="一键修复linux网络脚本"
   clear
-  echo "#######################################################################"
-  echo "#                     ${YELLOW}一键修复linux网络脚本${PLAIN}                           #"
-  echo "# 版本：$ver                                                    #"
-  echo "# 更新日志：$changeLog                                     #"
-  echo "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
-  echo "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
-  echo "#######################################################################"
+  echo -e "#######################################################################"
+  echo -e "#                     ${YELLOW}一键修复linux网络脚本${PLAIN}                           #"
+  echo -e "# 版本：$ver                                                    #"
+  echo -e "# 更新日志：$changeLog                                     #"
+  echo -e "# ${GREEN}作者${PLAIN}: spiritlhl                                                     #"
+  echo -e "# ${GREEN}仓库${PLAIN}: https://github.com/spiritLHLS/one-click-installation-script   #"
+  echo -e "#######################################################################"
   echo "支持系统：Ubuntu 18+，Debian 8+，centos 7+，Fedora，Almalinux 8.5+"
   echo "1.检测ping谷歌和GitHub如果有问题修改nameserver为google源或cloudflare源"
   echo "2.检测ping谷歌和Github还有问题尝试修复为IP类型对应的网络优先级(默认IPV4类型，纯V6类型再替换为IPV6类型)"
@@ -98,9 +102,19 @@ main_v4() {
   fi
 
   if [ "$ip_type" = "IPv4" ]; then
-    priority=$(grep precedence /etc/gai.conf | grep -oP '(?<=precedence ::ffff:0:0\/96 )\d+')
+    priority=$(grep precedence /etc/gai.conf 2>/dev/null | grep -oP '(?<=precedence ::ffff:0:0\/96 )\d+' | head -1)
+    if [[ -z "$priority" ]]; then
+      # 条目不存在，直接写入 IPv4 优先配置
+      echo "precedence ::ffff:0:0/96 100" >>/etc/gai.conf
+      priority=100
+    fi
   else
-    priority=$(grep precedence /etc/gai.conf | grep -oP '(?<=precedence ::/0 )\d+')
+    priority=$(grep precedence /etc/gai.conf 2>/dev/null | grep -oP '(?<=precedence ::\/0 )\d+' | head -1)
+    if [[ -z "$priority" ]]; then
+      # 条目不存在，直接写入 IPv6 优先配置
+      echo "precedence ::/0 50" >>/etc/gai.conf
+      priority=50
+    fi
   fi
 
   # Modify network priority if necessary
