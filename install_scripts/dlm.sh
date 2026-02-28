@@ -36,7 +36,7 @@ uninstall_qcloud() {
     rm -rf /usr/local/qcloud
 }
 
-uninstall_oralce() {
+uninstall_oracle() {
     # 甲骨文云
     systemctl stop oracle-cloud-agent
     systemctl disable oracle-cloud-agent
@@ -308,7 +308,7 @@ rescue_localhost_name() {
 check_root
 touch /etc/cloud/cloud-init.disabled
 uninstall_qcloud
-uninstall_oralce
+uninstall_oracle
 uninstall_jdcloud
 kill_processes
 pkill_processes

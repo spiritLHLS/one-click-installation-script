@@ -56,7 +56,7 @@ main() {
   backup_file="/etc/systemd/journald.conf-$(date +%Y%m%d%H%M%S).bak"
   sudo cp /etc/systemd/journald.conf "$backup_file"
   yellow "Backed up /etc/systemd/journald.conf to $backup_file"
-  awk -v size="$size" '{ if ($1 == "SystemMaxUse=") { print "SystemMaxUse=" size } else { print $0 } }' /etc/systemd/journald.conf >"$temp_file"
+  awk -v size="$size" '/^SystemMaxUse=/ { print "SystemMaxUse=" size; next } { print $0 }' /etc/systemd/journald.conf >"$temp_file"
   sudo cp "$temp_file" /etc/systemd/journald.conf
   rm -rf "$temp_file"
   conf_file="/etc/systemd/journald.conf"

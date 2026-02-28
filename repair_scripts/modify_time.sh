@@ -58,7 +58,7 @@ head() {
 }
 
 check_time_zone() {
-  _yellow "adjusting the time"
+  yellow "adjusting the time"
   if ! command -v chronyd >/dev/null 2>&1; then
     ${PACKAGE_INSTALL[int]} chrony >/dev/null 2>&1
   fi

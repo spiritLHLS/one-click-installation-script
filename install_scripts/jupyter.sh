@@ -197,16 +197,25 @@ install_jupyter() {
     check_curl
     check_ufw
     if ! command -v conda &>/dev/null; then
-        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-        bash Miniconda3-latest-Linux-x86_64.sh -b -u
+        local sysarch
+        sysarch="$(uname -m)"
+        local miniconda_arch
+        case "${sysarch}" in
+            "x86_64" | "x86" | "amd64" | "x64") miniconda_arch="x86_64" ;;
+            "aarch64" | "armv8" | "armv8l") miniconda_arch="aarch64" ;;
+            "i386" | "i686") miniconda_arch="x86" ;;
+            *) miniconda_arch="x86_64" ;;
+        esac
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${miniconda_arch}.sh
+        bash Miniconda3-latest-Linux-${miniconda_arch}.sh -b -u
         echo 'export PATH="$PATH:$HOME/miniconda3/bin:$HOME/miniconda3/condabin"' >>~/.bashrc
         echo 'export PATH="$PATH:$HOME/.local/share/jupyter"' >>~/.bashrc
         source ~/.bashrc
         sleep 1
-        echo 'export PATH="/home/user/miniconda3/bin:$PATH"' >>~/.bashrc
+        echo "export PATH=\"$HOME/miniconda3/bin:\$PATH\"" >>~/.bashrc
         source ~/.bashrc
         sleep 1
-        export PATH="/home/user/miniconda3/bin:$PATH"
+        export PATH="$HOME/miniconda3/bin:$PATH"
         green "请关闭本窗口开一个新窗口再执行本脚本，否则无法加载一些预设的环境变量(或断开SSH连接后重新连接)" && exit 0
     fi
     green "加载预设的conda环境变量成功，准备安装jupyter，无脑输入y和回车即可"

@@ -42,6 +42,7 @@ head() {
 }
 
 # Check if the hostname is set correctly in /etc/hosts
+head
 HOSTNAME=$(cat /etc/hostname)
 HOSTS_LINE="$(grep $HOSTNAME /etc/hosts)"
 

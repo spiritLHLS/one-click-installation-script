@@ -155,7 +155,11 @@ main_v6() {
     echo "nameserver $nameserver" >/etc/resolv.conf
 
     # 让修改生效
-    resolvconf -u
+    if command -v resolvconf >/dev/null 2>&1; then
+      resolvconf -u
+    elif command -v systemd-resolve >/dev/null 2>&1; then
+      systemd-resolve --flush-caches 2>/dev/null
+    fi
 
     # ping 测试
     if ping -c 3 google.com &>/dev/null && ping -c 3 github.com &>/dev/null; then
@@ -166,7 +170,11 @@ main_v6() {
 
   # 如果所有 nameserver 都尝试过了仍然无法修复，则恢复为原来的 nameserver
   echo "nameserver $current_nameserver" >/etc/resolv.conf
-  resolvconf -u
+  if command -v resolvconf >/dev/null 2>&1; then
+    resolvconf -u
+  elif command -v systemd-resolve >/dev/null 2>&1; then
+    systemd-resolve --flush-caches 2>/dev/null
+  fi
 }
 
 head

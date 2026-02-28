@@ -67,7 +67,7 @@ get_latest_go_version() {
     local versions
     local proxy_url="https://goproxy.cn"
     for url in "https://go.dev/dl/" "https://golang.google.cn/dl/" "https://github.com/golang/go/tags"; do
-        versions=$(curl -s --connect-timeout 10 "$url" | grep -oE 'go[0-9]+\.[0-9]+(\.[0-9]+)?' | sort -V | tail -n 1)
+        versions=$(curl -s --connect-timeout 10 "$url" | grep -oE 'go[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)
         if [[ -n "$versions" ]]; then
             echo "${versions#go}"
             return 0

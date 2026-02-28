@@ -127,8 +127,9 @@ change_ubuntu_apt_sources() {
   16*) UBUNTU_RELEASE="xenial" ;;
   18*) UBUNTU_RELEASE="bionic" ;;
   20*) UBUNTU_RELEASE="focal" ;;
-  22*) UBUNTU_RELEASE="groovy" ;;
-  *) echo "The system is not Ubuntu 14/16/18/20/22 . No changes were made to the apt-get sources." && return 1 ;;
+  22*) UBUNTU_RELEASE="jammy" ;;
+  24*) UBUNTU_RELEASE="noble" ;;
+  *) echo "The system is not Ubuntu 14/16/18/20/22/24 . No changes were made to the apt-get sources." && return 1 ;;
   esac
 
   # 备份当前sources.list

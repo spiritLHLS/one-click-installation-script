@@ -313,7 +313,7 @@ verify_installation(){
         echo "  2. 重新打开终端窗口"
         echo "  3. 重新登录系统"
         echo "现在可以开始Go开发了!"
-        return 1
+        return 0
     fi
 }
 
